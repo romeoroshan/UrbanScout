@@ -1,0 +1,114 @@
+.hero {
+    width: 100%;
+    height: 100vh;
+    background-image: url("img/hero2.jpg");
+    background-size: cover;
+}
+
+.overlay {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.725);
+}
+
+#hero-head {
+    font-size: 100px;
+    font-weight: bold;
+    color: white;
+}
+
+.button {
+    width: 200px;
+    position: relative;
+    overflow: hidden;
+    height: 3rem;
+    padding: 0 2rem;
+    border-radius: 1.5rem;
+    background: #3d3a4e;
+    background-size: 400%;
+    color: #fff;
+    border: none;
+}
+
+.button:hover::before {
+    transform: scaleX(1);
+}
+
+.button-content {
+    position: relative;
+    z-index: 1;
+}
+
+.button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    width: 100%;
+    height: inherit;
+    border-radius: inherit;
+    background: linear-gradient(82.3deg,
+            rgba(150, 93, 233, 1) 10.8%,
+            rgba(99, 88, 238, 1) 94.3%);
+    transition: all 0.475s;
+}
+.login-div{
+    height: 100vh;
+    overflow-y: scroll;
+
+}
+
+.bg-img-login{
+    background-image: url('img/hero.jpg');
+    height: 100vh;
+    width: 100%;
+    background-size: cover;
+    color: white;
+}
+.login-overlay{
+    background: linear-gradient(
+    rgb(23, 6, 49),
+    rgb(49, 45, 108));
+    height: 100vh;
+    width: 100%;
+    opacity: 0.9;
+}
+.player-navbar {
+    background: linear-gradient(rgb(60, 21, 60), rgb(41, 0, 41));
+}
+
+.img-width {
+    width: 150px;
+    height: 150px;
+
+}
+
+.feed-img {
+    width: 50px;
+    height: 50px;
+}
+
+.rec-img-club {
+    width: 30px;
+    height: 30px;
+}
+
+.player-feeds {
+    height: 80vh;
+    /* %-height of the viewport */
+    overflow-y: scroll;
+    position: relative;
+}
+.player-scout-img{
+    width: 120px;
+    height: 120px;
+}
+@media (max-width: 991.98px) {
+    .player-feeds{
+        height: 100%;
+        position: relative;
+        overflow-y: unset;
+    }
+}
