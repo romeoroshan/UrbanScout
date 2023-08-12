@@ -32,11 +32,11 @@
             var lettersWithSpaces = /^[A-Za-z\s]+$/;
             if (name.trim() === "") {
                 console.log("entered")
-                $("#error").html("Enter the Name").css("color", "red");
+                $("#fname").html("Enter the Name").css("color", "red");
             } else if (!lettersWithSpaces.test(name)) {
-                $("#error").html("Name field required only alphabet characters with spaces").css("color", "red");
+                $("#fname").html("Name field required only alphabet characters with spaces").css("color", "red");
             } else {
-                $("#error").html("");
+                $("#fname").html("");
             }
         }
 
@@ -44,11 +44,11 @@
             var name = $(fieldId).val();
             var lettersWithSpaces = /^[A-Za-z\s]+$/;
             if (name.trim() === "") {
-                $("#error").html("Enter the Name").css("color", "red");
+                $("#lname").html("Enter the Name").css("color", "red");
             } else if (!lettersWithSpaces.test(name)) {
-                $("#error").html("Name field required only alphabet characters with spaces").css("color", "red");
+                $("#lname").html("Name field required only alphabet characters with spaces").css("color", "red");
             } else {
-                $("#error").html("");
+                $("#lname").html("");
             }
         }
 
@@ -57,11 +57,11 @@
             var email = $(fieldId).val();
             var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
             if (email === "") {
-                $("#error").html("Enter the Email Id").css("color", "red");
+                $("#email").html("Enter the Email Id").css("color", "red");
             } else if (!filter.test(email)) {
-                $("#error").html("Use correct Email Id").css("color", "red");
+                $("#email").html("Use correct Email Id").css("color", "red");
             } else {
-                $("#error").html("");
+                $("#email").html("");
             }
         }
 
@@ -69,14 +69,14 @@
             var password = $(fieldId).val();
             var pwd_expression = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])/;
             if (password === "") {
-                $("#error").html("Enter the Password").css("color", "red");
+                $("#pass1").html("Enter the Password").css("color", "red");
             }else if(!pwd_expression.test(password))
                     {
-                        $("#error").html("Use password with atleast one capital and small alphabets, special character and letters").css("color", "red");
+                        $("#pass1").html("Use password with atleast one capital and small alphabets, special character and letters").css("color", "red");
                     }
             else 
             {
-                $("#error").html("");
+                $("#pass1").html("");
             }
         }
 
@@ -84,11 +84,11 @@
             var password = $("#pass").val();
             var confirmPassword = $(fieldId).val();
             if (confirmPassword === "") {
-                $("#error").html("Enter the Confirm Password").css("color", "red");
+                $("#cpass1").html("Enter the Confirm Password").css("color", "red");
             } else if (confirmPassword !== password) {
-                $("#error").html("Password do not match").css("color", "red");
+                $("#cpass1").html("Password do not match").css("color", "red");
             } else {
-                $("#error").html("");
+                $("#cpass1").html("");
             }
         }
 

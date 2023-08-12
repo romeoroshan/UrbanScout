@@ -42,11 +42,44 @@
                 </div>
                 <p class="h3 text-light">Registration</p>
                 <form class="d-flex flex-column w-100" enctype="multipart/form-data" action="" method="POST">
-                    {% csrf_token %}
-                    {{playerForm.as_table}}
 
+                    {% csrf_token %}
+    <div class="form-group">
+        <label for="{{ playerForm.img.id_for_label }}">Image</label>
+        {{ playerForm.img }}
+        <p id="img" class="text-danger"></p>
+    </div>
+    <div class="form-group">
+        <label for="{{ playerForm.first_name.id_for_label }}">First Name</label>
+        {{ playerForm.first_name }}
+        <p id="fname" class="text-danger"></p>
+    </div>
+    <div class="form-group">
+        <label for="{{ playerForm.last_name.id_for_label }}">Last Name</label>
+        {{ playerForm.last_name }}
+        <p id="lname" class="text-danger"></p>
+    </div>
+    <div class="form-group">
+        <label for="{{ playerForm.email.id_for_label }}">Email</label>
+        {{ playerForm.email }}
+        <p id="email" class="text-danger"></p>
+    </div>
+    <div class="form-group">
+        <label for="{{ playerForm.password1.id_for_label }}">Password</label>
+        {{ playerForm.password1 }}
+        <p id="pass1" class="text-danger"></p>
+    </div>
+    <div class="form-group">
+        <label for="{{ playerForm.password2.id_for_label }}">Confirm Password</label>
+        {{ playerForm.password2 }}
+        <p id="cpass1" class="text-danger"></p>
+    </div>
+    <div class="form-group">
+        <label for="{{ playerForm.player_dob.id_for_label }}">Date of Birth</label>
+        {{ playerForm.player_dob }}
+    </div>
                     <div class="d-flex justify-content-center"><button type="submit"
-                            class="btn btn-outline-primary text-light p-2 w-50 mt-3">Sign-up</button></div>
+                    class="btn btn-outline-primary text-light p-2 w-50 mt-3">Sign-up</button></div>
                 </form>
                 {% if msg %}
                 <p class="m-3 text-danger">{{ msg }}</p>

@@ -3,6 +3,7 @@
 <html lang="en">
 
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -40,7 +41,39 @@
                 <p class="h3 text-light">Registration</p>
                 <form class="d-flex flex-column w-100" enctype="multipart/form-data" action="" method="POST">
                     {% csrf_token %}
-                    {{playerForm.as_table}}
+    <div class="form-group">
+        <label for="{{ playerForm.img.id_for_label }}">Logo</label>
+        {{ playerForm.img }}
+        <p id="img" class="text-danger"></p>
+    </div>
+    <div class="form-group">
+        <label for="{{ playerForm.img.id_for_label }}">Club Name</label>
+        {{ playerForm.club_name }}
+        <p id="img" class="text-danger"></p>
+    </div>
+    <div class="form-group">
+        <label for="{{ playerForm.email.id_for_label }}">Email</label>
+        {{ playerForm.email }}
+        <p id="email" class="text-danger"></p>
+    </div>
+    <div class="form-group">
+        <label for="{{ playerForm.password1.id_for_label }}">Password</label>
+        {{ playerForm.password1 }}
+        <p id="pass1" class="text-danger"></p>
+    </div>
+    <div class="form-group">
+        <label for="{{ playerForm.password1.id_for_label }}">Confirm Password</label>
+        {{ playerForm.password2 }}
+        <p id="cpass1" class="text-danger"></p>
+    </div>
+    <div class="form-group">
+        <label for="{{ playerForm.password2.id_for_label }}">District</label>
+        {{ playerForm.district }}
+    </div>
+    <div class="form-group">
+        <label for="{{ playerForm.player_dob.id_for_label }}">Locality</label>
+        {{ playerForm.locality }}
+    </div>
                     <div class="d-flex justify-content-center"><button type="submit"
                             class="btn btn-outline-primary text-light p-2 w-50 mt-3">Sign-up</button></div>
                 </form>
@@ -51,6 +84,7 @@
             </div>
         </div>
     </div>
+    <script src="{% static 'regval.js' %}"></script>
 </body>
 
 </html>

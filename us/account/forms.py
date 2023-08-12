@@ -82,18 +82,20 @@ class ClubRegistraionForm(UserCreationForm):
     password1 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "class": ""
+                "class": "",
+                "id":"pass"
             }
         )
     )
     password2 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "class": ""
+                "class": "",
+                "id":"cpass"
             }
         )
     )
-
+    email=forms.EmailField(widget=forms.EmailInput(attrs={"id":"mail"}))
     
     
     class Meta:

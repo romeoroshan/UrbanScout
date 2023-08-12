@@ -1,16 +1,312 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'style.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <title>Document</title>
 </head>
-<body>
+
+<body class="bg-light">
+    {% if user.is_club %}
+    <nav class="navbar player-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
+                <p class="text-white">Urban</p>
+                <p class="text-warning">Scout</p>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="ms-3 d-flex w-50">
+                    <input type="text" class="form-control" placeholder="Search">
+                    <button class="btn shadow-none"><i class="bi bi-search fs-3 text-white"></i></button>
+                </div>
+                <div class="ms-3">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link  text-white" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page" href="#">Scouts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page" href="#">Clubs</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="border rounded p-2 pb-0 mt-2 ms-3">
+                        <p class="text-light "><i class="bi bi-shield-fill"></i> {{user.club_name}}</p>
+                    </div>
+                    <a href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="d-flex flex-wrap justify-content-center mt-4">
+        <div class="col-lg-3 h-50 col-12 m-3 p-5 rounded bg-white shadow-lg position-sticky">
+            <div class="">
+                <div class="d-flex justify-content-center">
+                    <div class="">
+                        <img class="rounded-circle img-width " src={{user.img.url}} alt="">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <p class="text-dark mt-2 fs-4 fw-bold">{{user.club_name}}</p>
+                    <p class="text-secondary">District: {{user.district}}</p>
+                    <p class="text-secondary">Locality: {{user.locality}}</p>
+                </div>
+                <div>
+                    <p>Club Reputation: <i class="bi bi-star-fill text-warning"></i><i
+                            class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i
+                            class="bi bi-star-fill text-warning"></i><i class="bi bi-star-half text-warning"></i></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
+            <div class="w-100 d-flex justify-content-center">
+                <div class="w-100">
+                    <textarea class="form-control" name="" id="" cols="30" rows="5"
+                        placeholder="Share a post"></textarea>
+                    <div class="d-flex justify-content-around m-2 mt-4">
+                        <button class="btn btn-outline-primary"><i class="bi bi-image"></i> Photo</button>
+                        <button class="btn btn-outline-success"><i class="bi bi-play-btn-fill"></i> Video</button>
+                        <button class="btn btn-outline-warning"><i class="bi bi-send-fill"></i> Post</button>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 border-top pt-4">
+                <div class="d-flex">
+                    <div class="feed-img">
+                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
+                    </div>
+                    <div class="ms-2">
+                        <p class="fw-bold">
+                            {{user.club_name}}
+                        </p>
+
+                    </div>
+                </div>
+                <div class="w-100 mt-3">
+                    <img class="w-100"
+                        src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Nnx8fGVufDB8fHx8fA%3D%3D&w=1000&q=80"
+                        alt="">
+                </div>
+                <div class="mt-3">
+                    <p class="fw-bold">{{user.club_name}}
+                    <p>Retail giants like Reliance Retail, Aditya Birla Fashion & Retail, and Devyani International,
+                        among others, are on an offline expansion spree, but real estate is proving hard to come by,
+                        reports Livemint.</p>
+                    </p>
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-lg-3 col-12">
+            <div class="m-3 p-5 rounded bg-white shadow-lg">
+                <div>
+                    <p class="fw-bold">Recommended Players</p>
+                    <div class="d-flex">
+                        <div class="rec-img-club">
+                            <img class="w-100 rounded-circle"
+                                src="https://www.shareicon.net/data/2016/07/05/791224_man_512x512.png" alt="">
+                        </div>
+                        <p class="ms-2">Mohammed Salah</p>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="m-3 p-5 rounded bg-white shadow-lg">
+                <div>
+                    <p class="fw-bold">Recommended Scouts</p>
+                    <div class="d-flex">
+                        <div class="rec-img-club">
+                            <img class="w-100 rounded-circle"
+                                src="https://www.shareicon.net/data/2016/07/05/791224_man_512x512.png" alt="">
+                        </div>
+                        <p class="ms-2">Athletico Club</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif user.is_player %}
+    <nav class="navbar player-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
+                <p class="text-white">Urban</p>
+                <p class="text-warning">Scout</p>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="ms-3 d-flex w-50">
+                    <input type="text" class="form-control" placeholder="Search">
+                    <button class="btn shadow-none"><i class="bi bi-search fs-3 text-white"></i></button>
+                </div>
+                <div class="ms-3">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link  text-white" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page" href="#">Scouts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page" href="{% url 'player-club' %}">Clubs</a>
+                        </li>
+                        
+                    </ul>
+                </div>
+                <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="border rounded p-2 pb-0 mt-2 ms-3">
+                        <p class="text-light "><i class="bi bi-person-circle"></i> {{user.first_name}}</p>
+                    </div>
+                    <a href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="d-flex flex-wrap justify-content-center mt-4">
+        <div class="col-lg-3 h-50 col-12 m-3 p-5 rounded bg-white shadow-lg position-sticky">
+            <div class="">
+                <div class="d-flex justify-content-center">
+                    <div class="">
+                        <img class="rounded-circle img-width" src={{user.img.url}} alt="">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <p class="text-dark mt-2 fs-4 fw-bold">{{user.first_name}} {{user.last_name}}</p>
+                    <p id="age" class="text-secondary"></p>
+                    <script>
+                        var playerDobString = "{{ user.player_dob }}";
+                        console.log(playerDobString)
+                        var months = {
+                            'Jan.': 0, 'Feb.': 1, 'Mar.': 2, 'Apr.': 3, 'May': 4, 'June': 5,
+                            'Jul.': 6, 'Aug.': 7, 'Sep.': 8, 'Oct.': 9, 'Nov.': 10, 'Dec.': 11
+                        };
+
+                        var dobParts = playerDobString.split(' ');
+                        var month = months[dobParts[0]];
+                        var day = parseInt(dobParts[1].replace(',', ''));
+                        var year = parseInt(dobParts[2]);
+
+                        // Create a Date object from the parsed parts
+                        var playerDate = new Date(year, month, day);
+
+                        // Example: Calculate the age based on player's date of birth
+                        var today = new Date();
+                        var age = today.getFullYear() - playerDate.getFullYear() - ((today.getMonth() < playerDate.getMonth() || (today.getMonth() === playerDate.getMonth() && today.getDate() < playerDate.getDate())) ? 1 : 0);
+
+                        // You can now use the 'age' variable for your JavaScript logic
+                        console.log("Player's age is: " + age);
+                        document.getElementById("age").textContent = "Age: " + age;
+                    </script>
+
+                    <p class="text-secondary">Position: {{user.player_pos}}</p>
+                    <p class="text-secondary">District: {{user.district}}</p>
+                    <p class="text-secondary">Locality: {{user.locality}}</p>
+                </div>
+                <div>
+                    <p>Ability: <i class="bi bi-star-fill text-warning"></i><i
+                            class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i
+                            class="bi bi-star-fill text-warning"></i><i class="bi bi-star-half text-warning"></i></p>
+                    <p>Potential: <i class="bi bi-star-fill text-warning"></i><i
+                            class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i
+                            class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i></p>
+                </div>
+                <div class="d-flex justify-content-center"><a href="{% url 'edit-player-profile' %}"><button class="btn btn-outline-info">Edit Profile</button></a></div>
+            </div>
+        </div>
+        <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
+            <div class="w-100 d-flex justify-content-center">
+                <div class="w-100">
+                    <textarea class="form-control" name="" id="" cols="30" rows="5"
+                        placeholder="Share a post"></textarea>
+                    <div class="d-flex justify-content-around m-2 mt-4">
+                        <button class="btn btn-outline-primary"><i class="bi bi-image"></i> Photo</button>
+                        <button class="btn btn-outline-success"><i class="bi bi-play-btn-fill"></i> Video</button>
+                        <button class="btn btn-outline-warning"><i class="bi bi-send-fill"></i> Post</button>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 border-top pt-4">
+                <div class="d-flex">
+                    <div class="feed-img">
+                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
+                    </div>
+                    <div class="ms-2">
+                        <p class="fw-bold">
+                            {{user.first_name}} {{user.last_name}}
+                        </p>
+
+                    </div>
+                </div>
+                <div class="w-100 mt-3">
+                    <img class="w-100"
+                        src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Nnx8fGVufDB8fHx8fA%3D%3D&w=1000&q=80"
+                        alt="">
+                </div>
+                <div class="mt-3">
+                    <p class="fw-bold">{{user.first_name}} {{user.last_name}}
+                    <p>Retail giants like Reliance Retail, Aditya Birla Fashion & Retail, and Devyani International,
+                        among others, are on an offline expansion spree, but real estate is proving hard to come by,
+                        reports Livemint.</p>
+                    </p>
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-lg-3 col-12">
+            <div class="m-3 p-5 rounded bg-white shadow-lg">
+                <div>
+                    <p class="fw-bold">Recommended Clubs</p>
+                    <div class="d-flex">
+                        <div class="rec-img-club">
+                            <img class="w-100 rounded-circle"
+                                src="https://www.shareicon.net/data/2016/07/05/791224_man_512x512.png" alt="">
+                        </div>
+                        <p class="ms-2">Athletico Club</p>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="m-3 p-5 rounded bg-white shadow-lg">
+                <div>
+                    <p class="fw-bold">Recommended Scouts</p>
+                    <div class="d-flex">
+                        <div class="rec-img-club">
+                            <img class="w-100 rounded-circle"
+                                src="https://www.shareicon.net/data/2016/07/05/791224_man_512x512.png" alt="">
+                        </div>
+                        <p class="ms-2">Athletico Club</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
     <div class="hero">
         <div class="overlay text-center p-5 d-flex flex-column justify-content-center">
             <p class="h1 text-white fw-bold">UrbanScout</p>
@@ -24,5 +320,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 </body>
+
 </html>

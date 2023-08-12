@@ -73,3 +73,12 @@ class User(AbstractUser):
     club_name=models.CharField((("Club Name")),default='',max_length=30)
     REQUIRED_FIELDS = [] 
     
+class Player(models.Model):
+    first_name=models.CharField(max_length=30)
+    last_name=models.CharField(max_length=30)
+    player_dob = models.DateField(("Date of Birth"), default=date.today, validators=[validate_dob])
+    player_pos = models.CharField(("Position"),default='',max_length=30,choices=Pos_Choice)
+    district = models.CharField(("District"),default='',max_length=20,choices=District_Choice)
+    locality = models.CharField(("Locality"),default='',max_length=50,blank=True)
+    player_foot = models.CharField(("Prefered Foot"),default='',max_length=10,choices=Foot_Choice)
+    player_ability = models.IntegerField(("Ability"),default=0,choices=Ability_Choice)

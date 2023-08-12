@@ -3,7 +3,7 @@ from .models import User
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
-
+from .models import Pos_Choice, District_Choice
 from datetime import date
 # Create your views here.
 def index(request):
@@ -58,13 +58,10 @@ def login(request):
             password = form.cleaned_data.get('password')
             user = authenticate(email=email, password=password)
             print(user)
-            if user is not None and user.is_player:
+            if user is not None:
                 print("entered")
                 auth_login(request, user)
-                return redirect('player-home')
-            elif user is not None and user.is_club:
-                auth_login(request, user)
-                return redirect('http://127.0.0.1:8000/clubhome')
+                return redirect('index')
             else:
                 msg= 'invalid credentials'
         else:
@@ -81,4 +78,29 @@ def playerClub(request):
     clubs=User.objects.filter(is_club=1).values()
     return render(request,'player-club.html',{'clubs':clubs})
 def editPlayerProfile(request):
-    return render(request,'edit-player-profile.html')
+    if request.method == 'POST':
+        first_name = request.POST.get('fname')
+        last_name = request.POST.get('lname')
+        email = request.POST.get('email')
+        player_pos = request.POST.get('pos')
+        district = request.POST.get('dist')
+        locality = request.POST.get('loc')
+
+        # Update the user's profile information
+        user = request.user
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.player_pos = player_pos
+        user.district = district
+        user.locality = locality
+        user.save()
+
+        
+        return redirect('player-home')
+    
+    return render(request, 'edit-player-profile.html', {
+        'user': request.user,
+        'pos_choices': Pos_Choice,
+        'district_choices': District_Choice,
+    })
