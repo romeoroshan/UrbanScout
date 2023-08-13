@@ -69,7 +69,7 @@ class PlayerSignUpForm(UserCreationForm):
         )
     )
     email=forms.EmailField(widget=forms.EmailInput(attrs={"id":"mail"}))
-    
+    player_dob=forms.DateField(widget=forms.DateInput(attrs={"id":"dateofbirth","type":"date"}))
     
     class Meta:
         model = User

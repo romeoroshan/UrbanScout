@@ -23,6 +23,9 @@
             $("#number").keyup(function () {
                 validatePhoneNumber("#number");
             });
+            $('#dateofbirth').change(function(){
+                TDate();
+            });
         });
 
         function validateName(fieldId) {
@@ -138,12 +141,15 @@
         }
 
         function TDate() {
-            console.log("Entered")
+            console.log("Working");
             var UserDate = document.getElementById("dateofbirth").value;
-            var ToDate = new Date(2016, 1, 1);
-            console.log(UserDate,ToDate)
-            if (new Date(UserDate).getTime() < ToDate.getTime()) {
-                alert("The Date must be Bigger or Equal to today date");
+            var UserDate = new Date(UserDate);
+            var ToDate = new Date(2016, 0, 1); 
+            console.log(ToDate>UserDate) // Changed month to 0 (January)
+            
+            if (UserDate>ToDate) {
+                $("#dob").html("You must be born before 2016").css("color", "red");
+                console.log('in')
                 return false;
             }
             return true;

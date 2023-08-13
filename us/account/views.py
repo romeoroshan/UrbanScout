@@ -7,8 +7,30 @@ from .models import Pos_Choice, District_Choice
 from datetime import date
 # Create your views here.
 def index(request):
-    
-    return render(request,'index.html')
+    users=User.objects.all()
+    usercout=users.count()
+    players = User.objects.filter(is_player=True)
+    player_count = players.count()
+    club = User.objects.filter(is_club=True)
+    club_count = club.count()
+    return render(request,'index.html',
+                    {"count":usercout,
+                    "users":users,
+                    'player':player_count,
+                    'club':club_count,
+                    })
+def deleteUser(request,delete_id):
+    delUser=User.objects.get(id=delete_id)
+    delUser.delete()
+    return redirect('/')
+def updateStatus(request,update_id):
+    updateUser=User.objects.get(id=update_id)
+    if updateUser.is_active==True:
+        updateUser.is_active=False
+    else:
+        updateUser.is_active=True
+    updateUser.save()
+    return redirect('/')
 def login(request):
     return render(request,'login.html')
 def registerPlayer(request):
@@ -52,21 +74,26 @@ def registerClub(request):
 def login(request):
     form = LoginForm(request.POST or None)
     msg = None
+    
     if request.method == 'POST':
         if form.is_valid():
             email = form.cleaned_data.get('email')
-            print(email)
             password = form.cleaned_data.get('password')
+            
             user = authenticate(email=email, password=password)
             print(user)
+            
             if user is not None:
-                print("entered")
-                auth_login(request, user)
-                return redirect('index')
+                if user.is_active:
+                    auth_login(request, user)
+                    return redirect('/')
+                else:
+                    msg = "User is inactive"
             else:
-                msg= 'invalid credentials'
+                msg = 'Invalid credentials'
         else:
-            msg = 'error validating form'
+            msg = 'Error validating form'
+    
     return render(request, 'login.html', {'form': form, 'msg': msg})
 def playerHome(request):
     return render(request,'player-home.html')
@@ -98,7 +125,7 @@ def editPlayerProfile(request):
         user.save()
 
         
-        return redirect('player-home')
+        return redirect('index')
     
     return render(request, 'edit-player-profile.html', {
         'user': request.user,

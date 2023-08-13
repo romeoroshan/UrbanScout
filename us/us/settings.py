@@ -131,3 +131,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL='account.User'
 ACCOUNT_USERNAME_REQUIRED = False
+AUTHENTICATION_BACKENDS = [
+    'us.custom_auth_backends.CustomModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
