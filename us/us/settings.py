@@ -32,18 +32,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myaccount',
-    'usapp',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    'account.apps.AccountConfig',
+    'usapp'
     
 ]
 
@@ -133,25 +129,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL='myaccount.User'
+AUTH_USER_MODEL='account.User'
 ACCOUNT_USERNAME_REQUIRED = False
 AUTHENTICATION_BACKENDS = [
     'us.custom_auth_backends.CustomModelBackend',
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
 ]
-
-SITE_ID = 1  # Make sure you have SITE_ID configured correctly
-
-LOGIN_REDIRECT_URL = 'home'
-SOCIALACCOUNT_QUERY_EMAIL = True
-SOCIALACCOUNT_AUTO_SIGNUP = True
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': 'YOUR_CLIENT_ID',
-            'secret': 'YOUR_CLIENT_SECRET',
-            'key': ''
-        }
-    }
-}
