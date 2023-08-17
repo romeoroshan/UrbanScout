@@ -117,7 +117,7 @@
                         <p class="text-light "><i class="bi bi-person-circle"></i> Admin</p>
                     </div>
                     <div class="d-flex justify-content-center flex-column">
-                        <a href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                        <a class="d-flex flex-column justify-content-center text-decoration-none" href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
                     </div>
                 </div>
             </div>
@@ -213,7 +213,7 @@
                     <div class="border rounded p-2 pb-0 mt-2 ms-3">
                         <p class="text-light "><i class="bi bi-shield-fill"></i> {{user.club_name}}</p>
                     </div>
-                    <a href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                    <a class="d-flex flex-column justify-content-center text-decoration-none" href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
                 </div>
             </div>
         </div>
@@ -344,7 +344,7 @@
                     <div class="border rounded p-2 pb-0 mt-2 ms-3">
                         <p class="text-light "><i class="bi bi-person-circle"></i> {{user.first_name}}</p>
                     </div>
-                    <a href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                    <a class="d-flex flex-column justify-content-center text-decoration-none" href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
                 </div>
             </div>
         </div>

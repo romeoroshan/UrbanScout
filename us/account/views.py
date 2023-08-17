@@ -118,7 +118,7 @@ def editPlayerProfile(request):
         user = request.user
         user.first_name = first_name
         user.last_name = last_name
-        user.email = email
+        user.email = user.email
         user.player_pos = player_pos
         user.district = district
         user.locality = locality
