@@ -116,9 +116,7 @@
                     <div class="border rounded p-2 pb-0 mt-2 ms-3">
                         <p class="text-light "><i class="bi bi-person-circle"></i> Admin</p>
                     </div>
-                    <div class="d-flex justify-content-center flex-column">
-                        <a href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
-                    </div>
+                    <a href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
                 </div>
             </div>
         </div>
@@ -146,7 +144,7 @@
             <div class="table-responsive">
                 <table class="table rounded text-center table-hover table-bordered">
                     <tr class="thead fw-bold">
-
+                        <td>Id</td>
                         <td>Email</td>
                         <td>User Role</td>
                         <td>Status</td>
@@ -155,9 +153,8 @@
 
                     </tr>
                     {% for i in users %}
-                    {% if not i.is_staff %}
                     <tr>
-
+                        <td>{{i.id}}</td>
                         <td>{{i.email}}</td>
                         <td>{% if i.is_player %}
                             Player
@@ -173,7 +170,6 @@
                                         class="bi bi-trash3-fill"></i></button></a></td>
 
                     </tr>
-                    {% endif %}
                     {% endfor %}
                 </table>
             </div>
