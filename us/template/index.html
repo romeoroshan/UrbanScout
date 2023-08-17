@@ -4,8 +4,8 @@
 
 <head>
     <script>
-        var count=0;
-        
+        var count = 0;
+
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +17,66 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <title>Document</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var count = parseInt('{{ count }}');
+            console.log(count);
+            
+            var player = parseInt('{{ player }}');
+            console.log(player);
+            
+            var playerPercentage = (player / count) * 100;
+            var totalPercentage = 100 - playerPercentage;
+    
+            var data = google.visualization.arrayToDataTable([
+                ['Task', 'Percentage'],
+                ['', playerPercentage],
+                ['', totalPercentage],
+            ]);
+    
+            var options = {
+                is3D: true,
+                legend: 'none',
+          pieSliceText: 'none',
+            };
+    
+            var chart = new google.visualization.PieChart(document.getElementById('piechart_player_3d'));
+            chart.draw(data, options);
+        }
+    </script>
+    <script type="text/javascript">
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var count = parseInt('{{ count }}');
+            console.log(count);
+            
+            var player = parseInt('{{ club }}');
+            console.log(player);
+            
+            var playerPercentage = (player / count) * 100;
+            var totalPercentage = 100 - playerPercentage;
+    
+            var data = google.visualization.arrayToDataTable([
+                ['Task', 'Percentage'],
+                ['', playerPercentage],
+                ['', totalPercentage],
+            ]);
+    
+            var options = {
+                is3D: true,
+                legend: 'none',
+          pieSliceText: 'none',
+            };
+    
+            var chart = new google.visualization.PieChart(document.getElementById('piechart_club_3d'));
+            chart.draw(data, options);
+        }
+    </script>
+    
 </head>
 
 <body class="bg-light">
@@ -39,7 +99,8 @@
                 <div class="ms-3">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Manage Users</a>
+                            <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Manage
+                                Users</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page" href="#">Register Scouts</a>
@@ -63,7 +124,7 @@
     <div class="d-flex justify-content-center">
         <div class="bg-white shadow-lg mt-4 pb-3 rounded col-12 col-lg-8">
             <p class="m-4 text-secondary fs-4 fw-bold">Manage Users</p>
-            
+
             <div class="d-flex justify-content-center flex-lg-row align-items-center text-center flex-column">
                 <div class="d-flex col-3 justify-content-center flex-column align-items-center">
                     <p class="fs-5 text-secondary">Number of Users</p>
@@ -72,10 +133,12 @@
                 <div class="d-flex col-3 justify-content-center flex-column align-items-center">
                     <p class="fs-5 text-secondary">Number of Players</p>
                     <p class="fs-4">{{player}}</p>
+                    <div id="piechart_player_3d" style="width: 240px; height: 240px;"></div>
                 </div>
                 <div class="d-flex col-3 justify-content-center flex-column align-items-center">
                     <p class="fs-5 text-secondary">Number of Clubs</p>
                     <p class="fs-4">{{club}}</p>
+                    <div id="piechart_club_3d" style="width: 240px; height: 240px;"></div>
                 </div>
             </div>
             <div class="table-responsive">
@@ -87,7 +150,7 @@
                         <td>Status</td>
                         <td>Edit Status</td>
                         <td>Delete User</td>
-                        
+
                     </tr>
                     {% for i in users %}
                     <tr>
@@ -99,16 +162,18 @@
                             Club
                             {% else %}
                             Admin
-                        {% endif %}</td>
+                            {% endif %}</td>
                         <td>{{i.is_active}}</td>
-                        <td><a href="{% url 'updateStatus' i.id %}"><button class="btn btn-primary"><i class="bi bi-pencil-square"></i></button></a></td>
-                        <td><a href="{% url 'deleteUser' i.id %}"><button class="btn btn-danger"><i class="bi bi-trash3-fill"></i></button></a></td>
-                        
+                        <td><a href="{% url 'updateStatus' i.id %}"><button class="btn btn-primary"><i
+                                        class="bi bi-pencil-square"></i></button></a></td>
+                        <td><a href="{% url 'deleteUser' i.id %}"><button class="btn btn-danger"><i
+                                        class="bi bi-trash3-fill"></i></button></a></td>
+
                     </tr>
                     {% endfor %}
                 </table>
             </div>
-            
+
         </div>
     </div>
     {% elif user.is_club %}
@@ -265,9 +330,10 @@
                             <a class="nav-link text-secondary" aria-current="page" href="#">Scouts</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" aria-current="page" href="{% url 'player-club' %}">Clubs</a>
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'player-club' %}">Clubs</a>
                         </li>
-                        
+
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
@@ -327,7 +393,8 @@
                             class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i
                             class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i></p>
                 </div>
-                <div class="d-flex justify-content-center"><a href="{% url 'edit-player-profile' %}"><button class="btn btn-outline-info">Edit Profile</button></a></div>
+                <div class="d-flex justify-content-center"><a href="{% url 'edit-player-profile' %}"><button
+                            class="btn btn-outline-info">Edit Profile</button></a></div>
             </div>
         </div>
         <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
@@ -405,7 +472,10 @@
     <div class="hero">
         <div class="overlay text-center p-5 d-flex flex-column justify-content-center">
             <p class="h1 text-white fw-bold">UrbanScout</p>
-            <p class="h5 text-secondary mt-3">"Unleash Urban Football Excellence with UrbanScout! Discover the Rising Stars of the City Streets. Join our Dynamic Football Community, where Players, Scouts, and Clubs Unite to Ignite the Passion for the Game. Embrace Talent, Empower Dreams, and Redefine Football Scouting in Urban Landscapes. Step into the World of UrbanScout – Where Talent Meets Opportunity!"</p>
+            <p class="h5 text-secondary mt-3">"Unleash Urban Football Excellence with UrbanScout! Discover the Rising
+                Stars of the City Streets. Join our Dynamic Football Community, where Players, Scouts, and Clubs Unite
+                to Ignite the Passion for the Game. Embrace Talent, Empower Dreams, and Redefine Football Scouting in
+                Urban Landscapes. Step into the World of UrbanScout – Where Talent Meets Opportunity!"</p>
             <div class="d-flex justify-content-center">
                 <a href="{% url 'login' %}">
                     <button class="button mt-5">
