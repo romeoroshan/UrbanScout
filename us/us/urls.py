@@ -17,8 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
+from social_django import views as social_views
+
 from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('auth/', include('social_django.urls', namespace='social')),
+    path('auth/login/google-oauth2/', social_views.auth, name='social:begin'),
+    
+    # Google OAuth2 callback
+    path('auth/complete/google-oauth2/', social_views.complete, name='social:complete'),
     path('', include('account.urls')),
+    
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

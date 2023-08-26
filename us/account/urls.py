@@ -14,5 +14,19 @@ urlpatterns = [
     path('player-club',views.playerClub,name="player-club"),
     path('edit-player-profile',views.editPlayerProfile,name="edit-player-profile"),
     path('deleteUser/<int:delete_id>',views.deleteUser,name="deleteUser"),
-    path('updateStauts/<int:update_id>',views.updateStatus,name="updateStatus")
+    path('updateStauts/<int:update_id>',views.updateStatus,name="updateStatus"),
+    path('selectType/',views.selectType,name='selectType'),
+    path('club-selected/',views.club_selected,name='club-selected'),
+    path('player-selected/',views.player_selected,name='player-selected'),
+    path('CompleteProfile/',views.CompleteProfile,name='CompleteProfile'),
+    path('CompleteClub/',views.CompleteClub,name="CompleteClub"),
+    path('EditClub/',views.editClub,name="EditClub")
+    # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
+    # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
+
+    # Google OAuth2 login
+    # path('social-auth/login/google-oauth2/', views.google_login, name='google_login'),
+    # Google OAuth2 callback
+    # path('social-auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
+    
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

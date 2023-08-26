@@ -54,10 +54,10 @@ def validate_dob(value):
     if value > date(2016, 1, 1):
         raise ValidationError("Date of Birth cannot be later than 2016.")
 class User(AbstractUser):
-    username=None
+    username=models.CharField(max_length=32, blank=True, null=True)
     USERNAME_FIELD = 'email'
     email = models.EmailField(unique=True)
-    img=models.ImageField(upload_to='pics')
+    img=models.ImageField(upload_to='pics',default='https://img.freepik.com/free-icon/man_318-677829.jpg',null=True)
     is_player=models.BooleanField('is_player',default=False)
     is_club=models.BooleanField('is_club',default=False)
     is_scout=models.BooleanField('is_scout',default=False)

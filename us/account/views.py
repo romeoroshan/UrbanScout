@@ -107,6 +107,8 @@ def playerClub(request):
     return render(request,'player-club.html',{'clubs':clubs})
 def editPlayerProfile(request):
     if request.method == 'POST':
+        img=request.FILES.get('img')
+        print(img)
         first_name = request.POST.get('fname')
         last_name = request.POST.get('lname')
         email = request.POST.get('email')
@@ -116,6 +118,7 @@ def editPlayerProfile(request):
 
         # Update the user's profile information
         user = request.user
+        user.img=img
         user.first_name = first_name
         user.last_name = last_name
         user.email = user.email
@@ -132,3 +135,78 @@ def editPlayerProfile(request):
         'pos_choices': Pos_Choice,
         'district_choices': District_Choice,
     })
+
+
+
+def selectType(request):
+    return render(request,'selectType.html')
+def player_selected(request):
+    user=request.user
+    user.is_player=1
+    user.save()
+    return redirect('CompleteProfile')
+def club_selected(request):
+    user=request.user
+    user.is_club=1
+    user.save()
+    return redirect('CompleteClub')
+def CompleteProfile(request):
+    if request.method=='POST':
+        img=request.FILES.get('img')
+        dob=request.POST.get('birthdate')
+        
+        print(img,dob)
+        user=request.user
+        
+        user.email=user.email
+        user.img=img
+        user.player_dob=dob
+        user.save()
+        return render(request,'index.html')
+    return render(request,'CompleteProfile.html')
+def CompleteClub(request):
+    if request.method=='POST':
+        img=request.FILES.get('img')
+        club_name=request.POST.get('clubname')
+        user=request.user
+        user.email=user.email
+        user.img=img
+        user.club_name=club_name
+        user.save()
+        return render(request,'index.html')
+    return render(request,'CompleteClub.html')
+def editClub(request):
+    if request.method == 'POST':
+        img=request.FILES.get('img')
+        club_name = request.POST.get('clubname')
+        district = request.POST.get('dist')
+        locality = request.POST.get('loc')
+
+        # Update the user's profile information
+        user = request.user
+        user.img=img
+        user.club_name = club_name
+        user.email = user.email
+        user.district = district
+        user.locality = locality
+        user.save()
+        
+        return redirect('index')
+    
+    return render(request, 'EditClub.html', {
+        'user': request.user,
+        'district_choices': District_Choice,
+    })
+# def google_login(request):
+#     print("Entered")
+#     return redirect('social:begin', 'google-oauth2')
+
+# from social_django.models import UserSocialAuth
+# def google_login(request):
+#     return redirect('social:begin', 'google-oauth2')
+# def google_callback(request):
+#     print("Entered")
+#     user = request.user
+#     social = UserSocialAuth.objects.get(user=user, provider='google-oauth2')
+#     # Do something with the social data, e.g., update user's email
+#     return redirect('index')
