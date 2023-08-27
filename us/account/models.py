@@ -85,3 +85,6 @@ class Player(models.Model):
 class InterestedClubs(models.Model):
     club=models.ForeignKey(User, on_delete=models.CASCADE, related_name='interested_clubs_as_club')
     player=models.ForeignKey(User, on_delete=models.CASCADE, related_name='interested_clubs_as_player')
+class ShortlistedPlayers(models.Model):
+    club=models.ForeignKey(User, on_delete=models.CASCADE, related_name='shortlisted_players_as_club')
+    player=models.ForeignKey(User, on_delete=models.CASCADE, related_name='shortlisted_players_as_player')

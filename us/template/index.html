@@ -369,7 +369,7 @@
                         var dobParts;
                         var year, month, day;
                     
-                        if (playerDobString.includes('.')) {
+                        if (playerDobString.includes(',')) {
                             // Format: Oct. 17, 2001
                             var months = {
                                 'Jan.': 0, 'Feb.': 1, 'March': 2, 'Apr.': 3, 'May': 4, 'June': 5,
@@ -390,7 +390,7 @@
                     
                         // Create a Date object from the parsed parts
                         var playerDate = new Date(year, month, day);
-                    
+                        console.log(playerDate)
                         // Calculate the age based on player's date of birth
                         var today = new Date();
                         var age = today.getFullYear() - playerDate.getFullYear() - (today.getMonth() < playerDate.getMonth() || (today.getMonth() === playerDate.getMonth() && today.getDate() < playerDate.getDate()) ? 1 : 0);

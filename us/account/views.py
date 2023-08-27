@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs
+from .models import User,InterestedClubs,ShortlistedPlayers
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -121,11 +121,13 @@ def logout(request):
 def playerClub(request):
     user = request.user
     interested_clubs = InterestedClubs.objects.filter(player_id=user.id).values_list('club_id', flat=True)
+    shortlisted_Players=ShortlistedPlayers.objects.filter(player_id=user.id).values_list('club_id',flat=True)
 
     all_clubs = User.objects.filter(is_club=True).values()
 
     interested_clubs_list = []
     not_interested_clubs_list = []
+    shortlisted_Players_list=[]
 
     for club in all_clubs:
         club_id = club['id']
@@ -140,10 +142,13 @@ def playerClub(request):
         
         if club_id in interested_clubs:
             interested_clubs_list.append(club_data)
+        elif club_id in shortlisted_Players:
+            shortlisted_Players_list.append(club_data)
         else:
             not_interested_clubs_list.append(club_data)
 
     return render(request, 'player-club.html', {
+        'shortlisted_players':shortlisted_Players_list,
         'interested_clubs': interested_clubs_list,
         'not_interested_clubs': not_interested_clubs_list,
     })
@@ -310,12 +315,11 @@ def showInterest(request,club_id):
 def clubPlayer(request):
     user = request.user
     interested_players = InterestedClubs.objects.filter(club_id=user.id).values_list('player_id', flat=True)
-
+    shortlisted_Players=ShortlistedPlayers.objects.filter(club_id=user.id).values_list('player_id',flat=True)
     all_players = User.objects.filter(is_player=True).values()
-
     interested_players_list = []
     not_interested_players_list = []
-
+    shortlisted_Players_list=[]
     for player in all_players:
         player_id = player['id']
         player_data = {
@@ -330,10 +334,21 @@ def clubPlayer(request):
         
         if player_id in interested_players:
             interested_players_list.append(player_data)
+        elif player_id in shortlisted_Players:
+            shortlisted_Players_list.append(player_data)
         else:
             not_interested_players_list.append(player_data)
 
     return render(request, 'club-player.html', {
+        'shortlisted_players':shortlisted_Players_list,
         'interested_players': interested_players_list,
         'not_interested_players': not_interested_players_list,
     })
+def shortlistPlayer(request,player_id):
+    user=request.user
+    data=ShortlistedPlayers(
+        player_id=player_id,
+        club_id=user.id
+    )
+    data.save()
+    return redirect('ClubPlayer')
