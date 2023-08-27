@@ -22,6 +22,7 @@ urlpatterns = [
     path('CompleteClub/',views.CompleteClub,name="CompleteClub"),
     path('EditClub/',views.editClub,name="EditClub"),
     path('RegisterScout/',views.registerScout,name="RegisterScout"),
+    path('email/',views.sendEmail,name="email")
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 

@@ -33,6 +33,17 @@ def updateStatus(request,update_id):
     return redirect('/')
 def login(request):
     return render(request,'login.html')
+from django.core.mail import EmailMessage
+from django.conf import settings
+def sendEmail(user_email):
+    print(user_email)
+    email_subject = 'Welcome to UrbanScout'
+    email_body = 'Dear User, We are thrilled to welcome you to Urban! Thank you for choosing to be a part of our community. Your registration with us marks the beginning of an exciting journey. With your account, you now have access to a wide range of features and services that our website offers. Whether you are here to connect, explore, or achieve specific goals, we are here to provide you with a seamless and enriching experience. Feel free to explore our platform and take advantage of all the resources available to you. We are committed to ensuring that your time here is both enjoyable and valuable.If you have any questions, feedback, or need assistance, do not hesitate to reach out to our support team. We are here to help you every step of the way. Once again, thank you for choosing UrbanScout. We are excited to have you on board and look forward to seeing you thrive within our community.'
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = [user_email]
+    email = EmailMessage(email_subject, email_body, from_email, recipient_list)
+    print(email)
+    email.send()
 def registerPlayer(request):
     msg = None
     if request.method == 'POST':
@@ -45,6 +56,7 @@ def registerPlayer(request):
                 user = player_form.save(commit=False) 
                 user.is_player = True 
                 user.save()  
+                sendEmail(email)
                 msg = 'User created'
                 return redirect('login')
         else:
@@ -64,6 +76,7 @@ def registerClub(request):
                 user = club_form.save(commit=False) 
                 user.is_club = True 
                 user.save()  
+                sendEmail(email)
                 msg = 'User created'
                 return redirect('login')
         else:
@@ -232,6 +245,7 @@ def registerScout(request):
             )
             user.set_password(password)
             user.save()
+            sendEmail(email)
             return redirect('index')
     
     return render(request, 'RegisterScout.html', {
@@ -250,3 +264,9 @@ def registerScout(request):
 #     social = UserSocialAuth.objects.get(user=user, provider='google-oauth2')
 #     # Do something with the social data, e.g., update user's email
 #     return redirect('index')
+
+
+#email
+def showInterest(request):
+    
+    return render(request,'player-club.html')

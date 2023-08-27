@@ -107,7 +107,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
-                                href="{% url 'player-club' %}">Clubs</a>
+                                href="{% url 'email' %}">Clubs</a>
                         </li>
 
                     </ul>
@@ -364,28 +364,42 @@
                     <p id="age" class="text-secondary"></p>
                     <script>
                         var playerDobString = "{{ user.player_dob }}";
-                        console.log(playerDobString)
-                        var months = {
-                            'Jan.': 0, 'Feb.': 1, 'March': 2, 'Apr.': 3, 'May': 4, 'June': 5,
-                            'Jul.': 6, 'Aug.': 7, 'Sept.': 8, 'Oct.': 9, 'Nov.': 10, 'Dec.': 11
-                        };
-
-                        var dobParts = playerDobString.split(' ');
-                        var month = months[dobParts[0]];
-                        var day = parseInt(dobParts[1].replace(',', ''));
-                        var year = parseInt(dobParts[2]);
-
+                        console.log(playerDobString);
+                    
+                        var dobParts;
+                        var year, month, day;
+                    
+                        if (playerDobString.includes('.')) {
+                            // Format: Oct. 17, 2001
+                            var months = {
+                                'Jan.': 0, 'Feb.': 1, 'March': 2, 'Apr.': 3, 'May': 4, 'June': 5,
+                                'Jul.': 6, 'Aug.': 7, 'Sept.': 8, 'Oct.': 9, 'Nov.': 10, 'Dec.': 11
+                            };
+                    
+                            dobParts = playerDobString.split(' ');
+                            month = months[dobParts[0]];
+                            day = parseInt(dobParts[1].replace(',', ''));
+                            year = parseInt(dobParts[2]);
+                        } else {
+                            // Format: 2001-10-17
+                            dobParts = playerDobString.split('-');
+                            year = parseInt(dobParts[0]);
+                            month = parseInt(dobParts[1]) - 1; // Months are 0-indexed in JavaScript
+                            day = parseInt(dobParts[2]);
+                        }
+                    
                         // Create a Date object from the parsed parts
                         var playerDate = new Date(year, month, day);
-
-                        // Example: Calculate the age based on player's date of birth
+                    
+                        // Calculate the age based on player's date of birth
                         var today = new Date();
-                        var age = today.getFullYear() - playerDate.getFullYear() - ((today.getMonth() < playerDate.getMonth() || (today.getMonth() === playerDate.getMonth() && today.getDate() < playerDate.getDate())) ? 1 : 0);
-
+                        var age = today.getFullYear() - playerDate.getFullYear() - (today.getMonth() < playerDate.getMonth() || (today.getMonth() === playerDate.getMonth() && today.getDate() < playerDate.getDate()) ? 1 : 0);
+                    
                         // You can now use the 'age' variable for your JavaScript logic
                         console.log("Player's age is: " + age);
                         document.getElementById("age").textContent = "Age: " + age;
                     </script>
+                    
 
                     <p class="text-secondary">Position: {{user.player_pos}}</p>
                     <p class="text-secondary">District: {{user.district}}</p>
