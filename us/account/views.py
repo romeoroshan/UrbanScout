@@ -115,7 +115,7 @@ def editPlayerProfile(request):
         player_pos = request.POST.get('pos')
         district = request.POST.get('dist')
         locality = request.POST.get('loc')
-
+        
         # Update the user's profile information
         user = request.user
         user.img=img
@@ -195,6 +195,46 @@ def editClub(request):
     
     return render(request, 'EditClub.html', {
         'user': request.user,
+        'district_choices': District_Choice,
+    })
+def registerScout(request):
+    if request.method == 'POST':
+        img = request.FILES.get('img')
+        first_name = request.POST.get('firstname')
+        last_name = request.POST.get('lastname')
+        email = request.POST.get('email')
+        district = request.POST.get('dist')
+        locality = request.POST.get('loc')
+        password = request.POST.get('pass')
+        confirm_password = request.POST.get('cpass')
+
+        if User.objects.filter(email=email).exists():
+            msg = 'Email already exists. Please use a different email address.'
+            return render(request, 'RegisterScout.html', {
+                'district_choices': District_Choice,
+                'msg': msg,
+            })
+        elif password != confirm_password:
+            msg = 'Passwords do not match.'
+            return render(request, 'RegisterScout.html', {
+                'district_choices': District_Choice,
+                'msg': msg,
+            })
+        else:
+            user = User(
+                img=img,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                is_scout=True,
+                district=district,
+                locality=locality,
+            )
+            user.set_password(password)
+            user.save()
+            return redirect('index')
+    
+    return render(request, 'RegisterScout.html', {
         'district_choices': District_Choice,
     })
 # def google_login(request):

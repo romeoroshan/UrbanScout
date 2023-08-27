@@ -103,7 +103,7 @@
                                 Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" aria-current="page" href="#">Register Scouts</a>
+                            <a class="nav-link text-secondary" aria-current="page" href="{% url 'RegisterScout' %}">Register Scouts</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
@@ -164,7 +164,7 @@
                             {% elif i.is_club %}
                             Club
                             {% else %}
-                            Admin
+                            Scout
                             {% endif %}</td>
                         <td>{{i.is_active}}</td>
                         <td><a href="{% url 'updateStatus' i.id %}"><button class="btn btn-primary"><i
