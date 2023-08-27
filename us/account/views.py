@@ -13,11 +13,14 @@ def index(request):
     player_count = players.count()
     club = User.objects.filter(is_club=True)
     club_count = club.count()
+    scout=User.objects.filter(is_scout=True)
     return render(request,'index.html',
                     {"count":usercout,
                     "users":users,
                     'player':player_count,
                     'club':club_count,
+                    'clubdata':club,
+                    'scout':scout,
                     })
 def deleteUser(request,delete_id):
     delUser=User.objects.get(id=delete_id)
