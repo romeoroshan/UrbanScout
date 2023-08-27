@@ -302,3 +302,35 @@ def showInterest(request,club_id):
     )
     data.save()
     return redirect('player-club')
+
+
+def clubPlayer(request):
+    user = request.user
+    interested_players = InterestedClubs.objects.filter(club_id=user.id).values_list('player_id', flat=True)
+
+    all_players = User.objects.filter(is_player=True).values()
+
+    interested_players_list = []
+    not_interested_players_list = []
+
+    for player in all_players:
+        player_id = player['id']
+        player_data = {
+            'id': player['id'],
+            'first_name': player['first_name'],
+            'last_name':player['last_name'],
+            'img':player['img'],
+            'district':player['district'],
+            'locality':player['locality']
+            # Add other fields you want to include here
+        }
+        
+        if player_id in interested_players:
+            interested_players_list.append(player_data)
+        else:
+            not_interested_players_list.append(player_data)
+
+    return render(request, 'club-player.html', {
+        'interested_players': interested_players_list,
+        'not_interested_players': not_interested_players_list,
+    })
