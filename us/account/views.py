@@ -116,8 +116,35 @@ def logout(request):
     auth.logout(request)
     return redirect('login')
 def playerClub(request):
-    clubs=User.objects.filter(is_club=1).values()
-    return render(request,'player-club.html',{'clubs':clubs})
+    user = request.user
+    interested_clubs = InterestedClubs.objects.filter(player_id=user.id).values_list('club_id', flat=True)
+
+    all_clubs = User.objects.filter(is_club=True).values()
+
+    interested_clubs_list = []
+    not_interested_clubs_list = []
+
+    for club in all_clubs:
+        club_id = club['id']
+        club_data = {
+            'id': club['id'],
+            'club_name': club['club_name'],
+            'img':club['img'],
+            'district':club['district'],
+            'locality':club['locality']
+            # Add other fields you want to include here
+        }
+        
+        if club_id in interested_clubs:
+            interested_clubs_list.append(club_data)
+        else:
+            not_interested_clubs_list.append(club_data)
+
+    return render(request, 'player-club.html', {
+        'interested_clubs': interested_clubs_list,
+        'not_interested_clubs': not_interested_clubs_list,
+    })
+
 def editPlayerProfile(request):
     if request.method == 'POST':
         img=request.FILES.get('img')
