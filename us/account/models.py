@@ -82,3 +82,6 @@ class Player(models.Model):
     locality = models.CharField(("Locality"),default='',max_length=50,blank=True)
     player_foot = models.CharField(("Prefered Foot"),default='',max_length=10,choices=Foot_Choice)
     player_ability = models.IntegerField(("Ability"),default=0,choices=Ability_Choice)
+class InterestedClubs(models.Model):
+    club=models.ForeignKey(User, on_delete=models.CASCADE, related_name='interested_clubs_as_club')
+    player=models.ForeignKey(User, on_delete=models.CASCADE, related_name='interested_clubs_as_player')

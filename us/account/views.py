@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User
+from .models import User,InterestedClubs
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -267,6 +267,11 @@ def registerScout(request):
 
 
 #email
-def showInterest(request):
-    
-    return render(request,'player-club.html')
+def showInterest(request,club_id):
+    user=request.user
+    data=InterestedClubs(
+        club_id=club_id,
+        player_id=user.id
+    )
+    data.save()
+    return redirect('player-club')
