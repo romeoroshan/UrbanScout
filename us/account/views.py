@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -352,3 +352,38 @@ def shortlistPlayer(request,player_id):
     )
     data.save()
     return redirect('ClubPlayer')
+def playerScout(request):
+    user = request.user
+    shortlisted_scouts = ShortlistedScouts.objects.filter(player_id=user.id).values_list('scout_id', flat=True)
+    all_scouts = User.objects.filter(is_scout=True).values()
+    shortlisted_scout_list = []
+    not_shortlisted_scout_list = []
+    for scout in all_scouts:
+        scout_id = scout['id']
+        player_data = {
+            'id': scout['id'],
+            'first_name': scout['first_name'],
+            'last_name':scout['last_name'],
+            'img':scout['img'],
+            'district':scout['district'],
+            'locality':scout['locality']
+            # Add other fields you want to include here
+        }
+        
+        if scout_id in shortlisted_scouts:
+            shortlisted_scout_list.append(player_data)
+        else:
+            not_shortlisted_scout_list.append(player_data)
+
+    return render(request, 'player-scout.html', {
+        'shortlisted_scout': shortlisted_scout_list,
+        'not_shortlisted_scout': not_shortlisted_scout_list,
+    })
+def shortlistScout(request,scout_id):
+    user=request.user
+    data=ShortlistedScouts(
+        scout_id=scout_id,
+        player_id=user.id
+    )
+    data.save()
+    return redirect('PlayerScout')

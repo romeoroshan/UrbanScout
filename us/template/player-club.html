@@ -34,10 +34,10 @@
                             <a class="nav-link  text-secondary" aria-current="page" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" aria-current="page" href="#">Scouts</a>
+                            <a class="nav-link text-secondary" aria-current="page" href="{% url 'PlayerScout' %}">Scouts</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" aria-current="page" href="#">Clubs</a>
+                            <a class="nav-link text-white" aria-current="page" href="{% url 'player-club' %}">Clubs</a>
                         </li>
                     </ul>
                 </div>
@@ -62,7 +62,7 @@
                     </div>
                 </div>
                 
-                <div class="ms-3 col-lg-7 col-12">
+                <div class="ms-3 col-lg-5 col-12">
                     <p class="fs-2 fw-bold">{{i.club_name}}</p>
                     <p class=""><b>District: </b>{{i.district}} </p>
                     <p class=""><b>Locality </b>{{i.locality}}</p>
@@ -70,7 +70,7 @@
                 </div>
                 
                 <div class="d-flex justify-content-lg-end justify-content-center w-100">
-                    
+                    <p class="text-success"><i class="bi bi-check-circle-fill"></i> You're request has been recorded, waiting for club response</p>
                 </div>
             </div>
             

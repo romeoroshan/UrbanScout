@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -30,47 +31,84 @@
                 <div class="ms-3">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link  text-secondary" aria-current="page" href="#">Home</a>
+                            <a class="nav-link  text-secondary" aria-current="page" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" aria-current="page" href="#">Scouts</a>
+                            <a class="nav-link text-white" aria-current="page" href="{% url 'PlayerScout' %}">Scouts</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" aria-current="page" href="#">Clubs</a>
+                            <a class="nav-link text-secondary" aria-current="page" href="{% url 'player-club' %}">Clubs</a>
                         </li>
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
                     <div class="border rounded p-2 pb-0 mt-2 ms-3">
-                        <p class="text-light "><i class="bi bi-person-circle"></i> Username</p>
+                        <p class="text-light "><i class="bi bi-person-circle"></i> {{user.first_name}}</p>
                     </div>
-                    <button class="btn text-white ms-4">Log-out</button>
+                    <a class="d-flex flex-column justify-content-center text-decoration-none" href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
                 </div>
             </div>
         </div>
     </nav>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex flex-column align-items-center justify-content-center">
+        <h2 class="mt-5">Shortlisted Scouts</h2>
+        {% for i in shortlisted_scout %}
+        <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
-            <div class="border mt-4 d-flex flex-lg-row flex-column justify-content-center align-items-center w-100 p-3 rounded">
+            <div class="border mt-4 d-flex flex-lg-row flex-column justify-content-center justify-content-lg-start align-items-center w-100 p-3 rounded">
                 <div class="d-flex align-items-center">
                     <div class="player-scout-img">
-                        <img class="w-100 rounded-circle" src="https://www.shareicon.net/data/2016/07/05/791224_man_512x512.png" alt="">
+                        <img class="w-100 rounded-circle" src={{i.img}} alt="">
                     </div>
                 </div>
-                <div class="ms-3 col-lg-7 col-12">
-                    <p class="fs-2 fw-bold">Anthonio Valencia</p>
-                    <p class=""><b>Experience: </b>UrbanScout offers a seamless search and filtering functionality, empowering users to navigate the football ecosystem effortlessly. </p>
-                    <p class=""><b>UrbanScout Recomendation: </b><i class="bi bi-star-fill text-warning text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-half text-warning"></i></p>
+                
+                <div class="ms-3 col-lg-5 col-12">
+                    <p class="fs-2 fw-bold">{{i.first_name}}{{i.last_name}}</p>
+                    <p class=""><b>District: </b>{{i.district}} </p>
+                    <p class=""><b>Locality </b>{{i.locality}}</p>
+                    <p class="fw-bold">Recommendation: <i class="bi bi-star-fill text-warning"></i><i
+                        class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i
+                        class="bi bi-star-fill text-warning"></i><i class="bi bi-star-half text-warning"></i></p>
                 </div>
+                
                 <div class="d-flex justify-content-lg-end justify-content-center w-100">
-                    <div class="d-flex align-items-center justify-content-center col-3">
-                        <button class="btn btn-outline-primary">Enquiry Scout</button>
+                    <div class="d-flex align-items-center justify-content-center col-5">
+                        <p class="text-success"><i class="bi bi-check-circle-fill"></i> You're request has been recorded, waiting for scout response</p>
                     </div>
                 </div>
             </div>
             
+        </div>
+        {% endfor %}
+        <h2 class="mt-5">Other Scouts</h2>
+        {% for i in not_shortlisted_scout %}
+        <script>console.log("{{ i.img }}")</script>
+        <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
+            <div class="border mt-4 d-flex flex-lg-row flex-column justify-content-center justify-content-lg-start align-items-center w-100 p-3 rounded">
+                <div class="d-flex align-items-center">
+                    <div class="player-scout-img">
+                        <img class="w-100 rounded-circle" src={{i.img}} alt="">
+                    </div>
+                </div>
+                
+                <div class="ms-3 col-lg-5 col-12">
+                    <p class="fs-2 fw-bold">{{i.first_name}}{{i.last_name}}</p>
+                    <p class=""><b>District: </b>{{i.district}} </p>
+                    <p class=""><b>Locality </b>{{i.locality}}</p>
+                    <p class="fw-bold">Recommendation: <i class="bi bi-star-fill text-warning"></i><i
+                        class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i
+                        class="bi bi-star-fill text-warning"></i><i class="bi bi-star-half text-warning"></i></p>
+                </div>
+                
+                <div class="d-flex justify-content-lg-end justify-content-center w-100">
+                    <div class="d-flex align-items-center justify-content-center col-5">
+                        <a href="{% url 'ShortlistScout' i.id %}"><button class="btn btn-outline-primary">Enquire Scout</button></a>
+                    </div>
+                </div>
+            </div>
             
         </div>
+        {% endfor %}
     </div>
 </body>
 

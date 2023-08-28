@@ -26,6 +26,8 @@ urlpatterns = [
     path('ShowInterest/<int:club_id>',views.showInterest,name="ShowInterest"),
     path('ClubPlayer',views.clubPlayer,name="ClubPlayer"),
     path('ShortlistPlayer/<int:player_id>',views.shortlistPlayer,name="ShortlistPlayer"),
+    path('PlayerScout',views.playerScout,name="PlayerScout"),
+    path('ShortlistScout/<int:scout_id>',views.shortlistScout,name="ShortlistScout"),
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 
