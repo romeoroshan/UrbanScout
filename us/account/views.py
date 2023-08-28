@@ -17,6 +17,7 @@ def index(request):
     return render(request,'index.html',
                     {"count":usercout,
                     "users":users,
+                    'playerdata':players,
                     'player':player_count,
                     'club':club_count,
                     'clubdata':club,

@@ -289,13 +289,15 @@
             <div class="m-3 p-5 rounded bg-white shadow-lg">
                 <div>
                     <p class="fw-bold">Recommended Players</p>
+                    {% for Players in playerdata %}
+
                     <div class="d-flex">
                         <div class="rec-img-club">
-                            <img class="w-100 rounded-circle"
-                                src="https://www.shareicon.net/data/2016/07/05/791224_man_512x512.png" alt="">
+                            <img class="w-100 rounded-circle" src="{{Players.img}}" alt="">
                         </div>
-                        <p class="ms-2">Mohammed Salah</p>
+                        <p class="ms-2">{{Players.first_name}} {{Players.last_name}}</p>
                     </div>
+                    {% endfor %}
 
 
                 </div>
@@ -303,13 +305,14 @@
             <div class="m-3 p-5 rounded bg-white shadow-lg">
                 <div>
                     <p class="fw-bold">Recommended Scouts</p>
+                    {% for scouts in scout %}
                     <div class="d-flex">
                         <div class="rec-img-club">
-                            <img class="w-100 rounded-circle"
-                                src="https://www.shareicon.net/data/2016/07/05/791224_man_512x512.png" alt="">
+                            <img class="w-100 rounded-circle" src="{{scouts.img}}" alt="">
                         </div>
-                        <p class="ms-2">Athletico Club</p>
+                        <p class="ms-2">{{scouts.first_name}} {{scouts.last_name}} <i class="bi bi-patch-check-fill text-primary"></i></p>
                     </div>
+                    {% endfor %}
 
                 </div>
             </div>
@@ -364,7 +367,7 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <p class="text-dark mt-2 fs-4 fw-bold">{{user.first_name}} {{user.last_name}}</p>
+                    <p class="text-dark mt-2 fs-4 fw-bold">{{user.first_name}} {{user.last_name}} <i class="bi bi-patch-check-fill text-primary"></i></p>
                     <p class="text-secondary">District: {{user.district}}</p>
                     <p class="text-secondary">Locality: {{user.locality}}</p>
 
@@ -625,7 +628,7 @@
                         <div class="rec-img-club">
                             <img class="w-100 rounded-circle" src="{{scouts.img}}" alt="">
                         </div>
-                        <p class="ms-2">{{scouts.first_name}} {{scouts.last_name}}</p>
+                        <p class="ms-2">{{scouts.first_name}} {{scouts.last_name}} <i class="bi bi-patch-check-fill text-primary"></i></p>
                     </div>
                     {% endfor %}
 
