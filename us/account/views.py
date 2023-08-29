@@ -476,3 +476,20 @@ def scoutClub(request):
         'interested_Clubs': interested_Clubs_list,
         'not_interested_Clubs': not_interested_Clubs_list,
     })
+def acceptRequest(request,req_id):
+    user=request.user
+    print(user.id,req_id)
+    data=ShortlistedPlayers(
+        club_id=user.id,
+        player_id=req_id,
+    )
+
+    data.save()
+    club_id=user.id
+    player_id=req_id
+    deleteByRequest(player_id,club_id)
+    return redirect('ClubPlayer')
+def deleteByRequest(player_id,club_id):
+    delete_data=InterestedClubs.objects.filter(player_id=player_id,club_id=club_id)
+    delete_data.delete()
+    return redirect('ClubPlayer')

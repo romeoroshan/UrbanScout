@@ -34,10 +34,10 @@
                             <a class="nav-link  text-secondary" aria-current="page" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" aria-current="page" href="#">Scouts</a>
+                            <a class="nav-link text-secondary" aria-current="page" href="{% url 'ClubScout' %}">Scouts</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" aria-current="page" href="#">Players</a>
+                            <a class="nav-link text-white" aria-current="page" href="{% url 'ClubPlayer' %}">Players</a>
                         </li>
                     </ul>
                 </div>
@@ -72,7 +72,7 @@
                 
                 <div class="d-flex justify-content-lg-end justify-content-center w-100">
                     <div class="d-flex align-items-center justify-content-center col-5">
-                        <a href="{% url 'ShortlistPlayer' i.id %}"><button class="btn btn-outline-primary">Accept Request</button></a>
+                        <a href="{% url 'AcceptRequest' i.id %}"><button class="btn btn-outline-primary">Accept Request</button></a>
                     </div>
                 </div>
             </div>
