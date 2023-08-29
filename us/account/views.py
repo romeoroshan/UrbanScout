@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -414,4 +414,65 @@ def scoutPlayer(request):
     return render(request, 'ScoutPlayer.html', {
         'interested_players': interested_players_list,
         'not_interested_players': not_interested_players_list,
+    })
+def clubScout(request):
+    user = request.user
+    shortlisted_scouts = ShortlistedClubScouts.objects.filter(club_id=user.id).values_list('scout_id', flat=True)
+    all_scouts = User.objects.filter(is_scout=True).values()
+    shortlisted_scout_list = []
+    not_shortlisted_scout_list = []
+    for scout in all_scouts:
+        scout_id = scout['id']
+        player_data = {
+            'id': scout['id'],
+            'first_name': scout['first_name'],
+            'last_name':scout['last_name'],
+            'img':scout['img'],
+            'district':scout['district'],
+            'locality':scout['locality']
+            # Add other fields you want to include here
+        }
+        
+        if scout_id in shortlisted_scouts:
+            shortlisted_scout_list.append(player_data)
+        else:
+            not_shortlisted_scout_list.append(player_data)
+
+    return render(request, 'ClubScout.html', {
+        'shortlisted_scout': shortlisted_scout_list,
+        'not_shortlisted_scout': not_shortlisted_scout_list,
+    })
+def shortlistClubScout(request,scout_id):
+    user=request.user
+    data=ShortlistedClubScouts(
+        scout_id=scout_id,
+        club_id=user.id
+    )
+    data.save()
+    return redirect('ClubScout')
+def scoutClub(request):
+    user = request.user
+    interested_Clubs = ShortlistedClubScouts.objects.filter(scout_id=user.id).values_list('club_id', flat=True)
+    all_clubs = User.objects.filter(is_club=True).values()
+    interested_Clubs_list = []
+    not_interested_Clubs_list = []
+    for Club in all_clubs:
+        Club_id = Club['id']
+        Club_data = {
+            'id': Club['id'],
+            'first_name': Club['club_name'],
+            'img':Club['img'],
+            'district':Club['district'],
+            'locality':Club['locality']
+            # Add other fields you want to include here
+        }
+        
+        if Club_id in interested_Clubs:
+            interested_Clubs_list.append(Club_data)
+        else:
+            not_interested_Clubs_list.append(Club_data)
+
+    return render(request, 'ScoutClub.html', {
+        'interested_Clubs': interested_Clubs_list,
+        'not_interested_Clubs': not_interested_Clubs_list,
     })
