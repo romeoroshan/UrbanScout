@@ -505,7 +505,9 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <p class="text-dark mt-2 fs-4 fw-bold">{{user.first_name}} {{user.last_name}}</p>
+                    <p class="text-dark mt-2 fs-4 fw-bold">{{user.first_name}} {{user.last_name}} {% if user.scouted_by != '' %}
+                        <i class="bi bi-patch-check-fill text-primary"></i>
+                        {% endif %}</p>
                     <p id="age" class="text-secondary"></p>
                     <script>
                         var playerDobString = "{{ user.player_dob }}";
@@ -551,12 +553,27 @@
                     <p class="text-secondary">Locality: {{user.locality}}</p>
                 </div>
                 <div>
-                    <p>Ability: <i class="bi bi-star-fill text-warning"></i><i
-                            class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i
-                            class="bi bi-star-fill text-warning"></i><i class="bi bi-star-half text-warning"></i></p>
-                    <p>Potential: <i class="bi bi-star-fill text-warning"></i><i
-                            class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i
-                            class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i></p>
+                    <p>Ability:{% with ability=user.player_ability %} {% for i in abilityRange %}
+                        {% if i < ability %}
+                        <i class="bi bi-star-fill text-warning"></i>
+                        {% else %}
+                        <i class="bi bi-star text-warning"></i>
+                        {% endif %}
+                        {% endfor %}
+                        {% endwith %}
+                    </p>
+                    <p>Potential:{% with potential=user.player_potential %} {% for i in abilityRange %}
+                        {% if i < potential %}
+                        <i class="bi bi-star-fill text-warning"></i>
+                        {% else %}
+                        <i class="bi bi-star text-warning"></i>
+                        {% endif %}
+                        {% endfor %}
+                        {% endwith %}
+                    </p>
+                    {% if user.scouted_by != '' %}
+                    <p class="fw-bold">Scouted By {{user.scouted_by}} <i class="bi bi-patch-check-fill text-primary"></i></p>
+                    {% endif %}
                 </div>
                 <div class="d-flex justify-content-center"><a href="{% url 'edit-player-profile' %}"><button
                             class="btn btn-outline-info">Edit Profile</button></a></div>

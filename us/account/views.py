@@ -14,6 +14,7 @@ def index(request):
     club = User.objects.filter(is_club=True)
     club_count = club.count()
     scout=User.objects.filter(is_scout=True)
+    ability_range = range(0, 5)
     return render(request,'index.html',
                     {"count":usercout,
                     "users":users,
@@ -22,6 +23,7 @@ def index(request):
                     'club':club_count,
                     'clubdata':club,
                     'scout':scout,
+                    'abilityRange':ability_range
                     })
 def deleteUser(request,delete_id):
     delUser=User.objects.get(id=delete_id)
@@ -494,23 +496,22 @@ def deleteByRequest(player_id,club_id):
     delete_data.delete()
     return redirect('ClubPlayer')
 def scoutPlayerEdit(request,update_id):
-    updateUser=User.objects.filter(id=update_id)
-    # updateUser=User.objects.get(id=update_id)
-    # if updateUser.is_active==True:
-    #     updateUser.is_active=False
-    # else:
-    #     updateUser.is_active=True
-    # updateUser.save()
+    updateUser=User.objects.get(id=update_id)
+    user=request.user
+    username = "{} {}".format(user.first_name, user.last_name)
+    print(username)
     if request.method=='POST':
+        
         ability=request.POST.get('ability')
         potential=request.POST.get('potential')
         desc=request.POST.get('desc')
         updateUser.player_ability=ability
         updateUser.player_potential=potential
         updateUser.desc=desc
+        updateUser.scouted_by=username
         updateUser.save()
         print('saved')
-        return render(request,'ScoutPlayer.html')
+        return redirect('ScoutPlayer')
     return render(request,'ScoutPlayerEdit.html',{
         'updateUser':updateUser,
         'abilityChoices':Ability_Choice,
