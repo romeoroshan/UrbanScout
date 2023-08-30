@@ -3,7 +3,7 @@ from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,Sh
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
-from .models import Pos_Choice, District_Choice
+from .models import Pos_Choice, District_Choice,Ability_Choice
 from datetime import date
 # Create your views here.
 def index(request):
@@ -493,3 +493,25 @@ def deleteByRequest(player_id,club_id):
     delete_data=InterestedClubs.objects.filter(player_id=player_id,club_id=club_id)
     delete_data.delete()
     return redirect('ClubPlayer')
+def scoutPlayerEdit(request,update_id):
+    updateUser=User.objects.filter(id=update_id)
+    # updateUser=User.objects.get(id=update_id)
+    # if updateUser.is_active==True:
+    #     updateUser.is_active=False
+    # else:
+    #     updateUser.is_active=True
+    # updateUser.save()
+    if request.method=='POST':
+        ability=request.POST.get('ability')
+        potential=request.POST.get('potential')
+        desc=request.POST.get('desc')
+        updateUser.player_ability=ability
+        updateUser.player_potential=potential
+        updateUser.desc=desc
+        updateUser.save()
+        print('saved')
+        return render(request,'ScoutPlayer.html')
+    return render(request,'ScoutPlayerEdit.html',{
+        'updateUser':updateUser,
+        'abilityChoices':Ability_Choice,
+        })

@@ -71,6 +71,7 @@ class User(AbstractUser):
     player_potential = models.IntegerField(("Potential"),default=0,choices=Ability_Choice)
     desc=models.CharField(("Description"),max_length=100, default='')
     club_name=models.CharField((("Club Name")),default='',max_length=30)
+    scouted_by=models.CharField(max_length=30,default='')
     REQUIRED_FIELDS = [] 
     
 class Player(models.Model):
