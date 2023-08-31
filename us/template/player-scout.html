@@ -53,6 +53,7 @@
     <div class="d-flex flex-column align-items-center justify-content-center">
         <h2 class="mt-5">Shortlisted Scouts</h2>
         {% for i in shortlisted_scout %}
+        
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
             <div class="border mt-4 d-flex flex-lg-row flex-column justify-content-center justify-content-lg-start align-items-center w-100 p-3 rounded">
@@ -73,7 +74,11 @@
                 
                 <div class="d-flex justify-content-lg-end justify-content-center w-100">
                     <div class="d-flex align-items-center justify-content-center col-5">
+                        {% if user.scouted_by == '' %}
                         <p class="text-success"><i class="bi bi-check-circle-fill"></i> You're request has been recorded, waiting for scout response</p>
+                        {% else %}
+                        <p class="text-primary"><i class="bi bi-check-circle-fill"></i> You're scout reports are released by {{user.scouted_by}}</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>

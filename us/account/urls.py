@@ -34,6 +34,7 @@ urlpatterns = [
     path('ScoutClub',views.scoutClub,name="ScoutClub"),
     path('AcceptRequest/<int:req_id>',views.acceptRequest,name="AcceptRequest"),
     path('ScoutPlayerEdit/<int:update_id>',views.scoutPlayerEdit,name="ScoutPlayerEdit"),
+    path('ScoutClubEdit/<int:update_id>',views.scoutClubEdit,name="ScoutClubEdit"),
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 

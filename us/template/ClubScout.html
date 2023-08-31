@@ -78,8 +78,11 @@
                 
                 <div class="d-flex justify-content-lg-end justify-content-center w-100">
                     <div class="d-flex align-items-center justify-content-center col-5">
+                        {% if user.scouted_by == '' %}
                         <p class="text-success"><i class="bi bi-check-circle-fill"></i> You're request has been recorded, waiting for scout response</p>
-                    </div>
+                        {% else %}
+                        <p class="text-primary"><i class="bi bi-check-circle-fill"></i> You're scout reports are released by {{user.scouted_by}}</p>
+                        {% endif %}                    </div>
                 </div>
             </div>
             

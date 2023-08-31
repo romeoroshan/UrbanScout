@@ -15,6 +15,7 @@ def index(request):
     club_count = club.count()
     scout=User.objects.filter(is_scout=True)
     ability_range = range(0, 5)
+    print(ability_range)
     return render(request,'index.html',
                     {"count":usercout,
                     "users":users,
@@ -369,7 +370,7 @@ def playerScout(request):
             'last_name':scout['last_name'],
             'img':scout['img'],
             'district':scout['district'],
-            'locality':scout['locality']
+            'locality':scout['locality'],
             # Add other fields you want to include here
         }
         
@@ -394,7 +395,9 @@ def scoutPlayer(request):
     user = request.user
     interested_players = ShortlistedScouts.objects.filter(scout_id=user.id).values_list('player_id', flat=True)
     all_players = User.objects.filter(is_player=True).values()
+    fullname = "{} {}".format(user.first_name, user.last_name)
     interested_players_list = []
+    ability_range = range(0, 5)
     not_interested_players_list = []
     for player in all_players:
         player_id = player['id']
@@ -404,7 +407,11 @@ def scoutPlayer(request):
             'last_name':player['last_name'],
             'img':player['img'],
             'district':player['district'],
-            'locality':player['locality']
+            'locality':player['locality'],
+            'scouted_by':player['scouted_by'],
+            'player_ability':player['player_ability'],
+            'player_potential':player['player_potential'],
+            
             # Add other fields you want to include here
         }
         
@@ -414,8 +421,10 @@ def scoutPlayer(request):
             not_interested_players_list.append(player_data)
 
     return render(request, 'ScoutPlayer.html', {
+        'fullname':fullname,
         'interested_players': interested_players_list,
         'not_interested_players': not_interested_players_list,
+        'abilityRange':ability_range,
     })
 def clubScout(request):
     user = request.user
@@ -456,16 +465,21 @@ def scoutClub(request):
     user = request.user
     interested_Clubs = ShortlistedClubScouts.objects.filter(scout_id=user.id).values_list('club_id', flat=True)
     all_clubs = User.objects.filter(is_club=True).values()
+    fullname = "{} {}".format(user.first_name, user.last_name)
+    print(fullname)
+    ability_range = range(0, 5)
     interested_Clubs_list = []
     not_interested_Clubs_list = []
     for Club in all_clubs:
         Club_id = Club['id']
         Club_data = {
             'id': Club['id'],
-            'first_name': Club['club_name'],
+            'club_name': Club['club_name'],
             'img':Club['img'],
             'district':Club['district'],
-            'locality':Club['locality']
+            'locality':Club['locality'],
+            'club_reputation':Club['club_reputation'],
+            'scouted_by':Club['scouted_by'],
             # Add other fields you want to include here
         }
         
@@ -475,6 +489,8 @@ def scoutClub(request):
             not_interested_Clubs_list.append(Club_data)
 
     return render(request, 'ScoutClub.html', {
+        'fullname':fullname,
+        'abilityRange':ability_range,
         'interested_Clubs': interested_Clubs_list,
         'not_interested_Clubs': not_interested_Clubs_list,
     })
@@ -513,6 +529,25 @@ def scoutPlayerEdit(request,update_id):
         print('saved')
         return redirect('ScoutPlayer')
     return render(request,'ScoutPlayerEdit.html',{
+        'updateUser':updateUser,
+        'abilityChoices':Ability_Choice,
+        })
+def scoutClubEdit(request,update_id):
+    updateUser=User.objects.get(id=update_id)
+    user=request.user
+    username = "{} {}".format(user.first_name, user.last_name)
+    print(username)
+    if request.method=='POST':
+        
+        club_reputation=request.POST.get('reputation')
+        desc=request.POST.get('desc')
+        updateUser.club_reputation=club_reputation
+        updateUser.desc=desc
+        updateUser.scouted_by=username
+        updateUser.save()
+        print('saved')
+        return redirect('ScoutClub')
+    return render(request,'ScoutClubEdit.html',{
         'updateUser':updateUser,
         'abilityChoices':Ability_Choice,
         })
