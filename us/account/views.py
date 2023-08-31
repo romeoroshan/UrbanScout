@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -143,6 +143,10 @@ def playerClub(request):
     user = request.user
     interested_clubs = InterestedClubs.objects.filter(player_id=user.id).values_list('club_id', flat=True)
     shortlisted_Players=ShortlistedPlayers.objects.filter(player_id=user.id).values_list('club_id',flat=True)
+    cont_is_active=Contract.objects.filter(player=user.id, player_negotiating=True).values_list('club_id', flat=True)
+    cont_is_not_active=Contract.objects.filter(player_id=user.id, player_negotiating=False).values_list('club_id', flat=True)
+    non_contract_clubs=[]
+    contract_clubs=[]
 
     all_clubs = User.objects.filter(is_club=True).values()
 
@@ -167,11 +171,19 @@ def playerClub(request):
             shortlisted_Players_list.append(club_data)
         else:
             not_interested_clubs_list.append(club_data)
-
+        if club_id in cont_is_active:
+            contract_clubs.append(club_data)
+            
+        elif club_id in cont_is_not_active:
+            non_contract_clubs.append(club_data)
+    print(contract_clubs)
+    print(non_contract_clubs)
     return render(request, 'player-club.html', {
         'shortlisted_players':shortlisted_Players_list,
         'interested_clubs': interested_clubs_list,
         'not_interested_clubs': not_interested_clubs_list,
+        'contractedClubs':contract_clubs,
+        'nonContractedClubs':non_contract_clubs,
     })
 
 def editPlayerProfile(request):
@@ -338,8 +350,14 @@ def clubPlayer(request):
     interested_players = InterestedClubs.objects.filter(club_id=user.id).values_list('player_id', flat=True)
     shortlisted_Players=ShortlistedPlayers.objects.filter(club_id=user.id).values_list('player_id',flat=True)
     all_players = User.objects.filter(is_player=True).values()
+    cont_is_active=Contract.objects.filter(club_id=user.id, player_negotiating=True).values_list('player_id', flat=True)
+    cont_is_not_active=Contract.objects.filter(club_id=user.id, player_negotiating=False).values_list('player_id', flat=True)
+    print(cont_is_active)
+    contract_players=[]
+    non_contract_players=[]
     interested_players_list = []
     not_interested_players_list = []
+    ability_range = range(0, 5)
     shortlisted_Players_list=[]
     for player in all_players:
         player_id = player['id']
@@ -349,7 +367,10 @@ def clubPlayer(request):
             'last_name':player['last_name'],
             'img':player['img'],
             'district':player['district'],
-            'locality':player['locality']
+            'locality':player['locality'],
+            'scouted_by':player['scouted_by'],
+            'player_ability':player['player_ability'],
+            'player_potential':player['player_potential'],
             # Add other fields you want to include here
         }
         
@@ -359,11 +380,18 @@ def clubPlayer(request):
             shortlisted_Players_list.append(player_data)
         else:
             not_interested_players_list.append(player_data)
+        if player_id in cont_is_active:
+            contract_players.append(player_data)
+        elif player_id in cont_is_not_active:
+            non_contract_players.append(player_data)
 
     return render(request, 'club-player.html', {
         'shortlisted_players':shortlisted_Players_list,
         'interested_players': interested_players_list,
         'not_interested_players': not_interested_players_list,
+        'abilityRange':ability_range,
+        'contractedPlayers':contract_players,
+        'nonContractedPlayers':non_contract_players,
     })
 def shortlistPlayer(request,player_id):
     user=request.user
@@ -598,3 +626,59 @@ def postVideo(request):
         post.save() 
         return redirect('index')
     return render(request,'PostVideo.html')
+def contract(request,user_id):
+    player_id=user_id
+    user=request.user
+    club_id=user.id
+    if request.method=='POST':
+        wage=request.POST.get('wage')
+        fees=request.POST.get('fee')
+        bonus=request.POST.get('bonus')
+        cont=Contract(
+            wage=wage,
+            fees=fees,
+            bonus=bonus,
+            player_id=player_id,
+            club_id=club_id,
+            player_negotiating=True,
+            club_negotiating=False,
+        )
+        cont.save()
+        print(wage,fees,bonus,player_id,club_id)
+    return render(request,'Contract.html')
+def contractNegotiation(request,user_id):
+    club_id=user_id
+    user=request.user
+    player_id=user.id
+    updateCont=Contract.objects.get(player_id=player_id,club_id=club_id)
+    cont=Contract.objects.filter(player_id=player_id,club_id=club_id)
+    if request.method=='POST':
+        wage=request.POST.get('wage')
+        fees=request.POST.get('fee')
+        bonus=request.POST.get('bonus')
+        updateCont.wage=wage
+        updateCont.fees=fees
+        updateCont.bonus=bonus
+        updateCont.player_negotiating=False
+        
+        updateCont.save()
+        print(wage,fees,bonus,player_id,club_id)
+    return render(request,'EditContract.html',{'cont':cont})
+def contractNegotiationClub(request,user_id):
+    player_id=user_id
+    user=request.user
+    club_id=user.id
+    updateCont=Contract.objects.get(player_id=player_id,club_id=club_id)
+    cont=Contract.objects.filter(player_id=player_id,club_id=club_id)
+    if request.method=='POST':
+        wage=request.POST.get('wage')
+        fees=request.POST.get('fee')
+        bonus=request.POST.get('bonus')
+        updateCont.wage=wage
+        updateCont.fees=fees
+        updateCont.bonus=bonus
+        updateCont.player_negotiating=True
+        
+        updateCont.save()
+        print(wage,fees,bonus,player_id,club_id)
+    return render(request,'EditContractClub.html',{'cont':cont})

@@ -37,6 +37,9 @@ urlpatterns = [
     path('ScoutClubEdit/<int:update_id>',views.scoutClubEdit,name="ScoutClubEdit"),
     path('PostImage',views.postImage,name="PostImage"),
     path('PostVideo',views.postVideo,name="PostVideo"),
+    path('Contract/<int:user_id>',views.contract,name="Contract"),
+    path('EditContract/<int:user_id>',views.contractNegotiation,name="EditContract"),
+    path('EditContractClub/<int:user_id>',views.contractNegotiationClub,name="EditContractClub"),
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 

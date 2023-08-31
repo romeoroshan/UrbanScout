@@ -109,3 +109,11 @@ class PostVideoFeed(models.Model):
     video = models.FileField(upload_to='pics',
     validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv'])])
     user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='post_video_feed_as_user')
+class Contract(models.Model):
+    player=models.ForeignKey(User, on_delete=models.CASCADE, related_name='contract_as_player')
+    club=models.ForeignKey(User, on_delete=models.CASCADE, related_name='contract_as_club')
+    wage=models.IntegerField()
+    fees=models.IntegerField()
+    bonus=models.CharField(max_length=200)
+    club_negotiating=models.BooleanField(default=False)
+    player_negotiating=models.BooleanField(default=False)
