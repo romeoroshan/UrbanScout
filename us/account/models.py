@@ -98,3 +98,7 @@ class ShortlistedClubScouts(models.Model):
 class PostFeed(models.Model):
     feed=models.CharField(max_length=200)
     user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='post_feed_as_user')
+class PostImageFeed(models.Model):
+    feed=models.CharField(max_length=200)
+    img=models.ImageField(upload_to='pics')
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='post_image_feed_as_user')

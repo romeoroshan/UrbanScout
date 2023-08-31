@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -18,6 +18,7 @@ def index(request):
     user=request.user
     user_id=user.id
     feeds=PostFeed.objects.filter(user_id=user_id)
+    imgfeeds=PostImageFeed.objects.filter(user_id=user_id)
     print(ability_range)
     if request.method=='POST':
         feed=request.POST.get('feed')
@@ -38,6 +39,7 @@ def index(request):
                     'scout':scout,
                     'abilityRange':ability_range,
                     'userfeeds':feeds,
+                    'userimgfeeds':imgfeeds,
                     })
 def deleteUser(request,delete_id):
     delUser=User.objects.get(id=delete_id)
@@ -564,3 +566,17 @@ def scoutClubEdit(request,update_id):
         'updateUser':updateUser,
         'abilityChoices':Ability_Choice,
         })
+def postImage(request):
+    user=request.user
+    user_id=user.id
+    if request.method=='POST':
+        feed=request.POST.get('feed')
+        img=request.FILES.get('img')
+        print(feed,img)
+        post=PostImageFeed(
+            feed=feed,
+            img=img,
+            user_id=user_id,
+        )
+        post.save() 
+    return render(request,'PostImage.html')
