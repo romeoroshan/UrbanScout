@@ -270,10 +270,37 @@
                     </form>
                     <div class="d-flex justify-content-evenly">
                         <a href="{% url 'PostImage' %}"><button class="btn btn-outline-primary"><i class="bi bi-image"></i> Photo</button></a>
-                    <button class="btn btn-outline-success"><i class="bi bi-play-btn-fill"></i> Video</button>
+                    <a href="{% url 'PostVideo' %}"><button class="btn btn-outline-success"><i class="bi bi-play-btn-fill"></i> Video</button></a>
                     </div>
                 </div>
             </div>
+            {% for i in uservideofeeds %}
+            <div class="mt-4 border-top pt-4">
+                <div class="d-flex">
+                    <div class="feed-img">
+                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
+                    </div>
+                    <div class="ms-2">
+                        <p class="fw-bold">
+                            {{user.club_name}}
+                        </p>
+
+                    </div>
+                </div>
+                <div class="w-100 mt-3">
+                    <video class="w-100" controls>
+                        <source src="{{ i.video.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="mt-3">
+                    <p class="fw-bold">{{user.club_name}}
+                    <p>{{i.feed}}</p>
+                    </p>
+
+                </div>
+            </div>
+            {% endfor %}
             {% for i in userimgfeeds %}
             <div class="mt-4 border-top pt-4">
                 <div class="d-flex">
@@ -437,10 +464,37 @@
                     </form>
                     <div class="d-flex justify-content-evenly">
                         <a href="{% url 'PostImage' %}"><button class="btn btn-outline-primary"><i class="bi bi-image"></i> Photo</button></a>
-                    <button class="btn btn-outline-success"><i class="bi bi-play-btn-fill"></i> Video</button>
+                        <a href="{% url 'PostVideo' %}"><button class="btn btn-outline-success"><i class="bi bi-play-btn-fill"></i> Video</button></a>
                     </div>
                 </div>
             </div>
+            {% for i in uservideofeeds %}
+            <div class="mt-4 border-top pt-4">
+                <div class="d-flex">
+                    <div class="feed-img">
+                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
+                    </div>
+                    <div class="ms-2">
+                        <p class="fw-bold">
+                            {{user.first_name}} {{user.last_name}}
+                        </p>
+
+                    </div>
+                </div>
+                <div class="w-100 mt-3">
+                    <video class="w-100" controls>
+                        <source src="{{ i.video.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="mt-3">
+                    <p class="fw-bold">{{user.first_name}} {{user.last_name}}
+                    <p>{{i.feed}}</p>
+                    </p>
+
+                </div>
+            </div>
+            {% endfor %}
             {% for i in userimgfeeds %}
             <div class="mt-4 border-top pt-4">
                 <div class="d-flex">
@@ -697,10 +751,37 @@
                     </form>
                     <div class="d-flex justify-content-evenly">
                         <a href="{% url 'PostImage' %}"><button class="btn btn-outline-primary"><i class="bi bi-image"></i> Photo</button></a>
-                    <button class="btn btn-outline-success"><i class="bi bi-play-btn-fill"></i> Video</button>
+                        <a href="{% url 'PostVideo' %}"><button class="btn btn-outline-success"><i class="bi bi-play-btn-fill"></i> Video</button></a>
                     </div>
                 </div>
             </div>
+            {% for i in uservideofeeds %}
+            <div class="mt-4 border-top pt-4">
+                <div class="d-flex">
+                    <div class="feed-img">
+                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
+                    </div>
+                    <div class="ms-2">
+                        <p class="fw-bold">
+                            {{user.first_name}} {{user.last_name}}
+                        </p>
+
+                    </div>
+                </div>
+                <div class="w-100 mt-3">
+                    <video class="w-100" controls>
+                        <source src="{{ i.video.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="mt-3">
+                    <p class="fw-bold">{{user.first_name}} {{user.last_name}}
+                    <p>{{i.feed}}</p>
+                    </p>
+
+                </div>
+            </div>
+            {% endfor %}
             {% for i in userimgfeeds %}
             <div class="mt-4 border-top pt-4">
                 <div class="d-flex">

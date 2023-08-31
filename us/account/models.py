@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from datetime import date
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
+
 # Create your models here.
 
 Pos_Choice = (
@@ -102,3 +104,8 @@ class PostImageFeed(models.Model):
     feed=models.CharField(max_length=200)
     img=models.ImageField(upload_to='pics')
     user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='post_image_feed_as_user')
+class PostVideoFeed(models.Model):
+    feed=models.CharField(max_length=200)
+    video = models.FileField(upload_to='pics',
+    validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv'])])
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='post_video_feed_as_user')
