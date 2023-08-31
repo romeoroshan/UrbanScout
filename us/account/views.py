@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -15,7 +15,19 @@ def index(request):
     club_count = club.count()
     scout=User.objects.filter(is_scout=True)
     ability_range = range(0, 5)
+    user=request.user
+    user_id=user.id
+    feeds=PostFeed.objects.filter(user_id=user_id)
     print(ability_range)
+    if request.method=='POST':
+        feed=request.POST.get('feed')
+        print(feed)
+        print
+        post=PostFeed(
+            feed=feed,
+            user_id=user_id
+        )
+        post.save()
     return render(request,'index.html',
                     {"count":usercout,
                     "users":users,
@@ -24,7 +36,8 @@ def index(request):
                     'club':club_count,
                     'clubdata':club,
                     'scout':scout,
-                    'abilityRange':ability_range
+                    'abilityRange':ability_range,
+                    'userfeeds':feeds,
                     })
 def deleteUser(request,delete_id):
     delUser=User.objects.get(id=delete_id)

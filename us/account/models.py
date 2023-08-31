@@ -95,3 +95,6 @@ class ShortlistedScouts(models.Model):
 class ShortlistedClubScouts(models.Model):
     scout=models.ForeignKey(User, on_delete=models.CASCADE, related_name='shortlisted_club_scouts_as_scout')
     club=models.ForeignKey(User, on_delete=models.CASCADE, related_name='shortlisted_club_scouts_as_player')
+class PostFeed(models.Model):
+    feed=models.CharField(max_length=200)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='post_feed_as_user')

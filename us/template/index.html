@@ -256,15 +256,39 @@
         <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
             <div class="w-100 d-flex justify-content-center">
                 <div class="w-100">
-                    <textarea class="form-control" name="" id="" cols="30" rows="5"
+                    <form method="post">
+                        {% csrf_token %}
+                    <textarea class="form-control" required name="feed" id="" cols="30" rows="5"
                         placeholder="Share a post"></textarea>
                     <div class="d-flex justify-content-around m-2 mt-4">
                         <button class="btn btn-outline-primary"><i class="bi bi-image"></i> Photo</button>
                         <button class="btn btn-outline-success"><i class="bi bi-play-btn-fill"></i> Video</button>
-                        <button class="btn btn-outline-warning"><i class="bi bi-send-fill"></i> Post</button>
+                        <button type="submit" class="btn btn-outline-warning"><i class="bi bi-send-fill"></i> Post</button>
                     </div>
+                    </form>
                 </div>
             </div>
+            {% for i in userfeeds %}
+            <div class="mt-4 border-top pt-4">
+                <div class="d-flex">
+                    <div class="feed-img">
+                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
+                    </div>
+                    <div class="ms-2">
+                        <p class="fw-bold">
+                            {{user.club_name}}
+                        </p>
+
+                    </div>
+                </div>
+                <div class="mt-3">
+                    
+                    <p>{{i.feed}}</p>
+                    </p>
+
+                </div>
+            </div>
+            {% endfor %}
             <div class="mt-4 border-top pt-4">
                 <div class="d-flex">
                     <div class="feed-img">
@@ -394,15 +418,39 @@
         <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
             <div class="w-100 d-flex justify-content-center">
                 <div class="w-100">
-                    <textarea class="form-control" name="" id="" cols="30" rows="5"
+                    <form method="post">
+                        {% csrf_token %}
+                    <textarea class="form-control" required name="feed" id="" cols="30" rows="5"
                         placeholder="Share a post"></textarea>
                     <div class="d-flex justify-content-around m-2 mt-4">
                         <button class="btn btn-outline-primary"><i class="bi bi-image"></i> Photo</button>
                         <button class="btn btn-outline-success"><i class="bi bi-play-btn-fill"></i> Video</button>
-                        <button class="btn btn-outline-warning"><i class="bi bi-send-fill"></i> Post</button>
+                        <button type="submit" class="btn btn-outline-warning"><i class="bi bi-send-fill"></i> Post</button>
                     </div>
+                    </form>
                 </div>
             </div>
+            {% for i in userfeeds %}
+            <div class="mt-4 border-top pt-4">
+                <div class="d-flex">
+                    <div class="feed-img">
+                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
+                    </div>
+                    <div class="ms-2">
+                        <p class="fw-bold">
+                            {{user.first_name}} {{user.last_name}}
+                        </p>
+
+                    </div>
+                </div>
+                <div class="mt-3">
+                    
+                    <p>{{i.feed}}</p>
+                    </p>
+
+                </div>
+            </div>
+            {% endfor %}
             <div class="mt-4 border-top pt-4">
                 <div class="d-flex">
                     <div class="feed-img">
@@ -600,15 +648,39 @@
         <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
             <div class="w-100 d-flex justify-content-center">
                 <div class="w-100">
-                    <textarea class="form-control" name="" id="" cols="30" rows="5"
+                    <form method="post">
+                        {% csrf_token %}
+                    <textarea class="form-control" required name="feed" id="" cols="30" rows="5"
                         placeholder="Share a post"></textarea>
                     <div class="d-flex justify-content-around m-2 mt-4">
                         <button class="btn btn-outline-primary"><i class="bi bi-image"></i> Photo</button>
                         <button class="btn btn-outline-success"><i class="bi bi-play-btn-fill"></i> Video</button>
-                        <button class="btn btn-outline-warning"><i class="bi bi-send-fill"></i> Post</button>
+                        <button type="submit" class="btn btn-outline-warning"><i class="bi bi-send-fill"></i> Post</button>
                     </div>
+                    </form>
                 </div>
             </div>
+            {% for i in userfeeds %}
+            <div class="mt-4 border-top pt-4">
+                <div class="d-flex">
+                    <div class="feed-img">
+                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
+                    </div>
+                    <div class="ms-2">
+                        <p class="fw-bold">
+                            {{user.first_name}} {{user.last_name}}
+                        </p>
+
+                    </div>
+                </div>
+                <div class="mt-3">
+                    
+                    <p>{{i.feed}}</p>
+                    </p>
+
+                </div>
+            </div>
+            {% endfor %}
             <div class="mt-4 border-top pt-4">
                 <div class="d-flex">
                     <div class="feed-img">
@@ -648,7 +720,9 @@
                         <div class="rec-img-club">
                             <img class="w-100 rounded-circle" src="{{clubs.img}}" alt="">
                         </div>
-                        <p class="ms-2">{{clubs.club_name}}</p>
+                        <p class="ms-2">{{clubs.club_name}} {% if clubs.scouted_by != '' %}
+                            <i class="bi bi-patch-check-fill text-primary"></i>
+                            {% endif %}</p></p></p>
                     </div>
                     {% endfor %}
 
