@@ -115,5 +115,5 @@ class Contract(models.Model):
     wage=models.IntegerField()
     fees=models.IntegerField()
     bonus=models.CharField(max_length=200)
-    club_negotiating=models.BooleanField(default=False)
+    contractAccepted=models.BooleanField(default=False)
     player_negotiating=models.BooleanField(default=False)

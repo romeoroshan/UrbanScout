@@ -40,6 +40,10 @@ urlpatterns = [
     path('Contract/<int:user_id>',views.contract,name="Contract"),
     path('EditContract/<int:user_id>',views.contractNegotiation,name="EditContract"),
     path('EditContractClub/<int:user_id>',views.contractNegotiationClub,name="EditContractClub"),
+    path('AcceptContract/<int:user_id>',views.acceptContract,name="AcceptContract"),
+    path('AcceptContractClub/<int:user_id>',views.acceptContractClub,name="AcceptContractClub"),
+    path('RejectContract/<int:user_id>',views.rejectContract,name="RejectContract"),
+    path('RejectContractClub/<int:user_id>',views.rejectContractClub,name="RejectContractClub"),
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 

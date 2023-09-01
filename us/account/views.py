@@ -142,11 +142,15 @@ def logout(request):
 def playerClub(request):
     user = request.user
     interested_clubs = InterestedClubs.objects.filter(player_id=user.id).values_list('club_id', flat=True)
+    all_cont=Contract.objects.filter(player_id=user.id).values_list('club_id',flat=True)
     shortlisted_Players=ShortlistedPlayers.objects.filter(player_id=user.id).values_list('club_id',flat=True)
-    cont_is_active=Contract.objects.filter(player=user.id, player_negotiating=True).values_list('club_id', flat=True)
-    cont_is_not_active=Contract.objects.filter(player_id=user.id, player_negotiating=False).values_list('club_id', flat=True)
+    cont_is_active=Contract.objects.filter(player=user.id, player_negotiating=True,contractAccepted=False).values_list('club_id', flat=True)
+    cont_is_accepted=Contract.objects.filter(player=user.id,contractAccepted=True).values_list('club_id', flat=True)
+
+    cont_is_not_active=Contract.objects.filter(player_id=user.id, player_negotiating=False,contractAccepted=False).values_list('club_id', flat=True)
     non_contract_clubs=[]
     contract_clubs=[]
+    cont_accepted=[]
 
     all_clubs = User.objects.filter(is_club=True).values()
 
@@ -165,17 +169,20 @@ def playerClub(request):
             # Add other fields you want to include here
         }
         
-        if club_id in interested_clubs:
+        if club_id in interested_clubs and club_id not in all_cont:
             interested_clubs_list.append(club_data)
-        elif club_id in shortlisted_Players:
+        elif club_id in shortlisted_Players and club_id not in all_cont:
             shortlisted_Players_list.append(club_data)
         else:
-            not_interested_clubs_list.append(club_data)
+            if club_id not in all_cont:
+                not_interested_clubs_list.append(club_data)
         if club_id in cont_is_active:
             contract_clubs.append(club_data)
             
         elif club_id in cont_is_not_active:
             non_contract_clubs.append(club_data)
+        if club_id in cont_is_accepted:
+            cont_accepted.append(club_data)
     print(contract_clubs)
     print(non_contract_clubs)
     return render(request, 'player-club.html', {
@@ -184,6 +191,7 @@ def playerClub(request):
         'not_interested_clubs': not_interested_clubs_list,
         'contractedClubs':contract_clubs,
         'nonContractedClubs':non_contract_clubs,
+        'contractAccepted':cont_accepted,
     })
 
 def editPlayerProfile(request):
@@ -350,8 +358,13 @@ def clubPlayer(request):
     interested_players = InterestedClubs.objects.filter(club_id=user.id).values_list('player_id', flat=True)
     shortlisted_Players=ShortlistedPlayers.objects.filter(club_id=user.id).values_list('player_id',flat=True)
     all_players = User.objects.filter(is_player=True).values()
-    cont_is_active=Contract.objects.filter(club_id=user.id, player_negotiating=True).values_list('player_id', flat=True)
-    cont_is_not_active=Contract.objects.filter(club_id=user.id, player_negotiating=False).values_list('player_id', flat=True)
+    all_cont=Contract.objects.filter(club_id=user.id).values_list('player_id',flat=True)
+    cont_is_accepted=Contract.objects.filter(club_id=user.id,contractAccepted=True).values_list('player_id', flat=True)
+    cont_accepted=[]
+
+
+    cont_is_active=Contract.objects.filter(club_id=user.id, player_negotiating=True,contractAccepted=False).values_list('player_id', flat=True)
+    cont_is_not_active=Contract.objects.filter(club_id=user.id, player_negotiating=False,contractAccepted=False).values_list('player_id', flat=True)
     print(cont_is_active)
     contract_players=[]
     non_contract_players=[]
@@ -374,17 +387,19 @@ def clubPlayer(request):
             # Add other fields you want to include here
         }
         
-        if player_id in interested_players:
+        if player_id in interested_players and player_id not in all_cont:
             interested_players_list.append(player_data)
-        elif player_id in shortlisted_Players:
+        elif player_id in shortlisted_Players and player_id not in all_cont:
             shortlisted_Players_list.append(player_data)
         else:
-            not_interested_players_list.append(player_data)
+            if player_id not in all_cont:
+                not_interested_players_list.append(player_data)
         if player_id in cont_is_active:
             contract_players.append(player_data)
         elif player_id in cont_is_not_active:
             non_contract_players.append(player_data)
-
+        if player_id in cont_is_accepted:
+            cont_accepted.append(player_data)
     return render(request, 'club-player.html', {
         'shortlisted_players':shortlisted_Players_list,
         'interested_players': interested_players_list,
@@ -392,6 +407,8 @@ def clubPlayer(request):
         'abilityRange':ability_range,
         'contractedPlayers':contract_players,
         'nonContractedPlayers':non_contract_players,
+        'contractAccepted':cont_accepted,
+
     })
 def shortlistPlayer(request,player_id):
     user=request.user
@@ -641,9 +658,10 @@ def contract(request,user_id):
             player_id=player_id,
             club_id=club_id,
             player_negotiating=True,
-            club_negotiating=False,
+            contractAccepted=False,
         )
         cont.save()
+        return redirect('ClubPlayer')
         print(wage,fees,bonus,player_id,club_id)
     return render(request,'Contract.html')
 def contractNegotiation(request,user_id):
@@ -662,6 +680,7 @@ def contractNegotiation(request,user_id):
         updateCont.player_negotiating=False
         
         updateCont.save()
+        return redirect('player-club')
         print(wage,fees,bonus,player_id,club_id)
     return render(request,'EditContract.html',{'cont':cont})
 def contractNegotiationClub(request,user_id):
@@ -680,5 +699,37 @@ def contractNegotiationClub(request,user_id):
         updateCont.player_negotiating=True
         
         updateCont.save()
+        return redirect('ClubPlayer')
         print(wage,fees,bonus,player_id,club_id)
     return render(request,'EditContractClub.html',{'cont':cont})
+def acceptContract(request,user_id):
+    user=request.user
+    player_id=user.id
+    club_id=user_id
+    updateCont=Contract.objects.get(player_id=player_id,club_id=club_id)
+    updateCont.contractAccepted=True
+    updateCont.save()
+    return redirect('player-club')
+def acceptContractClub(request,user_id):
+    user=request.user
+    club_id=user.id
+    player_id=user_id
+    updateCont=Contract.objects.get(player_id=player_id,club_id=club_id)
+    updateCont.contractAccepted=True
+    updateCont.save()
+    return redirect('ClubPlayer')
+def rejectContract(request,user_id):
+    user=request.user
+    player_id=user.id
+    club_id=user_id
+    deleteCont=Contract.objects.get(player_id=player_id,club_id=club_id)
+    deleteCont.delete()
+    return redirect('player-club')
+def rejectContractClub(request,user_id):
+    user=request.user
+    club_id=user.id
+    player_id=user_id
+    print(club_id,player_id)
+    deleteCont=Contract.objects.get(player_id=player_id,club_id=club_id)
+    deleteCont.delete()
+    return redirect('ClubPlayer')
