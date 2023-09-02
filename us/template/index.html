@@ -274,7 +274,7 @@
                     </div>
                 </div>
             </div>
-            {% for i in uservideofeeds %}
+            {% for i in newfeeds %}
             <div class="mt-4 border-top pt-4">
                 <div class="d-flex">
                     <div class="feed-img">
@@ -288,10 +288,19 @@
                     </div>
                 </div>
                 <div class="w-100 mt-3">
+                    {% if i.video.url != '' %}
                     <video class="w-100" controls>
                         <source src="{{ i.video.url }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
+                    {% endif %}
+                    {% if i.img.url != '' %}
+                    <div class="w-100 mt-3">
+                        <img class="w-100"
+                            src="{{i.img}}"
+                            alt="">
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="mt-3">
                     <p class="fw-bold">{{user.club_name}}
@@ -301,7 +310,7 @@
                 </div>
             </div>
             {% endfor %}
-            {% for i in userimgfeeds %}
+            <!-- {% for i in userimgfeeds %}
             <div class="mt-4 border-top pt-4">
                 <div class="d-flex">
                     <div class="feed-img">
@@ -347,7 +356,7 @@
 
                 </div>
             </div>
-            {% endfor %}
+            {% endfor %} -->
             
 
 
@@ -358,14 +367,16 @@
                     <p class="fw-bold">Recommended Players</p>
                     {% for Players in playerdata %}
 
-                    <div class="d-flex">
-                        <div class="rec-img-club">
-                            <img class="w-100 rounded-circle" src="{{Players.img}}" alt="">
+                    <a class="text-decoration-none text-dark" href="{% url 'player-home' Players.id %}">
+                        <div class="d-flex">
+                            <div class="rec-img-club">
+                                <img class="w-100 rounded-circle" src="{{Players.img}}" alt="">
+                            </div>
+                            <p class="ms-2">{{Players.first_name}} {{Players.last_name}}{% if Players.scouted_by != '' %}
+                                <i class="bi bi-patch-check-fill text-primary"></i>
+                                {% endif %}</p></p>
                         </div>
-                        <p class="ms-2">{{Players.first_name}} {{Players.last_name}}{% if Players.scouted_by != '' %}
-                            <i class="bi bi-patch-check-fill text-primary"></i>
-                            {% endif %}</p></p>
-                    </div>
+                    </a>
                     {% endfor %}
 
 
@@ -375,12 +386,16 @@
                 <div>
                     <p class="fw-bold">Recommended Scouts</p>
                     {% for scouts in scout %}
-                    <div class="d-flex">
-                        <div class="rec-img-club">
-                            <img class="w-100 rounded-circle" src="{{scouts.img}}" alt="">
+                    {% if scouts.is_staff == 0 %}
+                    <a class="text-decoration-none text-dark" href="{% url 'scout-home' scouts.id %}">
+                        <div class="d-flex">
+                            <div class="rec-img-club">
+                                <img class="w-100 rounded-circle" src="{{scouts.img}}" alt="">
+                            </div>
+                            <p class="ms-2">{{scouts.first_name}} {{scouts.last_name}} <i class="bi bi-patch-check-fill text-primary"></i></p>
                         </div>
-                        <p class="ms-2">{{scouts.first_name}} {{scouts.last_name}} <i class="bi bi-patch-check-fill text-primary"></i></p>
-                    </div>
+                    </a>
+                    {% endif %}
                     {% endfor %}
 
                 </div>
@@ -468,7 +483,7 @@
                     </div>
                 </div>
             </div>
-            {% for i in uservideofeeds %}
+            {% for i in newfeeds %}
             <div class="mt-4 border-top pt-4">
                 <div class="d-flex">
                     <div class="feed-img">
@@ -482,59 +497,23 @@
                     </div>
                 </div>
                 <div class="w-100 mt-3">
+                    {% if i.video.url != '' %}
                     <video class="w-100" controls>
                         <source src="{{ i.video.url }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
-                </div>
-                <div class="mt-3">
-                    <p class="fw-bold">{{user.first_name}} {{user.last_name}}
-                    <p>{{i.feed}}</p>
-                    </p>
-
-                </div>
-            </div>
-            {% endfor %}
-            {% for i in userimgfeeds %}
-            <div class="mt-4 border-top pt-4">
-                <div class="d-flex">
-                    <div class="feed-img">
-                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
+                    <p class="fw-bold mt-3">{{user.first_name}} {{user.last_name}}
+                    {% endif %}
+                    {% if i.img.url != '' %}
+                    <div class="w-100 mt-3">
+                        <img class="w-100"
+                            src="{{i.img}}"
+                            alt="">
                     </div>
-                    <div class="ms-2">
-                        <p class="fw-bold">
-                            {{user.first_name}} {{user.last_name}}
-                        </p>
-
-                    </div>
+                    <p class="mt-3 fw-bold">{{user.first_name}} {{user.last_name}}
+                    {% endif %}
                 </div>
-                <div class="w-100 mt-3">
-                    <img class="w-100"
-                        src="{{i.img}}"
-                        alt="">
-                </div>
-                <div class="mt-3">
-                    <p class="fw-bold">{{user.first_name}} {{user.last_name}}
-                    <p>{{i.feed}}</p>
-                    </p>
-
-                </div>
-            </div>
-            {% endfor %}
-            {% for i in userfeeds %}
-            <div class="mt-4 border-top pt-4">
-                <div class="d-flex">
-                    <div class="feed-img">
-                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
-                    </div>
-                    <div class="ms-2">
-                        <p class="fw-bold">
-                            {{user.first_name}} {{user.last_name}}
-                        </p>
-
-                    </div>
-                </div>
-                <div class="mt-3">
+                <div class="">
                     
                     <p>{{i.feed}}</p>
                     </p>
@@ -755,7 +734,7 @@
                     </div>
                 </div>
             </div>
-            {% for i in uservideofeeds %}
+            {% for i in newfeeds %}
             <div class="mt-4 border-top pt-4">
                 <div class="d-flex">
                     <div class="feed-img">
@@ -769,59 +748,23 @@
                     </div>
                 </div>
                 <div class="w-100 mt-3">
+                    {% if i.video.url != '' %}
                     <video class="w-100" controls>
                         <source src="{{ i.video.url }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
-                </div>
-                <div class="mt-3">
-                    <p class="fw-bold">{{user.first_name}} {{user.last_name}}
-                    <p>{{i.feed}}</p>
-                    </p>
-
-                </div>
-            </div>
-            {% endfor %}
-            {% for i in userimgfeeds %}
-            <div class="mt-4 border-top pt-4">
-                <div class="d-flex">
-                    <div class="feed-img">
-                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
+                    <p class="fw-bold mt-3">{{user.first_name}} {{user.last_name}}
+                    {% endif %}
+                    {% if i.img.url != '' %}
+                    <div class="w-100 mt-3">
+                        <img class="w-100"
+                            src="{{i.img}}"
+                            alt="">
                     </div>
-                    <div class="ms-2">
-                        <p class="fw-bold">
-                            {{user.first_name}} {{user.last_name}}
-                        </p>
-
-                    </div>
+                    <p class="mt-3 fw-bold">{{user.first_name}} {{user.last_name}}
+                    {% endif %}
                 </div>
-                <div class="w-100 mt-3">
-                    <img class="w-100"
-                        src="{{i.img}}"
-                        alt="">
-                </div>
-                <div class="mt-3">
-                    <p class="fw-bold">{{user.first_name}} {{user.last_name}}
-                    <p>{{i.feed}}</p>
-                    </p>
-
-                </div>
-            </div>
-            {% endfor %}
-            {% for i in userfeeds %}
-            <div class="mt-4 border-top pt-4">
-                <div class="d-flex">
-                    <div class="feed-img">
-                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
-                    </div>
-                    <div class="ms-2">
-                        <p class="fw-bold">
-                            {{user.first_name}} {{user.last_name}}
-                        </p>
-
-                    </div>
-                </div>
-                <div class="mt-3">
+                <div class="">
                     
                     <p>{{i.feed}}</p>
                     </p>
@@ -856,12 +799,14 @@
                 <div>
                     <p class="fw-bold">Recommended Scouts</p>
                     {% for scouts in scout %}
+                    {% if scouts.is_staff == 0 %}
                     <div class="d-flex">
                         <div class="rec-img-club">
                             <img class="w-100 rounded-circle" src="{{scouts.img}}" alt="">
                         </div>
                         <p class="ms-2">{{scouts.first_name}} {{scouts.last_name}} <i class="bi bi-patch-check-fill text-primary"></i></p>
                     </div>
+                    {% endif %}
                     {% endfor %}
 
                 </div>

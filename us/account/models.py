@@ -117,3 +117,9 @@ class Contract(models.Model):
     bonus=models.CharField(max_length=200)
     contractAccepted=models.BooleanField(default=False)
     player_negotiating=models.BooleanField(default=False)
+class NewFeeds(models.Model):
+    feed=models.CharField(max_length=200)
+    img=models.ImageField(upload_to='pics',null=True)
+    video = models.FileField(upload_to='pics',
+    validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv'])], null=True)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='newfeeds_as_user')

@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -17,6 +17,7 @@ def index(request):
     ability_range = range(0, 5)
     user=request.user
     user_id=user.id
+    newfeeds=NewFeeds.objects.filter(user_id=user_id).order_by('-id')
     feeds=PostFeed.objects.filter(user_id=user_id)
     imgfeeds=PostImageFeed.objects.filter(user_id=user_id)
     videofeeds=PostVideoFeed.objects.filter(user_id=user_id)
@@ -25,7 +26,7 @@ def index(request):
         feed=request.POST.get('feed')
         print(feed)
         print
-        post=PostFeed(
+        post=NewFeeds(
             feed=feed,
             user_id=user_id
         )
@@ -42,6 +43,7 @@ def index(request):
                     'userfeeds':feeds,
                     'userimgfeeds':imgfeeds,
                     'uservideofeeds':videofeeds,
+                    'newfeeds':newfeeds
                     })
 def deleteUser(request,delete_id):
     delUser=User.objects.get(id=delete_id)
@@ -132,8 +134,24 @@ def login(request):
             msg = 'Error validating form'
     
     return render(request, 'login.html', {'form': form, 'msg': msg})
-def playerHome(request):
-    return render(request,'player-home.html')
+def playerHome(request,user_id):
+    players = User.objects.filter(is_player=True)
+    scout=User.objects.filter(is_scout=True)
+    ability_range = range(0, 5)
+    feeds=NewFeeds.objects.filter(user_id=user_id).order_by('-id')
+    ability_range = range(0, 5)
+    player=User.objects.filter(id=user_id)
+    return render(request,'player-home.html',{'player':player,'abilityRange':ability_range,'playerdata':players,'scout':scout,'feeds':feeds})
+def scoutHome(request,user_id):
+    clubs = User.objects.filter(is_club=True)
+    player=User.objects.filter(is_player=True)
+    scouts=User.objects.filter(is_scout=True)
+    ability_range = range(0, 5)
+    feeds=NewFeeds.objects.filter(user_id=user_id).order_by('-id')
+    ability_range = range(0, 5)
+    scout=User.objects.filter(id=user_id)
+    return render(request,'ScoutHome.html',{'scouts':scouts, 'scout':scout,'abilityRange':ability_range,'clubdata':clubs,'player':player,'feeds':feeds})
+
 def clubHome(request):
     return render(request,'club-home.html')
 def logout(request):
@@ -620,7 +638,7 @@ def postImage(request):
         feed=request.POST.get('feed')
         img=request.FILES.get('img')
         print(feed,img)
-        post=PostImageFeed(
+        post=NewFeeds(
             feed=feed,
             img=img,
             user_id=user_id,
@@ -635,7 +653,7 @@ def postVideo(request):
         feed=request.POST.get('feed')
         video=request.FILES.get('video')
         print(feed,video)
-        post=PostVideoFeed(
+        post=NewFeeds(
             feed=feed,
             video=video,
             user_id=user_id,

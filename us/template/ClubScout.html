@@ -68,7 +68,7 @@
                 </div>
                 
                 <div class="ms-3 col-lg-5 col-12">
-                    <p class="fs-2 fw-bold">{{i.first_name}}{{i.last_name}}</p>
+                    <a class="text-decoration-none text-dark" href="{% url 'scout-home' i.id %}"><p class="fs-2 fw-bold">{{i.first_name}}{{i.last_name}}</p></a>
                     <p class=""><b>District: </b>{{i.district}} </p>
                     <p class=""><b>Locality </b>{{i.locality}}</p>
                     <p class="fw-bold">Recommendation: <i class="bi bi-star-fill text-warning"></i><i
@@ -100,7 +100,7 @@
                 </div>
                 
                 <div class="ms-3 col-lg-5 col-12">
-                    <p class="fs-2 fw-bold">{{i.first_name}}{{i.last_name}}</p>
+                    <a class="text-decoration-none text-dark" href="{% url 'scout-home' i.id %}"><p class="fs-2 fw-bold">{{i.first_name}}{{i.last_name}}</p></a>
                     <p class=""><b>District: </b>{{i.district}} </p>
                     <p class=""><b>Locality </b>{{i.locality}}</p>
                     <p class="fw-bold">Recommendation: <i class="bi bi-star-fill text-warning"></i><i
