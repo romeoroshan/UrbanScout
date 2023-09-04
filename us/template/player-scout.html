@@ -51,7 +51,9 @@
         </div>
     </nav>
     <div class="d-flex flex-column align-items-center justify-content-center">
+        {% if shortlisted_scout|length > 0 %}
         <h2 class="mt-5">Shortlisted Scouts</h2>
+        {% endif %}
         {% for i in shortlisted_scout %}
         
         <script>console.log("{{ i.img }}")</script>
@@ -85,7 +87,9 @@
             
         </div>
         {% endfor %}
+        {% if not_shortlisted_scout|length > 0 %}
         <h2 class="mt-5">Other Scouts</h2>
+        {% endif %}
         {% for i in not_shortlisted_scout %}
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">

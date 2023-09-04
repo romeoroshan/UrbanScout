@@ -51,7 +51,9 @@
         </div>
     </nav>
     <div class="d-flex flex-column align-items-center justify-content-center">
+        {% if contractAccepted|length > 0 %}
         <h2 class="mt-3">Contracts Finalised</h2>
+        {% endif %}
         {% for i in contractAccepted %}
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
@@ -92,7 +94,9 @@
             
         </div>
         {% endfor %}
+        {% if nonContractedPlayers|length > 0 %}
         <h2 class="mt-5">Players send response</h2>
+        {% endif %}
         {% for i in nonContractedPlayers %}
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
@@ -137,7 +141,9 @@
             
         </div>
         {% endfor %}
+        {% if contractedPlayers|length > 0 %}
         <h2 class="mt-5">Currently active contracts</h2>
+        {% endif %}
         {% for i in contractedPlayers %}
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
@@ -182,7 +188,9 @@
             
         </div>
         {% endfor %}
+        {% if shortlisted_players|length > 0 %}
         <h2 class="mt-5">Shortlisted Players</h2>
+        {% endif %}
         {% for i in shortlisted_players %}
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
@@ -231,7 +239,9 @@
             
         </div>
         {% endfor %}
+        {% if interested_players|length > 0 %}
         <h2 class="mt-5">Players that are interested in your club</h2>
+        {% endif %}
         {% for i in interested_players %}
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
@@ -275,8 +285,9 @@
             
         </div>
         {% endfor %}
-        
+        {% if not_interested_players|length > 0 %}
         <h2 class="mt-5">Other players</h2>
+        {% endif %}
         {% for i in not_interested_players %}
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">

@@ -51,7 +51,9 @@
         </div>
     </nav>
     <div class="d-flex flex-column align-items-center justify-content-center">
+        {% if contractAccepted|length > 0 %}
         <h2 class="mt-3">Contracts Finalised</h2>
+        {% endif %}
         {% for i in contractAccepted %}
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
@@ -76,7 +78,9 @@
             
         </div>
         {% endfor %}
+        {% if contractedClubs|length > 0 or nonContractedClubs|length > 0 %}
         <h2 class="mt-3">Contract</h2>
+        {% endif %}
         {% for i in contractedClubs %}
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
@@ -127,7 +131,9 @@
             
         </div>
         {% endfor %}
+        {% if interested_clubs|length > 0 %}
         <h2 class="mt-3">Shortlisted Clubs</h2>
+        {% endif %}
         {% for i in interested_clubs %}
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
@@ -152,7 +158,9 @@
             
         </div>
         {% endfor %}
+        {% if shortlisted_players|length > 0 %}
         <h2 class="mt-3">Interest shown clubs</h2>
+        {% endif %}
         {% for i in shortlisted_players %}
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
@@ -177,7 +185,9 @@
             
         </div>
         {% endfor %}
+        {% if not_interested_clubs|length > 0 %}
         <h2 class="mt-5">Other Clubs</h2>
+        {% endif %}
         {% for i in not_interested_clubs %}
         <script>console.log("{{ i.img }}")</script>
         <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">

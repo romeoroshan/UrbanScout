@@ -458,7 +458,7 @@ def playerScout(request):
             shortlisted_scout_list.append(player_data)
         else:
             not_shortlisted_scout_list.append(player_data)
-
+    print(shortlisted_scout_list)
     return render(request, 'player-scout.html', {
         'shortlisted_scout': shortlisted_scout_list,
         'not_shortlisted_scout': not_shortlisted_scout_list,
@@ -499,7 +499,7 @@ def scoutPlayer(request):
             interested_players_list.append(player_data)
         else:
             not_interested_players_list.append(player_data)
-
+    print(interested_players_list)
     return render(request, 'ScoutPlayer.html', {
         'fullname':fullname,
         'interested_players': interested_players_list,
@@ -567,7 +567,7 @@ def scoutClub(request):
             interested_Clubs_list.append(Club_data)
         else:
             not_interested_Clubs_list.append(Club_data)
-
+    print(interested_Clubs_list)
     return render(request, 'ScoutClub.html', {
         'fullname':fullname,
         'abilityRange':ability_range,
