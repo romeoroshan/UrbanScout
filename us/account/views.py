@@ -751,3 +751,19 @@ def rejectContractClub(request,user_id):
     deleteCont=Contract.objects.get(player_id=player_id,club_id=club_id)
     deleteCont.delete()
     return redirect('ClubPlayer')
+
+
+#email verification
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_protect
+
+@csrf_protect
+def validate_email(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        data = {'is_taken': User.objects.filter(email=email).exists()}
+        return JsonResponse(data)
+    else:
+        # Handle GET requests or other methods if needed
+        return JsonResponse({'error': 'Invalid request method'})

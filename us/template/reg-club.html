@@ -55,6 +55,10 @@
         <label for="{{ playerForm.email.id_for_label }}">Email</label>
         {{ playerForm.email }}
         <p id="email" class="text-danger"></p>
+        <p id="email1" class="text-danger"></p>
+                        {% for error in playerForm.email.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
     </div>
     <div class="form-group">
         <label for="{{ playerForm.password1.id_for_label }}">Password</label>
@@ -88,3 +92,35 @@
 </body>
 
 </html>
+<script>
+    $(document).ready(function () {
+        $("#mail").keyup(function () {
+            var email = $("#mail").val();
+
+            // Include the CSRF token in the headers
+            var headers = {
+                "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val()
+            };
+
+            $.ajax({
+                url: "/validate_email/",
+                type: "POST",
+                headers: headers,
+                data: {
+                    email: email
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.is_taken) {
+                        console.log('taken')
+                        // Email is already taken
+                        $("#email1").text("This email is already in use.");
+                    } else {
+                        // Email is available
+                        $("#email1").text("");
+                    }
+                }
+            });
+        });
+    });
+</script>
