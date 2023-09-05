@@ -280,12 +280,12 @@
                     <div class="feed-img">
                         <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
                     </div>
-                    <div class="ms-2">
+                    <div class="ms-2 d-flex">
                         <p class="fw-bold">
                             {{user.club_name}}
                         </p>
-
-                    </div>
+                        <p class="ms-2 text-secondary">{{i.datetime}}</p>
+                    </div>  
                 </div>
                 <div class="w-100 mt-3">
                     {% if i.video.url != '' %}
@@ -489,11 +489,11 @@
                     <div class="feed-img">
                         <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
                     </div>
-                    <div class="ms-2">
+                    <div class="ms-2 d-flex">
                         <p class="fw-bold">
                             {{user.first_name}} {{user.last_name}}
                         </p>
-
+                        <p class="ms-2 text-secondary">{{i.datetime}}</p>
                     </div>
                 </div>
                 <div class="w-100 mt-3">
@@ -740,10 +740,11 @@
                     <div class="feed-img">
                         <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
                     </div>
-                    <div class="ms-2">
+                    <div class="ms-2 d-flex">
                         <p class="fw-bold">
                             {{user.first_name}} {{user.last_name}}
                         </p>
+                        <p class="ms-2 text-secondary">{{i.datetime}}</p>
 
                     </div>
                 </div>

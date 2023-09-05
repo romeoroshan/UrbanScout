@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from datetime import date
+import datetime
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 
@@ -123,3 +124,5 @@ class NewFeeds(models.Model):
     video = models.FileField(upload_to='pics',
     validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv'])], null=True)
     user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='newfeeds_as_user')
+    datetime = models.DateTimeField(null=True)
+    likes=models.IntegerField(null=True)

@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
 from .models import Pos_Choice, District_Choice,Ability_Choice
 from datetime import date
+from django.utils import timezone
 # Create your views here.
 def index(request):
     users=User.objects.all()
@@ -28,7 +29,8 @@ def index(request):
         print
         post=NewFeeds(
             feed=feed,
-            user_id=user_id
+            user_id=user_id,
+            datetime=timezone.now()
         )
         post.save()
     return render(request,'index.html',
@@ -642,6 +644,7 @@ def postImage(request):
             feed=feed,
             img=img,
             user_id=user_id,
+            datetime=timezone.now()
         )
         post.save() 
         return redirect('index')
@@ -657,6 +660,7 @@ def postVideo(request):
             feed=feed,
             video=video,
             user_id=user_id,
+            datetime=timezone.now()
         )
         post.save() 
         return redirect('index')
