@@ -125,4 +125,7 @@ class NewFeeds(models.Model):
     validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv'])], null=True)
     user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='newfeeds_as_user')
     datetime = models.DateTimeField(null=True)
-    likes=models.IntegerField(null=True)
+    likes_cout=models.IntegerField(default=0)
+class likes(models.Model):
+    feed=models.ForeignKey(NewFeeds,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='likes_as_user')

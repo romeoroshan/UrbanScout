@@ -46,6 +46,7 @@ urlpatterns = [
     path('RejectContract/<int:user_id>',views.rejectContract,name="RejectContract"),
     path('RejectContractClub/<int:user_id>',views.rejectContractClub,name="RejectContractClub"),
     path('validate_email/', views.validate_email, name='validate_email'),
+    path('like_feed_ajax/<int:feed_id>/', views.like_feed_ajax, name='like_feed_ajax'),
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 

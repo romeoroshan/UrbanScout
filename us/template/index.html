@@ -302,6 +302,7 @@
                     </div>
                     {% endif %}
                 </div>
+                
                 <div class="mt-3">
                     <p class="fw-bold">{{user.club_name}}
                     <p>{{i.feed}}</p>
@@ -748,7 +749,7 @@
 
                     </div>
                 </div>
-                <div class="w-100 mt-3">
+                <div class="w-100 mt-3" >
                     {% if i.video.url != '' %}
                     <video class="w-100" controls>
                         <source src="{{ i.video.url }}" type="video/mp4">
@@ -762,14 +763,23 @@
                             src="{{i.img}}"
                             alt="">
                     </div>
+                    
                     <p class="mt-3 fw-bold">{{user.first_name}} {{user.last_name}}
                     {% endif %}
                 </div>
+                
+                
                 <div class="">
                     
                     <p>{{i.feed}}</p>
                     </p>
-
+                    <div class="mt-2">
+                        <button class="btn shadow-none like-button" data-feed-id="{{ i.id }}">
+                            <i class="bi bi-heart fs-5"></i>
+                        </button>
+                        <p id="likes-count-{{ i.id }}">{{ i.likes_cout }} likes</p>
+                    </div>
+                    
                 </div>
             </div>
             {% endfor %}
@@ -855,3 +865,28 @@
 </body>
 
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".like-button").click(function () {
+            var feedId = $(this).data("feed-id");
+            var headers = {
+                "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                headers: headers,
+                url: "{% url 'like_feed_ajax' 0 %}".replace('0', feedId),
+                success: function (data) {
+                    // Update the like count on the page
+                    $("#likes-count-" + feedId).text(data.likes_count+" likes");
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

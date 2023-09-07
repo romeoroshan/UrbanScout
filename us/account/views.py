@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -756,6 +756,28 @@ def rejectContractClub(request,user_id):
     deleteCont.delete()
     return redirect('ClubPlayer')
 
+from django.http import JsonResponse
+
+def like_feed_ajax(request, feed_id):
+    user = request.user
+    post = NewFeeds.objects.get(id=feed_id)
+    current_likes = post.likes_cout
+    liked = likes.objects.filter(user=user, feed=post).count()
+
+    if not liked:
+        likes.objects.create(user=user, feed=post)
+        current_likes += 1
+    else:
+        likes.objects.filter(user=user, feed=post).delete()
+        current_likes -= 1
+
+    post.likes_cout = current_likes
+    post.save()
+
+    # Return the updated like count as JSON
+    return JsonResponse({'likes_count': current_likes})
+
+    
 
 #email verification
 
