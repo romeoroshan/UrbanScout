@@ -17,6 +17,10 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script type="text/javascript" src="{% static 'ajax.js' %}"></script>
+
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load("current", { packages: ["corechart"] });
@@ -78,7 +82,9 @@
     </script>
 
 </head>
-
+<form action="POST">
+    {% csrf_token %}
+</form>
 <body class="bg-light">
     {% if user.is_superuser %}
     <nav class="navbar player-navbar navbar-expand-lg">
@@ -157,7 +163,7 @@
                     </tr>
                     {% for i in users %}
                     {% if not i.is_staff %}
-                    <tr>
+                    <tr id="user-{{i.id}}">
 
                         <td>{{i.email}}</td>
                         <td>{% if i.is_player %}
@@ -170,8 +176,8 @@
                         <td>{{i.is_active}}</td>
                         <td><a href="{% url 'updateStatus' i.id %}"><button class="btn btn-primary"><i
                                         class="bi bi-pencil-square"></i></button></a></td>
-                        <td><a href="{% url 'deleteUser' i.id %}"><button class="btn btn-danger"><i
-                                        class="bi bi-trash3-fill"></i></button></a></td>
+                        <td><a href="{% url 'deleteUser' i.id %}"><button class="btn btn-danger delete-button"><i
+                            class="bi bi-trash3-fill"></i></button></a></td>
 
                     </tr>
                     {% endif %}
@@ -450,7 +456,7 @@
         </div>
     </nav>
     <div class="d-flex flex-wrap justify-content-center mt-4">
-        <div class="col-lg-3 h-50 col-12 m-3 p-5 rounded bg-white shadow-lg position-sticky">
+        <div class="col-lg-3 player-profile h-50 col-12 m-3 p-5 rounded bg-white shadow-lg position-sticky">
             <div class="">
                 <div class="d-flex justify-content-center">
                     <div class="">
@@ -564,7 +570,7 @@
 
         </div>
         <div class="col-lg-3 col-12">
-            <div class="m-3 p-5 rounded bg-white shadow-lg">
+            <div class="m-3 p-5 player-recomendation rounded bg-white shadow-lg">
                 <div>
                     <p class="fw-bold">Recommended Players</p>
                     {% for Players in playerdata %}
@@ -584,7 +590,7 @@
 
                 </div>
             </div>
-            <div class="m-3 p-5 rounded bg-white shadow-lg">
+            <div class="m-3 p-5 player-recomendation rounded bg-white shadow-lg">
                 <div>
                     <p class="fw-bold">Recommended Clubs</p>
                     {% for clubs in clubdata %}

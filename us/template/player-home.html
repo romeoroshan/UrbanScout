@@ -224,8 +224,9 @@
 
         </div>
         {% endfor %}
+        {% if user.is_scout %}
         <div class="col-lg-3 col-12">
-            <div class="m-3 p-5 rounded bg-white shadow-lg">
+            <div class="m-3 p-5  player-recomendation rounded bg-white shadow-lg">
                 <div>
                     <p class="fw-bold">Recommended Players</p>
                     {% for Players in playerdata %}
@@ -247,17 +248,17 @@
 
                 </div>
             </div>
-            <div class="m-3 p-5 rounded bg-white shadow-lg">
+            <div class="m-3 p-5  player-recomendation rounded bg-white shadow-lg">
                 <div>
-                    <p class="fw-bold">Recommended Scouts</p>
-                    {% for scouts in scout %}
-                    {% if scouts.is_staff == 0 %}
-                    <a class="text-decoration-none text-dark" href="{% url 'scout-home' scouts.id %}">
+                    <p class="fw-bold">Recommended Clubs</p>
+                    {% for clubs in clubdata %}
+                    {% if clubs.is_staff == 0 %}
+                    <a class="text-decoration-none text-dark" href="{% url 'clubHome' clubs.id %}">
                         <div class="d-flex">
                             <div class="rec-img-club">
-                                <img class="w-100 rounded-circle" src="{{scouts.img.url}}" alt="">
+                                <img class="w-100 rounded-circle" src="{{clubs.img.url}}" alt="">
                             </div>
-                            <p class="ms-2">{{scouts.first_name}} {{scouts.last_name}} <i
+                            <p class="ms-2">{{clubs.club_name}} <i
                                     class="bi bi-patch-check-fill text-primary"></i></p>
                         </div>
                     </a>
@@ -267,6 +268,50 @@
                 </div>
             </div>
         </div>
+        {% else %}
+        <div class="col-lg-3 col-12">
+            <div class="m-3 p-5  player-recomendation rounded bg-white shadow-lg">
+                <div>
+                    <p class="fw-bold">Recommended Players</p>
+                    {% for Players in playerdata %}
+
+                    <a class="text-decoration-none text-dark" href="{% url 'player-home' Players.id %}">
+                        <div class="d-flex">
+                            <div class="rec-img-club">
+                                <img class="w-100 rounded-circle" src="{{Players.img.url}}" alt="">
+                            </div>
+                            <p class="ms-2">{{Players.first_name}} {{Players.last_name}}{% if Players.scouted_by != ''%}
+                                <i class="bi bi-patch-check-fill text-primary"></i>
+                                {% endif %}
+                            </p>
+                            </p>
+                        </div>
+                    </a>
+                    {% endfor %}
+
+
+                </div>
+            </div>
+            <div class="m-3 p-5  player-recomendation rounded bg-white shadow-lg">
+                <div>
+                    <p class="fw-bold">Recommended Scouts</p>
+                    {% for scouts in scout %}
+                    {% if scouts.is_staff == 0 %}
+                    <a class="text-decoration-none text-dark" href="{% url 'scout-home' scouts.id %}">
+                        <div class="d-flex">
+                            <div class="rec-img-club">
+                                <img class="w-100 rounded-circle" src="{{scouts.img.url}}" alt="">
+                            </div>
+                            <p class="ms-2">{{scouts.first_name}} {{scouts.last_name}}<i
+                                    class="bi bi-patch-check-fill text-primary"></i></p>
+                        </div>
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </body>
 

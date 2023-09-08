@@ -50,7 +50,7 @@ def index(request):
 def deleteUser(request,delete_id):
     delUser=User.objects.get(id=delete_id)
     delUser.delete()
-    return redirect('/')
+    return redirect('index')
 def updateStatus(request,update_id):
     updateUser=User.objects.get(id=update_id)
     if updateUser.is_active==True:
@@ -139,21 +139,23 @@ def login(request):
 def playerHome(request,user_id):
     players = User.objects.filter(is_player=True)
     scout=User.objects.filter(is_scout=True)
+    clubs=User.objects.filter(is_club=True)
     ability_range = range(0, 5)
     feeds=NewFeeds.objects.filter(user_id=user_id).order_by('-id')
     ability_range = range(0, 5)
     player=User.objects.filter(id=user_id)
-    return render(request,'player-home.html',{'player':player,'abilityRange':ability_range,'playerdata':players,'scout':scout,'feeds':feeds})
+    return render(request,'player-home.html',{'player':player,'abilityRange':ability_range,'clubdata':clubs,'playerdata':players,'scout':scout,'feeds':feeds})
 
 
 def clubHome(request,user_id):
+    players=User.objects.filter(is_player=True)
     clubs = User.objects.filter(is_club=True)
     scout=User.objects.filter(is_scout=True)
     ability_range = range(0, 5)
     feeds=NewFeeds.objects.filter(user_id=user_id).order_by('-id')
     ability_range = range(0, 5)
     club=User.objects.filter(id=user_id)
-    return render(request,'ClubHome.html',{'club':club,'abilityRange':ability_range,'clubdata':clubs,'scout':scout,'feeds':feeds})
+    return render(request,'ClubHome.html',{'club':club,'abilityRange':ability_range,'playerdata':players,'clubdata':clubs,'scout':scout,'feeds':feeds})
 def scoutHome(request,user_id):
     clubs = User.objects.filter(is_club=True)
     player=User.objects.filter(is_player=True)
@@ -162,6 +164,7 @@ def scoutHome(request,user_id):
     feeds=NewFeeds.objects.filter(user_id=user_id).order_by('-id')
     ability_range = range(0, 5)
     scout=User.objects.filter(id=user_id)
+    print(scouts)
     return render(request,'ScoutHome.html',{'scouts':scouts, 'scout':scout,'abilityRange':ability_range,'clubdata':clubs,'player':player,'feeds':feeds})
 def logout(request):
     auth.logout(request)
