@@ -79,17 +79,18 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
-                                href="{% url 'ClubScout' %}">Scouts</a>
+                                href="{% url 'PlayerScout' %}">Scouts</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
-                                href="{% url 'ClubPlayer' %}">Players</a>
+                                href="{% url 'player-club' %}">Clubs</a>
                         </li>
+
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
                     <div class="border rounded p-2 pb-0 mt-2 ms-3">
-                        <p class="text-light "><i class="bi bi-shield-fill"></i> {{user.club_name}} </p>
+                        <p class="text-light "><i class="bi bi-person-circle"></i> {{user.first_name}}</p>
                     </div>
                     <a class="d-flex flex-column justify-content-center text-decoration-none"
                         href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
@@ -98,82 +99,38 @@
         </div>
     </nav>
     {% endif %}
-    {% for i in player %}
+    {% for i in club %}
     <div class="d-flex flex-wrap justify-content-center mt-4">
         <div class="col-lg-3 h-50 col-12 m-3 p-5 rounded bg-white shadow-lg position-sticky">
             <div class="">
                 <div class="d-flex justify-content-center">
                     <div class="">
-                        <img class="rounded-circle img-width" src={{i.img.url}} alt="">
+                        <img class="rounded-circle img-width " src={{i.img.url}} alt="">
                     </div>
                 </div>
                 <div class="text-center">
-                    <p class="text-dark mt-2 fs-4 fw-bold">{{i.first_name}} {{i.last_name}}</p>
-                    <p id="age" class="text-secondary"></p>
-                    <script>
-                        var playerDobString = "{{ i.player_dob }}";
-                        console.log(playerDobString);
-
-                        var dobParts;
-                        var year, month, day;
-
-                        if (playerDobString.includes(',')) {
-                            // Format: Oct. 17, 2001
-                            var months = {
-                                'Jan.': 0, 'Feb.': 1, 'March': 2, 'Apr.': 3, 'May': 4, 'June': 5,
-                                'Jul.': 6, 'Aug.': 7, 'Sept.': 8, 'Oct.': 9, 'Nov.': 10, 'Dec.': 11
-                            };
-
-                            dobParts = playerDobString.split(' ');
-                            month = months[dobParts[0]];
-                            day = parseInt(dobParts[1].replace(',', ''));
-                            year = parseInt(dobParts[2]);
-                        } else {
-                            // Format: 2001-10-17
-                            dobParts = playerDobString.split('-');
-                            year = parseInt(dobParts[0]);
-                            month = parseInt(dobParts[1]) - 1; // Months are 0-indexed in JavaScript
-                            day = parseInt(dobParts[2]);
-                        }
-
-                        // Create a Date object from the parsed parts
-                        var playerDate = new Date(year, month, day);
-                        console.log(playerDate)
-                        // Calculate the age based on player's date of birth
-                        var today = new Date();
-                        var age = today.getFullYear() - playerDate.getFullYear() - (today.getMonth() < playerDate.getMonth() || (today.getMonth() === playerDate.getMonth() && today.getDate() < playerDate.getDate()) ? 1 : 0);
-
-                        // You can now use the 'age' variable for your JavaScript logic
-                        console.log("Player's age is: " + age);
-                        document.getElementById("age").textContent = "Age: " + age;
-                    </script>
-
-                    <p class="text-secondary">Position: {{i.player_pos}}</p>
+                    <p class="text-dark mt-2 fs-4 fw-bold">{{i.club_name}} {% if i.scouted_by != '' %}
+                        <i class="bi bi-patch-check-fill text-primary"></i>
+                        {% endif %}</p>
                     <p class="text-secondary">District: {{i.district}}</p>
                     <p class="text-secondary">Locality: {{i.locality}}</p>
+
                 </div>
                 <div>
-                    <p>Ability:{% with ability=i.player_ability %} {% for j in abilityRange %}
-                        {% if j < ability %} <i class="bi bi-star-fill text-warning"></i>
-                            {% else %}
-                            <i class="bi bi-star text-warning"></i>
+                    <p>Club Reputation :{% with reputation=i.club_reputation %} {% for j in abilityRange %}
+                        {% if j < reputation %}
+                        <i class="bi bi-star-fill text-warning"></i>
+                        {% else %}
+                        <i class="bi bi-star text-warning"></i>
+                        {% endif %}
+                        {% endfor %}
+                        {% endwith %}
+                    </p>
+                            {% if i.scouted_by != '' %}
+                            <p class="fw-bold">Scouted By {{i.scouted_by}} <i class="bi bi-patch-check-fill text-primary"></i></p>
                             {% endif %}
-                            {% endfor %}
-                            {% endwith %}
-                    </p>
-                    <p>Potential:{% with potential=i.player_potential %} {% for j in abilityRange %}
-                        {% if j < potential %} <i class="bi bi-star-fill text-warning"></i>
-                            {% else %}
-                            <i class="bi bi-star text-warning"></i>
-                            {% endif %}
-                            {% endfor %}
-                            {% endwith %}
-                    </p>
-                    {% if i.scouted_by != '' %}
-                    <p class="fw-bold">Scouted By {{i.scouted_by}} <i class="bi bi-patch-check-fill text-primary"></i>
-                    </p>
-                    {% endif %}
                 </div>
+                
             </div>
         </div>
         <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
@@ -186,7 +143,7 @@
                     </div>
                     <div class="ms-2 d-flex">
                         <p class="fw-bold">
-                            {{i.first_name}} {{i.last_name}}
+                            {{i.club_name}}
                         </p>
                         <p class="ms-2 text-secondary">{{j.datetime}}</p>
                     </div>
@@ -197,13 +154,13 @@
                         <source src="{{ j.video.url }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
-                    <p class="fw-bold mt-3">{{i.first_name}} {{i.last_name}}
+                    <p class="fw-bold mt-3">{{i.club_name}}
                         {% endif %}
                         {% if j.img.url != '' %}
                     <div class="w-100 mt-3">
                         <img class="w-100" src="{{j.img.url}}" alt="">
                     </div>
-                    <p class="fw-bold mt-3">{{i.first_name}} {{i.last_name}}
+                    <p class="fw-bold mt-3">{{i.club_name}}
                         {% endif %}
                 </div>
                 <div class="">
@@ -227,15 +184,15 @@
         <div class="col-lg-3 col-12">
             <div class="m-3 p-5 rounded bg-white shadow-lg">
                 <div>
-                    <p class="fw-bold">Recommended Players</p>
-                    {% for Players in playerdata %}
+                    <p class="fw-bold">Recommended clubs</p>
+                    {% for clubs in clubdata %}
 
-                    <a class="text-decoration-none text-dark" href="{% url 'player-home' Players.id %}">
+                    <a class="text-decoration-none text-dark" href="{% url 'clubHome' clubs.id %}">
                         <div class="d-flex">
                             <div class="rec-img-club">
-                                <img class="w-100 rounded-circle" src="{{Players.img.url}}" alt="">
+                                <img class="w-100 rounded-circle" src="{{clubs.img.url}}" alt="">
                             </div>
-                            <p class="ms-2">{{Players.first_name}} {{Players.last_name}}{% if Players.scouted_by != ''%}
+                            <p class="ms-2">{{clubs.club_name}}{% if clubs.scouted_by != ''%}
                                 <i class="bi bi-patch-check-fill text-primary"></i>
                                 {% endif %}
                             </p>

@@ -144,6 +144,16 @@ def playerHome(request,user_id):
     ability_range = range(0, 5)
     player=User.objects.filter(id=user_id)
     return render(request,'player-home.html',{'player':player,'abilityRange':ability_range,'playerdata':players,'scout':scout,'feeds':feeds})
+
+
+def clubHome(request,user_id):
+    clubs = User.objects.filter(is_club=True)
+    scout=User.objects.filter(is_scout=True)
+    ability_range = range(0, 5)
+    feeds=NewFeeds.objects.filter(user_id=user_id).order_by('-id')
+    ability_range = range(0, 5)
+    club=User.objects.filter(id=user_id)
+    return render(request,'ClubHome.html',{'club':club,'abilityRange':ability_range,'clubdata':clubs,'scout':scout,'feeds':feeds})
 def scoutHome(request,user_id):
     clubs = User.objects.filter(is_club=True)
     player=User.objects.filter(is_player=True)
@@ -153,9 +163,6 @@ def scoutHome(request,user_id):
     ability_range = range(0, 5)
     scout=User.objects.filter(id=user_id)
     return render(request,'ScoutHome.html',{'scouts':scouts, 'scout':scout,'abilityRange':ability_range,'clubdata':clubs,'player':player,'feeds':feeds})
-
-def clubHome(request):
-    return render(request,'club-home.html')
 def logout(request):
     auth.logout(request)
     return redirect('login')
@@ -773,9 +780,11 @@ def like_feed_ajax(request, feed_id):
 
     post.likes_cout = current_likes
     post.save()
+    updated_likes_count = post.likes_cout
+    print(updated_likes_count)
 
     # Return the updated like count as JSON
-    return JsonResponse({'likes_count': current_likes})
+    return JsonResponse({'likes_count': updated_likes_count})
 def check_like_status(request, feed_id):
     user = request.user
     post = NewFeeds.objects.get(id=feed_id)

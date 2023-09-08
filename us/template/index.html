@@ -307,6 +307,12 @@
                     <p class="fw-bold">{{user.club_name}}
                     <p>{{i.feed}}</p>
                     </p>
+                    <div class="mt-2">
+                        <button class="btn shadow-none like-button" data-feed-id="{{ i.id }}">
+                            <i class="bi bi-heart fs-5"></i>
+                        </button>
+                        <p id="likes-count-{{ i.id }}">{{ i.likes_cout }} likes</p>
+                    </div>
 
                 </div>
             </div>
@@ -518,6 +524,12 @@
                     
                     <p>{{i.feed}}</p>
                     </p>
+                    <div class="mt-2">
+                        <button class="btn shadow-none like-button" data-feed-id="{{ i.id }}">
+                            <i class="bi bi-heart fs-5"></i>
+                        </button>
+                        <p id="likes-count-{{ i.id }}">{{ i.likes_cout }} likes</p>
+                    </div>
 
                 </div>
             </div>
@@ -557,14 +569,16 @@
                     <p class="fw-bold">Recommended Players</p>
                     {% for Players in playerdata %}
 
-                    <div class="d-flex">
-                        <div class="rec-img-club">
-                            <img class="w-100 rounded-circle" src="{{Players.img}}" alt="">
+                    <a class="text-decoration-none text-dark" href="{% url 'player-home' Players.id %}">
+                        <div class="d-flex">
+                            <div class="rec-img-club">
+                                <img class="w-100 rounded-circle" src="{{Players.img}}" alt="">
+                            </div>
+                            <p class="ms-2">{{Players.first_name}} {{Players.last_name}}{% if Players.scouted_by != '' %}
+                                <i class="bi bi-patch-check-fill text-primary"></i>
+                                {% endif %}</p></p>
                         </div>
-                        <p class="ms-2">{{Players.first_name}} {{Players.last_name}}{% if Players.scouted_by != '' %}
-                            <i class="bi bi-patch-check-fill text-primary"></i>
-                            {% endif %}</p></p>
-                    </div>
+                    </a>
                     {% endfor %}
 
 
@@ -574,7 +588,7 @@
                 <div>
                     <p class="fw-bold">Recommended Clubs</p>
                     {% for clubs in clubdata %}
-
+                    <a class="text-decoration-none text-dark" href="{% url 'clubHome' clubs.id %}">
                     <div class="d-flex">
                         <div class="rec-img-club">
                             <img class="w-100 rounded-circle" src="{{clubs.img}}" alt="">
@@ -583,6 +597,7 @@
                             <i class="bi bi-patch-check-fill text-primary"></i>
                             {% endif %}</p></p></p>
                     </div>
+                    </a>
                     {% endfor %}
 
 
@@ -793,14 +808,18 @@
                     <p class="fw-bold">Recommended Clubs</p>
                     {% for clubs in clubdata %}
 
-                    <div class="d-flex">
-                        <div class="rec-img-club">
-                            <img class="w-100 rounded-circle" src="{{clubs.img}}" alt="">
+                    <a class="text-decoration-none text-dark" href="{% url 'clubHome' clubs.id %}">
+                        <div class="d-flex">
+                            <div class="rec-img-club">
+                                <img class="w-100 rounded-circle" src="{{clubs.img.url}}" alt="">
+                            </div>
+                            <p class="ms-2">{{clubs.club_name}}{% if clubs.scouted_by != ''%}
+                                <i class="bi bi-patch-check-fill text-primary"></i>
+                                {% endif %}
+                            </p>
+                            </p>
                         </div>
-                        <p class="ms-2">{{clubs.club_name}} {% if clubs.scouted_by != '' %}
-                            <i class="bi bi-patch-check-fill text-primary"></i>
-                            {% endif %}</p></p></p>
-                    </div>
+                    </a>
                     {% endfor %}
 
 
@@ -811,12 +830,15 @@
                     <p class="fw-bold">Recommended Scouts</p>
                     {% for scouts in scout %}
                     {% if scouts.is_staff == 0 %}
-                    <div class="d-flex">
-                        <div class="rec-img-club">
-                            <img class="w-100 rounded-circle" src="{{scouts.img}}" alt="">
+                    <a class="text-decoration-none text-dark" href="{% url 'scout-home' scouts.id %}">
+                        <div class="d-flex">
+                            <div class="rec-img-club">
+                                <img class="w-100 rounded-circle" src="{{scouts.img.url}}" alt="">
+                            </div>
+                            <p class="ms-2">{{scouts.first_name}} {{scouts.last_name}} <i
+                                    class="bi bi-patch-check-fill text-primary"></i></p>
                         </div>
-                        <p class="ms-2">{{scouts.first_name}} {{scouts.last_name}} <i class="bi bi-patch-check-fill text-primary"></i></p>
-                    </div>
+                    </a>
                     {% endif %}
                     {% endfor %}
 

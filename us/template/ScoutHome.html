@@ -14,45 +14,89 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <title>Document</title>
 </head>
-<nav class="navbar player-navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
-            <p class="text-white">Urban</p>
-            <p class="text-warning">Scout</p>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="ms-3 d-flex w-50">
-                <input type="text" class="form-control" placeholder="Search">
-                <button class="btn shadow-none"><i class="bi bi-search fs-3 text-white"></i></button>
-            </div>
-            <div class="ms-3">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-secondary" aria-current="page" href="{% url 'ClubScout' %}">Scouts</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-secondary" aria-current="page"
-                            href="{% url 'ClubPlayer' %}">Players</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="d-flex w-100 justify-content-start justify-content-sm-end">
-                <div class="border rounded p-2 pb-0 mt-2 ms-3">
-                    <p class="text-light "><i class="bi bi-shield-fill"></i> {{user.club_name}} </p>
+{% if user.is_player %}
+    <nav class="navbar player-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
+                <p class="text-white">Urban</p>
+                <p class="text-warning">Scout</p>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="ms-3 d-flex w-50">
+                    <input type="text" class="form-control" placeholder="Search">
+                    <button class="btn shadow-none"><i class="bi bi-search fs-3 text-white"></i></button>
                 </div>
-                <a class="d-flex flex-column justify-content-center text-decoration-none"
-                    href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                <div class="ms-3">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'PlayerScout' %}">Scouts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'player-club' %}">Clubs</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="border rounded p-2 pb-0 mt-2 ms-3">
+                        <p class="text-light "><i class="bi bi-person-circle"></i> {{user.first_name}}</p>
+                    </div>
+                    <a class="d-flex flex-column justify-content-center text-decoration-none"
+                        href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+    {% else %}
+    <nav class="navbar player-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
+                <p class="text-white">Urban</p>
+                <p class="text-warning">Scout</p>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="ms-3 d-flex w-50">
+                    <input type="text" class="form-control" placeholder="Search">
+                    <button class="btn shadow-none"><i class="bi bi-search fs-3 text-white"></i></button>
+                </div>
+                <div class="ms-3">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page" href="{% url 'ClubScout' %}">Scouts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'ClubPlayer' %}">Players</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="border rounded p-2 pb-0 mt-2 ms-3">
+                        <p class="text-light "><i class="bi bi-shield-fill"></i> {{user.club_name}} </p>
+                    </div>
+                    <a class="d-flex flex-column justify-content-center text-decoration-none"
+                        href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
 <div class="d-flex flex-wrap justify-content-center mt-4">
     {% for scout in scout %}
     <div class="col-lg-3 h-50 col-12 m-3 p-5 rounded bg-white shadow-lg position-sticky">
@@ -112,6 +156,12 @@
                 
                 <p>{{i.feed}}</p>
                 </p>
+                <div class="mt-2">
+                    <button class="btn shadow-none like-button" data-feed-id="{{ i.id }}">
+                        <i class="bi bi-heart fs-5"></i>
+                    </button>
+                    <p id="likes-count-{{ i.id }}">{{ i.likes_cout }} likes</p>
+                </div>
 
             </div>
         </div>
@@ -189,3 +239,71 @@
     {% endfor %}
 </div>
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<form action="post">
+    {% csrf_token %}
+</form>
+
+<script>
+    $(document).ready(function () {
+        function getCSRFToken() {
+            return $('input[name="csrfmiddlewaretoken"]').val();
+        }
+        $(".like-button").each(function () {
+            var feedId = $(this).data("feed-id");
+            var likeButton = $(this);
+
+            // Check if the user has already liked the feed
+            $.ajax({
+                type: "GET",
+                headers: {
+                    "X-CSRFToken": getCSRFToken()
+                },
+                url: "{% url 'check_like_status' 0 %}".replace('0', feedId),
+                success: function (data) {
+                    if (data.liked) {
+                        // User has already liked the feed, display the liked icon
+                        likeButton.html('<i class="bi bi-heart-fill fs-5 text-danger"></i>');
+                    } else {
+                        // User has not liked the feed, display the regular like icon
+                        likeButton.html('<i class="bi bi-heart fs-5"></i>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        // Handle like button click event
+        $(".like-button").click(function () {
+            var feedId = $(this).data("feed-id");
+            var likeButton = $(this);
+            var headers = {
+                "X-CSRFToken": getCSRFToken()
+            };
+            $.ajax({
+                type: "POST",
+                headers: {
+                    "X-CSRFToken": getCSRFToken()
+                },
+                url: "{% url 'like_feed_ajax' 0 %}".replace('0', feedId),
+                success: function (data) {
+                    // Update the like count on the page
+                    var likesCountElement = $("#likes-count-" + feedId);
+                    likesCountElement.text(data.likes_count + " likes");
+
+                    // Toggle between the two icons
+                    if (likeButton.html().includes("text-danger")) {
+                        likeButton.html('<i class="bi bi-heart fs-5"></i>');
+                    } else {
+                        likeButton.html('<i class="bi bi-heart-fill fs-5 text-danger"></i>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
