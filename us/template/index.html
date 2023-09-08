@@ -869,12 +869,39 @@
 
 <script>
     $(document).ready(function () {
-        $(".like-button").click(function () {
+        $(".like-button").each(function () {
             var feedId = $(this).data("feed-id");
+            var likeButton = $(this);
             var headers = {
                 "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val()
             };
+            // Check if the user has already liked the feed
+            $.ajax({
+                type: "GET",
+                headers: headers,
+                url: "{% url 'check_like_status' 0 %}".replace('0', feedId),
+                success: function (data) {
+                    if (data.liked) {
+                        // User has already liked the feed, display the liked icon
+                        likeButton.html('<i class="bi bi-heart-fill fs-5 text-danger"></i>');
+                    } else {
+                        // User has not liked the feed, display the regular like icon
+                        likeButton.html('<i class="bi bi-heart fs-5"></i>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
 
+        // Handle like button click event
+        $(".like-button").click(function () {
+            var feedId = $(this).data("feed-id");
+            var likeButton = $(this);
+            var headers = {
+                "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val()
+            };
             $.ajax({
                 type: "POST",
                 headers: headers,
@@ -882,6 +909,13 @@
                 success: function (data) {
                     // Update the like count on the page
                     $("#likes-count-" + feedId).text(data.likes_count+" likes");
+
+                    // Toggle between the two icons
+                    if (likeButton.html().includes("text-danger")) {
+                        likeButton.html('<i class="bi bi-heart fs-5"></i>');
+                    } else {
+                        likeButton.html('<i class="bi bi-heart-fill fs-5 text-danger"></i>');
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

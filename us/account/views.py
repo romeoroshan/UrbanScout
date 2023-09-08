@@ -776,7 +776,12 @@ def like_feed_ajax(request, feed_id):
 
     # Return the updated like count as JSON
     return JsonResponse({'likes_count': current_likes})
+def check_like_status(request, feed_id):
+    user = request.user
+    post = NewFeeds.objects.get(id=feed_id)
+    liked = likes.objects.filter(user=user, feed=post).exists()
 
+    return JsonResponse({'liked': liked})
     
 
 #email verification
