@@ -799,6 +799,7 @@ def check_like_status(request, feed_id):
     user = request.user
     post = NewFeeds.objects.get(id=feed_id)
     liked = likes.objects.filter(user=user, feed=post).exists()
+    return JsonResponse({'liked': liked})
 def is_following(request, followed_id):
     user_id=request.user.id
     is_following=following.objects.filter(following_id=user_id,followed_id=followed_id).exists()

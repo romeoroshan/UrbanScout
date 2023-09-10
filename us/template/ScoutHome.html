@@ -343,7 +343,7 @@
                     likesCountElement.text(data.likes_count + " likes");
 
                     // Toggle between the two icons
-                    if (data["message"]=="liked") {
+                    if (likeButton.html().includes("text-danger")) {
                         likeButton.html('<i class="bi bi-heart fs-5"></i>');
                     } else {
                         likeButton.html('<i class="bi bi-heart-fill fs-5 text-danger"></i>');
