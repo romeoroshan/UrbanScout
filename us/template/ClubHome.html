@@ -13,6 +13,7 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <title>Document</title>
+
 </head>
 
 <body class="bg-light">
@@ -38,7 +39,8 @@
                             <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" aria-current="page" href="{% url 'ScoutClub' %}">Clubs</a>
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'ScoutClub' %}">Clubs</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
@@ -111,26 +113,33 @@
                 <div class="text-center">
                     <p class="text-dark mt-2 fs-4 fw-bold">{{i.club_name}} {% if i.scouted_by != '' %}
                         <i class="bi bi-patch-check-fill text-primary"></i>
-                        {% endif %}</p>
+                        {% endif %}
+                    </p>
                     <p class="text-secondary">District: {{i.district}}</p>
                     <p class="text-secondary">Locality: {{i.locality}}</p>
 
                 </div>
                 <div>
                     <p>Club Reputation :{% with reputation=i.club_reputation %} {% for j in abilityRange %}
-                        {% if j < reputation %}
-                        <i class="bi bi-star-fill text-warning"></i>
-                        {% else %}
-                        <i class="bi bi-star text-warning"></i>
-                        {% endif %}
-                        {% endfor %}
-                        {% endwith %}
-                    </p>
-                            {% if i.scouted_by != '' %}
-                            <p class="fw-bold">Scouted By {{i.scouted_by}} <i class="bi bi-patch-check-fill text-primary"></i></p>
+                        {% if j < reputation %} <i class="bi bi-star-fill text-warning"></i>
+                            {% else %}
+                            <i class="bi bi-star text-warning"></i>
                             {% endif %}
+                            {% endfor %}
+                            {% endwith %}
+                    </p>
+                    {% if i.scouted_by != '' %}
+                    <p class="fw-bold">Scouted By {{i.scouted_by}} <i class="bi bi-patch-check-fill text-primary"></i>
+                    </p>
+                    {% endif %}
+                    <div class="d-flex justify-content-center">
+                        <button class="followbutton p-4" data-follow-id="{{ i.id }}">
+                            <p class="">Follow</p>
+                            <i class="bi bi-person-fill-add text-white"></i>
+                        </button>
+                    </div>
                 </div>
-                
+
             </div>
         </div>
         <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
@@ -215,8 +224,7 @@
                             <div class="rec-img-club">
                                 <img class="w-100 rounded-circle" src="{{clubs.img.url}}" alt="">
                             </div>
-                            <p class="ms-2">{{clubs.club_name}} <i
-                                    class="bi bi-patch-check-fill text-primary"></i></p>
+                            <p class="ms-2">{{clubs.club_name}} <i class="bi bi-patch-check-fill text-primary"></i></p>
                         </div>
                     </a>
                     {% endif %}
@@ -226,48 +234,51 @@
             </div>
         </div>
         {% else %}
-    <div class="col-lg-3 col-12">
-        <div class="m-3 p-5 rounded player-recomendation bg-white shadow-lg">
-            <div>
-                <p class="fw-bold">Recommended Clubs</p>
-                {% for clubs in clubdata %}
+        <div class="col-lg-3 col-12">
+            <div class="m-3 p-5 rounded player-recomendation bg-white shadow-lg">
+                <div>
+                    <p class="fw-bold">Recommended Clubs</p>
+                    {% for clubs in clubdata %}
 
-                <a class="text-decoration-none text-dark" href="{% url 'clubHome' clubs.id %}">
-                    <div class="d-flex">
-                        <div class="rec-img-club">
-                            <img class="w-100 rounded-circle" src="{{clubs.img.url}}" alt="">
+                    <a class="text-decoration-none text-dark" href="{% url 'clubHome' clubs.id %}">
+                        <div class="d-flex">
+                            <div class="rec-img-club">
+                                <img class="w-100 rounded-circle" src="{{clubs.img.url}}" alt="">
+                            </div>
+                            <p class="ms-2">{{clubs.club_name}}{% if clubs.scouted_by != '' %}
+                                <i class="bi bi-patch-check-fill text-primary"></i>
+                                {% endif %}
+                            </p>
+                            </p>
                         </div>
-                        <p class="ms-2">{{clubs.club_name}}{% if clubs.scouted_by != '' %}
-                            <i class="bi bi-patch-check-fill text-primary"></i>
-                            {% endif %}</p></p>
-                    </div>
-                </a>
-                {% endfor %}
+                    </a>
+                    {% endfor %}
 
 
+                </div>
             </div>
-        </div>
-        <div class="m-3 p-5 rounded player-recomendation bg-white shadow-lg">
-            <div>
-                <p class="fw-bold">Recommended Scouts</p>
-                {% for scouts in scout %}
-                {% if scouts.is_staff == 0 %}
-                <a class="text-decoration-none text-dark" href="{% url 'scout-home' scouts.id %}">
-                    <div class="d-flex">
-                        <div class="rec-img-club">
-                            <img class="w-100 rounded-circle" src="{{scouts.img.url}}" alt="">
+            <div class="m-3 p-5 rounded player-recomendation bg-white shadow-lg">
+                <div>
+                    <p class="fw-bold">Recommended Scouts</p>
+                    {% for scouts in scout %}
+                    {% if scouts.is_staff == 0 %}
+                    <a class="text-decoration-none text-dark" href="{% url 'scout-home' scouts.id %}">
+                        <div class="d-flex">
+                            <div class="rec-img-club">
+                                <img class="w-100 rounded-circle" src="{{scouts.img.url}}" alt="">
+                            </div>
+                            <p class="ms-2">{{scouts.first_name}} {{scouts.last_name}} <i
+                                    class="bi bi-patch-check-fill text-primary"></i></p>
                         </div>
-                        <p class="ms-2">{{scouts.first_name}} {{scouts.last_name}} <i class="bi bi-patch-check-fill text-primary"></i></p>
-                    </div>
-                </a>
-                {% endif %}
-                {% endfor %}
+                    </a>
+                    {% endif %}
+                    {% endfor %}
 
+                </div>
             </div>
+
         </div>
-        
-    </div>
-    {% endif %}
+        {% endif %}
     </div>
 </body>
 
@@ -337,6 +348,66 @@
                     console.error(xhr.responseText);
                 }
             });
+        });
+        $(".followbutton").click(function () {
+            var FollowId = $(this).data("follow-id");
+            var followButton = $(this);
+            var text=$(".not-followed")
+            var icon=$(".not-followed-icon")
+            var headers = {
+                "X-CSRFToken": getCSRFToken()
+            };
+            $.ajax({
+                type: "POST",
+                headers: {
+                    "X-CSRFToken": getCSRFToken()
+                },
+                url: "{% url 'following' 0 %}".replace('0', FollowId),
+                dataType:"json",
+                success: function (data) {
+                    
+                    if (data['message']=="unfollowed") {
+                        // User has already liked the feed, display the liked icon
+                        followButton.html('<p class="">Follow</p><i class="bi bi-person-fill-add text-white"></i>');
+                        
+                    } else {
+                        // User has not liked the feed, display the regular like icon
+                        followButton.html('<p class="">Unfollow</p><i class="bi bi-person-fill-dash text-white"></i>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+        $(".followbutton").each(function () {
+            var FollowId = $(this).data("follow-id");
+            var followButton = $(this);
+            var headers = {
+                "X-CSRFToken": getCSRFToken()
+            };
+            $.ajax({
+                type: "GET",
+                headers: {
+                    "X-CSRFToken": getCSRFToken()
+                },
+                url: "{% url 'is_following' 0 %}".replace('0', FollowId),
+                success: function (data) {
+                    if (data.is_following) {
+                        // User has already liked the feed, display the liked icon
+                        followButton.html('<p class="">Unfollow</p><i class="bi bi-person-fill-dash text-white"></i>');
+                        
+                    } else {
+                        // User has not liked the feed, display the regular like icon
+                        
+                        followButton.html('<p class="">Follow</p><i class="bi bi-person-fill-add text-white"></i>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
         });
     });
 </script>

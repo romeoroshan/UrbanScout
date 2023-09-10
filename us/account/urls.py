@@ -48,6 +48,8 @@ urlpatterns = [
     path('validate_email/', views.validate_email, name='validate_email'),
     path('like_feed_ajax/<int:feed_id>/', views.like_feed_ajax, name='like_feed_ajax'),
     path('check_like_status/<int:feed_id>/', views.check_like_status, name='check_like_status'),
+    path('follow/<int:followed_id>',views.following_funtion,name="following"),
+    path('is_follow/<int:followed_id>',views.is_following,name="is_following"),
 
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),

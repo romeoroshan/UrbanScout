@@ -129,3 +129,6 @@ class NewFeeds(models.Model):
 class likes(models.Model):
     feed=models.ForeignKey(NewFeeds,on_delete=models.CASCADE)
     user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='likes_as_user')
+class following(models.Model):
+    followed=models.ForeignKey(User,on_delete=models.CASCADE,related_name='following_followed')
+    following=models.ForeignKey(User,on_delete=models.CASCADE,related_name='following_following')

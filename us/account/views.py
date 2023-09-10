@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes,following
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -228,6 +228,8 @@ def editPlayerProfile(request):
     if request.method == 'POST':
         img=request.FILES.get('img')
         print(img)
+
+        
         first_name = request.POST.get('fname')
         last_name = request.POST.get('lname')
         email = request.POST.get('email')
@@ -237,6 +239,8 @@ def editPlayerProfile(request):
         
         # Update the user's profile information
         user = request.user
+        if img is None:
+            img=user.img
         user.img=img
         user.first_name = first_name
         user.last_name = last_name
@@ -303,6 +307,8 @@ def editClub(request):
 
         # Update the user's profile information
         user = request.user
+        if img is None:
+            img=user.img
         user.img=img
         user.club_name = club_name
         user.email = user.email
@@ -777,6 +783,7 @@ def like_feed_ajax(request, feed_id):
     if not liked:
         likes.objects.create(user=user, feed=post)
         current_likes += 1
+        
     else:
         likes.objects.filter(user=user, feed=post).delete()
         current_likes -= 1
@@ -792,10 +799,26 @@ def check_like_status(request, feed_id):
     user = request.user
     post = NewFeeds.objects.get(id=feed_id)
     liked = likes.objects.filter(user=user, feed=post).exists()
-
-    return JsonResponse({'liked': liked})
+def is_following(request, followed_id):
+    user_id=request.user.id
+    is_following=following.objects.filter(following_id=user_id,followed_id=followed_id).exists()
+    return JsonResponse({'is_following': is_following})
     
-
+def following_funtion(request,followed_id):
+    user_id=request.user.id
+    following_obj = following.objects.filter(following_id=user_id,followed_id=followed_id)
+    if not following_obj:
+        follow=following(
+            following_id=user_id,
+            followed_id=followed_id
+        )
+        follow.save()
+        return JsonResponse({'message': 'followed'})
+    else:
+        following.objects.filter(following_id=user_id,followed_id=followed_id).delete()
+        return JsonResponse({'message': 'unfollowed'})
+    
+    
 #email verification
 
 from django.http import JsonResponse

@@ -173,6 +173,12 @@
                     <p class="fw-bold">Scouted By {{i.scouted_by}} <i class="bi bi-patch-check-fill text-primary"></i>
                     </p>
                     {% endif %}
+                    <div class="d-flex justify-content-center">
+                        <button class="followbutton p-4" data-follow-id="{{ i.id }}">
+                            <p class="">Follow</p>
+                            <i class="bi bi-person-fill-add text-white"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -381,6 +387,66 @@
                     console.error(xhr.responseText);
                 }
             });
+        });
+        $(".followbutton").click(function () {
+            var FollowId = $(this).data("follow-id");
+            var followButton = $(this);
+            var text=$(".not-followed")
+            var icon=$(".not-followed-icon")
+            var headers = {
+                "X-CSRFToken": getCSRFToken()
+            };
+            $.ajax({
+                type: "POST",
+                headers: {
+                    "X-CSRFToken": getCSRFToken()
+                },
+                url: "{% url 'following' 0 %}".replace('0', FollowId),
+                dataType:"json",
+                success: function (data) {
+                    
+                    if (data['message']=="unfollowed") {
+                        // User has already liked the feed, display the liked icon
+                        followButton.html('<p class="">Follow</p><i class="bi bi-person-fill-add text-white"></i>');
+                        
+                    } else {
+                        // User has not liked the feed, display the regular like icon
+                        followButton.html('<p class="">Unfollow</p><i class="bi bi-person-fill-dash text-white"></i>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+        $(".followbutton").each(function () {
+            var FollowId = $(this).data("follow-id");
+            var followButton = $(this);
+            var headers = {
+                "X-CSRFToken": getCSRFToken()
+            };
+            $.ajax({
+                type: "GET",
+                headers: {
+                    "X-CSRFToken": getCSRFToken()
+                },
+                url: "{% url 'is_following' 0 %}".replace('0', FollowId),
+                success: function (data) {
+                    if (data.is_following) {
+                        // User has already liked the feed, display the liked icon
+                        followButton.html('<p class="">Unfollow</p><i class="bi bi-person-fill-dash text-white"></i>');
+                        
+                    } else {
+                        // User has not liked the feed, display the regular like icon
+                        
+                        followButton.html('<p class="">Follow</p><i class="bi bi-person-fill-add text-white"></i>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
         });
     });
 </script>
