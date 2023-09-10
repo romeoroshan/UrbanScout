@@ -819,7 +819,15 @@ def following_funtion(request,followed_id):
         following.objects.filter(following_id=user_id,followed_id=followed_id).delete()
         return JsonResponse({'message': 'unfollowed'})
     
+def following_feeds(request):
+    user = request.user
+    following_users = following.objects.filter(following=user).values_list('followed_id', flat=True)
     
+    # Get feeds from the following users, ordered by datetime in descending order
+    feeds = NewFeeds.objects.filter(user__in=following_users).order_by('-datetime')
+    
+    context = {'feeds': feeds}
+    return render(request, 'FollowingFeeds.html', context)
 #email verification
 
 from django.http import JsonResponse
