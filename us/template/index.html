@@ -261,11 +261,26 @@
                             <p class="fw-bold">Scouted By {{user.scouted_by}} <i class="bi bi-patch-check-fill text-primary"></i></p>
                             {% endif %}
                 </div>
+                
                 <div class="d-flex justify-content-center"><a href="{% url 'EditClub' %}"><button
                             class="btn btn-outline-primary">Edit Profile</button></a></div>
             </div>
         </div>
         <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
+            <div class="d-flex justify-content-evenly mb-3">
+                <div class="text-center">
+                    <p class="fs-4 fw-bold">{{post_count}}</p>
+                    <p class="fs-5">Posts</p>
+                </div>
+                <div class="text-center">
+                    <p class="fs-4 fw-bold">{{followers}}</p>
+                    <p class="fs-5">Followers</p>
+                </div>
+                <div class="text-center">
+                    <p class="fs-4 fw-bold">{{following}}</p>
+                    <p class="fs-5">Following</p>
+                </div>
+            </div>
             <div class="w-100 d-flex justify-content-center">
                 <div class="w-100">
                     <form method="post">
@@ -285,6 +300,7 @@
                 </div>
             </div>
             {% for i in newfeeds %}
+            
             <div class="mt-4 border-top pt-4">
                 <div class="d-flex">
                     <div class="feed-img">
@@ -379,7 +395,7 @@
 
         </div>
         <div class="col-lg-3 col-12">
-            <div class="m-3 p-5 rounded bg-white shadow-lg">
+            <div class="m-3 player-recomendation p-5 rounded bg-white shadow-lg">
                 <div>
                     <p class="fw-bold">Recommended Players</p>
                     {% for Players in playerdata %}
@@ -399,7 +415,7 @@
 
                 </div>
             </div>
-            <div class="m-3 p-5 rounded bg-white shadow-lg">
+            <div class="m-3 p-5 player-recomendation rounded bg-white shadow-lg">
                 <div>
                     <p class="fw-bold">Recommended Scouts</p>
                     {% for scouts in scout %}
@@ -486,7 +502,22 @@
             </div>
         </div>
         <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
+            <div class="d-flex justify-content-evenly mb-3">
+                <div class="text-center">
+                    <p class="fs-4 fw-bold">{{post_count}}</p>
+                    <p class="fs-5">Posts</p>
+                </div>
+                <div class="text-center">
+                    <p class="fs-4 fw-bold">{{followers}}</p>
+                    <p class="fs-5">Followers</p>
+                </div>
+                <div class="text-center">
+                    <p class="fs-4 fw-bold">{{following}}</p>
+                    <p class="fs-5">Following</p>
+                </div>
+            </div>
             <div class="w-100 d-flex justify-content-center">
+                
                 <div class="w-100">
                     <form method="post">
                         {% csrf_token %}
@@ -750,6 +781,20 @@
             </div>
         </div>
         <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
+            <div class="d-flex justify-content-evenly mb-3">
+                <div class="text-center">
+                    <p class="fs-4 fw-bold">{{post_count}}</p>
+                    <p class="fs-5">Posts</p>
+                </div>
+                <div class="text-center">
+                    <p class="fs-4 fw-bold">{{followers}}</p>
+                    <p class="fs-5">Followers</p>
+                </div>
+                <div class="text-center">
+                    <p class="fs-4 fw-bold">{{following}}</p>
+                    <p class="fs-5">Following</p>
+                </div>
+            </div>
             <div class="w-100 d-flex justify-content-center">
                 <div class="w-100">
                     <form method="post">
@@ -821,7 +866,7 @@
 
         </div>
         <div class="col-lg-3 col-12">
-            <div class="m-3 p-5 rounded bg-white shadow-lg">
+            <div class="m-3 p-5 rounded player-recomendation bg-white shadow-lg">
                 <div>
                     <p class="fw-bold">Recommended Clubs</p>
                     {% for clubs in clubdata %}
@@ -843,7 +888,7 @@
 
                 </div>
             </div>
-            <div class="m-3 p-5 rounded bg-white shadow-lg">
+            <div class="m-3 p-5 player-recomendation rounded bg-white shadow-lg">
                 <div>
                     <p class="fw-bold">Recommended Scouts</p>
                     {% for scouts in scout %}

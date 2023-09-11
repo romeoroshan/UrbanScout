@@ -8,6 +8,11 @@ from datetime import date
 from django.utils import timezone
 # Create your views here.
 def index(request):
+    followingg=following.objects.filter(following_id=request.user.id).count()
+    followers=following.objects.filter(followed_id=request.user.id).count()
+    
+    print(followers)
+    print(followingg)
     users=User.objects.all()
     usercout=users.count()
     players = User.objects.filter(is_player=True)
@@ -20,6 +25,7 @@ def index(request):
     user_id=user.id
     newfeeds=NewFeeds.objects.filter(user_id=user_id).order_by('-id')
     feeds=PostFeed.objects.filter(user_id=user_id)
+    post_count=newfeeds.count()
     imgfeeds=PostImageFeed.objects.filter(user_id=user_id)
     videofeeds=PostVideoFeed.objects.filter(user_id=user_id)
     print(ability_range)
@@ -45,7 +51,10 @@ def index(request):
                     'userfeeds':feeds,
                     'userimgfeeds':imgfeeds,
                     'uservideofeeds':videofeeds,
-                    'newfeeds':newfeeds
+                    'newfeeds':newfeeds,
+                    'following':followingg,
+                    'followers':followers,
+                    'post_count':post_count,
                     })
 def deleteUser(request,delete_id):
     delUser=User.objects.get(id=delete_id)
@@ -137,35 +146,44 @@ def login(request):
     
     return render(request, 'login.html', {'form': form, 'msg': msg})
 def playerHome(request,user_id):
+    followingg=following.objects.filter(following_id=user_id).count()
+    followers=following.objects.filter(followed_id=user_id).count()
     players = User.objects.filter(is_player=True)
     scout=User.objects.filter(is_scout=True)
     clubs=User.objects.filter(is_club=True)
     ability_range = range(0, 5)
     feeds=NewFeeds.objects.filter(user_id=user_id).order_by('-id')
+    post_count=feeds.count()
     ability_range = range(0, 5)
     player=User.objects.filter(id=user_id)
-    return render(request,'player-home.html',{'player':player,'abilityRange':ability_range,'clubdata':clubs,'playerdata':players,'scout':scout,'feeds':feeds})
+    return render(request,'player-home.html',{'player':player,'abilityRange':ability_range,'clubdata':clubs,'playerdata':players,'scout':scout,'feeds':feeds,'followers':followers,'following':followingg,'post_count':post_count})
 
 
 def clubHome(request,user_id):
+    followingg=following.objects.filter(following_id=user_id).count()
+    followers=following.objects.filter(followed_id=user_id).count()
     players=User.objects.filter(is_player=True)
     clubs = User.objects.filter(is_club=True)
     scout=User.objects.filter(is_scout=True)
     ability_range = range(0, 5)
     feeds=NewFeeds.objects.filter(user_id=user_id).order_by('-id')
+    post_count=feeds.count()
     ability_range = range(0, 5)
     club=User.objects.filter(id=user_id)
-    return render(request,'ClubHome.html',{'club':club,'abilityRange':ability_range,'playerdata':players,'clubdata':clubs,'scout':scout,'feeds':feeds})
+    return render(request,'ClubHome.html',{'club':club,'abilityRange':ability_range,'playerdata':players,'clubdata':clubs,'scout':scout,'feeds':feeds,'followers':followers,'following':followingg,'post_count':post_count})
 def scoutHome(request,user_id):
+    followingg=following.objects.filter(following_id=user_id).count()
+    followers=following.objects.filter(followed_id=user_id).count()
     clubs = User.objects.filter(is_club=True)
     player=User.objects.filter(is_player=True)
     scouts=User.objects.filter(is_scout=True)
     ability_range = range(0, 5)
     feeds=NewFeeds.objects.filter(user_id=user_id).order_by('-id')
+    post_count=feeds.count()
     ability_range = range(0, 5)
     scout=User.objects.filter(id=user_id)
     print(scouts)
-    return render(request,'ScoutHome.html',{'scouts':scouts, 'scout':scout,'abilityRange':ability_range,'clubdata':clubs,'player':player,'feeds':feeds})
+    return render(request,'ScoutHome.html',{'scouts':scouts, 'scout':scout,'abilityRange':ability_range,'clubdata':clubs,'player':player,'feeds':feeds,'followers':followers,'following':followingg,'post_count':post_count})
 def logout(request):
     auth.logout(request)
     return redirect('login')

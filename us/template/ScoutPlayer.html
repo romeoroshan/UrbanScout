@@ -90,7 +90,7 @@
                 </div>
                 
                 <div class="d-flex align-items-center justify-content-center col-5">
-                    <p class="text-primary"><i class="bi bi-file-earmark-bar-graph-fill"></i> You have released the scout report for this player</p>
+                    <a href="{% url 'ScoutPlayerEdit' i.id %}"><button class="btn btn-outline-primary">Scout Report</button></a>
                 </div>
             </div>
             
@@ -239,6 +239,7 @@
             </div>
             
         </div>
+        
         {% endif %}
         {% endfor %}
     </div>
