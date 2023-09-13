@@ -62,34 +62,40 @@
                         <div class="d-flex"><p class="fw-bold fs-3">Player Name:</p><p class="text-secondary fw-bold fs-3">{{updateUser.first_name}} {{updateUser.last_name}}</p></div>
                         
                         <div class="d-flex justify-content-center gap-2 m-5">
-                            <div class="d-flex flex-column w-100">
-                                <label for="dist">Ability</label>
-                                <select class="form-control" name="ability" id="">
-                                    <option value="{{ updateUser.player_ability }}">{{ updateUser.player_ability }}</option>
-                                    {% for choice_value,choice in abilityChoices %}
-                                    <option value="{{ choice }}">{{ choice }}</option>
-                                    {% endfor %}
-                                </select>
-
-                            </div>
-                            <div class="d-flex flex-column w-100">
-                                <label for="dist">Potential</label>
-                                <select class="form-control" name="potential" id="">
-                                    <option value="{{ updateUser.player_potential }}">{{ updateUser.player_potential }}</option>
-                                    {% for choice_value,choice in abilityChoices %}
-                                    <option value="{{ choice }}">{{ choice }}</option>
-                                    {% endfor %}
-                                </select>
-                                
+                            <div class="d-flex flex-wrap w-100">
+                                <div class="d-flex flex-column w-100">
+                                    <label for="pace">Pace</label>
+                                    <input class="form-control" type="number" name="pace" max="100">
+                                </div>
+                                <div class="d-flex flex-column w-100">
+                                    <label for="shooting">Shooting</label>
+                                    <input class="form-control" type="number" name="shooting" max="100">
+                                </div>
+                                <div class="d-flex flex-column w-100">
+                                    <label for="passing">Passing</label>
+                                    <input class="form-control" type="number" name="passing" max="100">
+                                </div>
+                                <div class="d-flex flex-column w-100">
+                                    <label for="dribbling">Dribbling</label>
+                                    <input class="form-control" type="number" name="dribbling" max="100">
+                                </div>
+                                <div class="d-flex flex-column w-100">
+                                    <label for="defending">Defending</label>
+                                    <input class="form-control" type="number" name="defending" max="100">
+                                </div>
+                                <div class="d-flex flex-column w-100">
+                                    <label for="physical">Physical</label>
+                                    <input class="form-control" type="number" name="physical" max="100">
+                                </div>
+                                <div class="d-flex flex-column w-100">
+                                    <label for="age">Age</label>
+                                    <input class="form-control" type="number" name="age" max="100">
+                                </div>
                             </div>
                             
                             
                         </div>
-                        <div class="d-flex flex-column w-100">
-                            <label for="dist">Other key abilities</label>
-                            <textarea name="desc" class="form-control" id="" cols="30" rows="10"></textarea>
-                            
-                        </div>
+                        
                         <div class="d-flex justify-content-center mt-2">
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>

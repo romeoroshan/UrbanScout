@@ -627,27 +627,57 @@ def deleteByRequest(player_id,club_id):
     delete_data=InterestedClubs.objects.filter(player_id=player_id,club_id=club_id)
     delete_data.delete()
     return redirect('ClubPlayer')
-def scoutPlayerEdit(request,update_id):
-    updateUser=User.objects.get(id=update_id)
-    user=request.user
+from joblib import load
+def scoutPlayerEdit(request, update_id):
+    potential_model=load('./player model/model.joblib')
+    ability_model=load('./player model/ability_model.joblib')
+    print(potential_model)
+    updateUser = User.objects.get(id=update_id)
+    user = request.user
     username = "{} {}".format(user.first_name, user.last_name)
     print(username)
-    if request.method=='POST':
+    
+    if request.method == 'POST':
+        pace = request.POST.get('pace')
+        shooting = request.POST.get('shooting')
+        passing = request.POST.get('passing')
+        dribbling = request.POST.get('dribbling')
+        defending = request.POST.get('defending')
+        physical = request.POST.get('physical')
+        age = request.POST.get('age')
         
-        ability=request.POST.get('ability')
-        potential=request.POST.get('potential')
-        desc=request.POST.get('desc')
+        # Print input data for debugging
+        print(f"Input Data: Pace={pace}, Shooting={shooting}, Passing={passing}, Dribbling={dribbling}, Defending={defending}, Physical={physical}, Age={age}")
+        
+
+            
+            # Prepare input data as a list of lists
+        input_data = [[int(age), int(pace), int(shooting), int(passing), int(dribbling), int(defending), int(physical)]]
+
+            # Make predictions
+        predictions = potential_model.predict(input_data)
+        ability_prediction=ability_model.predict(input_data)
+
+            # Extract ability and potential from predictions
+        potential =int(predictions)
+        print(potential)
+        ability=int(ability_prediction)
+        print(ability)
+        if potential>=5:
+            potential=5
+        if ability>=5:
+            ability=5
         updateUser.player_ability=ability
         updateUser.player_potential=potential
-        updateUser.desc=desc
         updateUser.scouted_by=username
         updateUser.save()
-        print('saved')
         return redirect('ScoutPlayer')
-    return render(request,'ScoutPlayerEdit.html',{
-        'updateUser':updateUser,
-        'abilityChoices':Ability_Choice,
-        })
+
+    return render(request, 'ScoutPlayerEdit.html', {
+        'updateUser': updateUser,
+        'abilityChoices': Ability_Choice,
+    })
+
 def scoutClubEdit(request,update_id):
     updateUser=User.objects.get(id=update_id)
     user=request.user
