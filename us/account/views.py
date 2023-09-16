@@ -657,6 +657,8 @@ def scoutPlayerEdit(request, update_id):
             # Make predictions
         predictions = potential_model.predict(input_data)
         ability_prediction=ability_model.predict(input_data)
+        print(predictions)
+        print(ability_prediction)
 
             # Extract ability and potential from predictions
         potential =int(predictions)
@@ -877,7 +879,16 @@ def following_feeds(request):
     context = {'feeds': feeds}
     return render(request, 'FollowingFeeds.html', context)
 #email verification
+from django.core import serializers
+from django.db.models import Q
+def searchByName(request,name):
+    
+    # name=name.lower()
+    users = User.objects.filter(Q(first_name__icontains=name) | Q(club_name__icontains=name))
+    user_data = serializers.serialize('json', users)
 
+    # Return the serialized data as JSON response
+    return JsonResponse(user_data, safe=False)
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 

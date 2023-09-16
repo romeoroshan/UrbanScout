@@ -158,6 +158,33 @@
 .followbutton:hover {
     background-color: #0077b5;
 }
+.search-container {
+        width: 50%;
+        margin-left: 3px;
+    }
+
+    /* Style for each user box */
+    .user-box {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 5px;
+        background-color: #f5f5f5;
+    }
+
+    /* Style for user image */
+    .user-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    /* Style for user name */
+    .user-name {
+        font-weight: bold;
+    }
 @media (max-width: 991.98px) {
     .player-feeds{
         height: 100%;
