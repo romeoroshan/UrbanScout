@@ -884,7 +884,7 @@ from django.db.models import Q
 def searchByName(request,name):
     
     # name=name.lower()
-    users = User.objects.filter(Q(first_name__icontains=name) | Q(club_name__icontains=name))
+    users = User.objects.filter(Q(first_name__icontains=name) | Q(club_name__icontains=name) | Q(player_pos__icontains=name) | Q(district__icontains=name) | Q(locality__icontains=name))
     user_data = serializers.serialize('json', users)
 
     # Return the serialized data as JSON response
