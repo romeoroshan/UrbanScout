@@ -6,6 +6,7 @@ from django.contrib.auth.models import auth
 from .models import Pos_Choice, District_Choice,Ability_Choice
 from datetime import date
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def index(request):
     followingg=following.objects.filter(following_id=request.user.id).count()
@@ -68,8 +69,7 @@ def updateStatus(request,update_id):
         updateUser.is_active=True
     updateUser.save()
     return redirect('/')
-def login(request):
-    return render(request,'login.html')
+
 from django.core.mail import EmailMessage
 from django.conf import settings
 def sendEmail(user_email):
@@ -122,29 +122,33 @@ def registerClub(request):
         club_form = ClubRegistraionForm()
     return render(request, 'reg-club.html', {'playerForm': club_form, 'msg': msg})
 def login(request):
-    form = LoginForm(request.POST or None)
-    msg = None
-    
-    if request.method == 'POST':
-        if form.is_valid():
-            email = form.cleaned_data.get('email')
-            password = form.cleaned_data.get('password')
-            
-            user = authenticate(email=email, password=password)
-            print(user)
-            
-            if user is not None:
-                if user.is_active:
-                    auth_login(request, user)
-                    return redirect('/')
+    if request.user.is_authenticated:
+        return redirect('/')
+    else:
+        form = LoginForm(request.POST or None)
+        msg = None
+        
+        if request.method == 'POST':
+            if form.is_valid():
+                email = form.cleaned_data.get('email')
+                password = form.cleaned_data.get('password')
+                
+                user = authenticate(email=email, password=password)
+                print(user)
+                
+                if user is not None:
+                    if user.is_active:
+                        auth_login(request, user)
+                        return redirect('/')
+                    else:
+                        msg = "User is inactive"
                 else:
-                    msg = "User is inactive"
+                    msg = 'Invalid credentials'
             else:
-                msg = 'Invalid credentials'
-        else:
-            msg = 'Error validating form'
-    
-    return render(request, 'login.html', {'form': form, 'msg': msg})
+                msg = 'Error validating form'
+        
+        return render(request, 'login.html', {'form': form, 'msg': msg})
+@login_required(login_url='http://127.0.0.1:8000/login/')
 def playerHome(request,user_id):
     followingg=following.objects.filter(following_id=user_id).count()
     followers=following.objects.filter(followed_id=user_id).count()
@@ -158,7 +162,7 @@ def playerHome(request,user_id):
     player=User.objects.filter(id=user_id)
     return render(request,'player-home.html',{'player':player,'abilityRange':ability_range,'clubdata':clubs,'playerdata':players,'scout':scout,'feeds':feeds,'followers':followers,'following':followingg,'post_count':post_count})
 
-
+@login_required(login_url='http://127.0.0.1:8000/login/')
 def clubHome(request,user_id):
     followingg=following.objects.filter(following_id=user_id).count()
     followers=following.objects.filter(followed_id=user_id).count()
@@ -171,6 +175,7 @@ def clubHome(request,user_id):
     ability_range = range(0, 5)
     club=User.objects.filter(id=user_id)
     return render(request,'ClubHome.html',{'club':club,'abilityRange':ability_range,'playerdata':players,'clubdata':clubs,'scout':scout,'feeds':feeds,'followers':followers,'following':followingg,'post_count':post_count})
+@login_required(login_url='http://127.0.0.1:8000/login/')
 def scoutHome(request,user_id):
     followingg=following.objects.filter(following_id=user_id).count()
     followers=following.objects.filter(followed_id=user_id).count()
@@ -187,6 +192,7 @@ def scoutHome(request,user_id):
 def logout(request):
     auth.logout(request)
     return redirect('login')
+@login_required(login_url='http://127.0.0.1:8000/login/')
 def playerClub(request):
     user = request.user
     interested_clubs = InterestedClubs.objects.filter(player_id=user.id).values_list('club_id', flat=True)
@@ -241,7 +247,7 @@ def playerClub(request):
         'nonContractedClubs':non_contract_clubs,
         'contractAccepted':cont_accepted,
     })
-
+@login_required(login_url='http://127.0.0.1:8000/login/')
 def editPlayerProfile(request):
     if request.method == 'POST':
         img=request.FILES.get('img')
@@ -340,6 +346,7 @@ def editClub(request):
         'user': request.user,
         'district_choices': District_Choice,
     })
+@login_required(login_url='http://127.0.0.1:8000/login/')
 def registerScout(request):
     if request.method == 'POST':
         img = request.FILES.get('img')
@@ -406,7 +413,7 @@ def showInterest(request,club_id):
     data.save()
     return redirect('player-club')
 
-
+@login_required(login_url='http://127.0.0.1:8000/login/')
 def clubPlayer(request):
     user = request.user
     interested_players = InterestedClubs.objects.filter(club_id=user.id).values_list('player_id', flat=True)
@@ -472,6 +479,7 @@ def shortlistPlayer(request,player_id):
     )
     data.save()
     return redirect('ClubPlayer')
+@login_required(login_url='http://127.0.0.1:8000/login/')
 def playerScout(request):
     user = request.user
     shortlisted_scouts = ShortlistedScouts.objects.filter(player_id=user.id).values_list('scout_id', flat=True)
@@ -507,6 +515,7 @@ def shortlistScout(request,scout_id):
     )
     data.save()
     return redirect('PlayerScout')
+@login_required(login_url='http://127.0.0.1:8000/login/')
 def scoutPlayer(request):
     user = request.user
     interested_players = ShortlistedScouts.objects.filter(scout_id=user.id).values_list('player_id', flat=True)
@@ -542,6 +551,7 @@ def scoutPlayer(request):
         'not_interested_players': not_interested_players_list,
         'abilityRange':ability_range,
     })
+@login_required(login_url='http://127.0.0.1:8000/login/')
 def clubScout(request):
     user = request.user
     shortlisted_scouts = ShortlistedClubScouts.objects.filter(club_id=user.id).values_list('scout_id', flat=True)
@@ -577,6 +587,7 @@ def shortlistClubScout(request,scout_id):
     )
     data.save()
     return redirect('ClubScout')
+@login_required(login_url='http://127.0.0.1:8000/login/')
 def scoutClub(request):
     user = request.user
     interested_Clubs = ShortlistedClubScouts.objects.filter(scout_id=user.id).values_list('club_id', flat=True)

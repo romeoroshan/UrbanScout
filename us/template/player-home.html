@@ -564,7 +564,8 @@
     var user = users[i];
     console.log(user.pk)
     var userHtml = '<div class="user-box">';
-    userHtml += '<img class="user-img" src="' + user.fields.img + '" alt="User Image">';
+    console.log(user.fields.img)
+    userHtml += '<img class="user-img" src="http://127.0.0.1:8000/' + user.fields.img + '" alt="User Image">';
     userHtml += '<p class="user-name">';
     
     // Check if the user is a Scout and add a link to ScoutHome
