@@ -900,6 +900,11 @@ def searchByName(request,name):
 
     # Return the serialized data as JSON response
     return JsonResponse(user_data, safe=False)
+def follower(request,user_id):
+    users=following.objects.filter(followed=user_id)
+    followers=User.objects.filter(id=users.followed_id)
+    print(users)
+    return render(request,'follower.html',{'follower':users})
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 
