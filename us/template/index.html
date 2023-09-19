@@ -404,7 +404,7 @@
                         <button class="btn shadow-none like-button" data-feed-id="{{ i.id }}">
                             <i class="bi bi-heart fs-5"></i>
                         </button>
-                        <p id="likes-count-{{ i.id }}">{{ i.likes_cout }} likes</p>
+                        <a class="text-decoration-none text-dark" href="{% url 'likesUsers' i.id %}"><p id="likes-count-{{ i.id }}">{{ i.likes_cout }} likes</p></a>
                     </div>
 
                 </div>
@@ -648,7 +648,7 @@
                         <button class="btn shadow-none like-button" data-feed-id="{{ i.id }}">
                             <i class="bi bi-heart fs-5"></i>
                         </button>
-                        <p id="likes-count-{{ i.id }}">{{ i.likes_cout }} likes</p>
+                        <a class="text-decoration-none text-dark" href="{% url 'likesUsers' i.id %}"><p id="likes-count-{{ i.id }}">{{ i.likes_cout }} likes</p></a>
                     </div>
 
                 </div>
@@ -937,7 +937,7 @@
                         <button class="btn shadow-none like-button" data-feed-id="{{ i.id }}">
                             <i class="bi bi-heart fs-5"></i>
                         </button>
-                        <p id="likes-count-{{ i.id }}">{{ i.likes_cout }} likes</p>
+                        <a class="text-decoration-none text-dark" href="{% url 'likesUsers' i.id %}"><p id="likes-count-{{ i.id }}">{{ i.likes_cout }} likes</p></a>
                     </div>
                     
                 </div>

@@ -908,6 +908,10 @@ def followingUsers(request,user_id):
     users=following.objects.filter(following_id=user_id)
     
     return render(request,'following.html',{'follower':users})
+def likesUsers(request,feed_id):
+    users=likes.objects.filter(feed_id=feed_id)
+    
+    return render(request,'likes.html',{'likes':users})
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 
