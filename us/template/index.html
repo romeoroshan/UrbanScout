@@ -335,14 +335,18 @@
                     <p class="fs-4 fw-bold">{{post_count}}</p>
                     <p class="fs-5">Posts</p>
                 </div>
-                <div class="text-center">
-                    <p class="fs-4 fw-bold">{{followers}}</p>
-                    <p class="fs-5">Followers</p>
-                </div>
-                <div class="text-center">
-                    <p class="fs-4 fw-bold">{{following}}</p>
-                    <p class="fs-5">Following</p>
-                </div>
+                <a class="text-decoration-none text-dark" href="{% url 'follower' user.id %}">
+                    <div class="text-center">
+                        <p class="fs-4 fw-bold">{{followers}}</p>
+                        <p class="fs-5">Followers</p>
+                    </div>
+                </a>
+                <a class="text-decoration-none text-dark" href="{% url 'followingUsers' user.id %}">
+                    <div class="text-center">
+                        <p class="fs-4 fw-bold">{{following}}</p>
+                        <p class="fs-5">Following</p>
+                    </div>
+                </a>
             </div>
             <div class="w-100 d-flex justify-content-center">
                 <div class="w-100">
@@ -580,10 +584,12 @@
                         <p class="fs-5">Followers</p>
                     </div>
                 </a>
-                <div class="text-center">
-                    <p class="fs-4 fw-bold">{{following}}</p>
-                    <p class="fs-5">Following</p>
-                </div>
+                <a class="text-decoration-none text-dark" href="{% url 'followingUsers' user.id %}">
+                    <div class="text-center">
+                        <p class="fs-4 fw-bold">{{following}}</p>
+                        <p class="fs-5">Following</p>
+                    </div>
+                </a>
             </div>
             <div class="w-100 d-flex justify-content-center">
                 
@@ -858,14 +864,18 @@
                     <p class="fs-4 fw-bold">{{post_count}}</p>
                     <p class="fs-5">Posts</p>
                 </div>
-                <div class="text-center">
-                    <p class="fs-4 fw-bold">{{followers}}</p>
-                    <p class="fs-5">Followers</p>
-                </div>
-                <div class="text-center">
-                    <p class="fs-4 fw-bold">{{following}}</p>
-                    <p class="fs-5">Following</p>
-                </div>
+                <a class="text-decoration-none text-dark" href="{% url 'follower' user.id %}">
+                    <div class="text-center">
+                        <p class="fs-4 fw-bold">{{followers}}</p>
+                        <p class="fs-5">Followers</p>
+                    </div>
+                </a>
+                <a class="text-decoration-none text-dark" href="{% url 'followingUsers' user.id %}">
+                    <div class="text-center">
+                        <p class="fs-4 fw-bold">{{following}}</p>
+                        <p class="fs-5">Following</p>
+                    </div>
+                </a>
             </div>
             <div class="w-100 d-flex justify-content-center">
                 <div class="w-100">
