@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes,following
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes,following,Notification
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -874,10 +874,16 @@ def following_funtion(request,followed_id):
             following_id=user_id,
             followed_id=followed_id
         )
+        notification=Notification(
+            followingg_id=user_id,
+            followed_id=followed_id
+        )
+        notification.save()
         follow.save()
         return JsonResponse({'message': 'followed'})
     else:
         following.objects.filter(following_id=user_id,followed_id=followed_id).delete()
+        Notification.objects.filter(followingg_id=user_id,followed_id=followed_id).delete()
         return JsonResponse({'message': 'unfollowed'})
     
 def following_feeds(request):
@@ -900,6 +906,24 @@ def searchByName(request,name):
 
     # Return the serialized data as JSON response
     return JsonResponse(user_data, safe=False)
+def notificationUsers(request,user_id):
+    print(user_id)
+    # name=name.lower()
+    users = Notification.objects.filter(followed_id=user_id)
+    print(users)
+    data = []
+
+    # Loop through notifications and include user details
+    for notification in users:
+        user=User.objects.filter(id=notification.followingg_id)
+        print(user)
+        
+        data.extend(user)
+    print(data)
+    data=serializers.serialize('json',data)
+
+    # Return the serialized data as JSON response
+    return JsonResponse(data, safe=False)
 def follower(request,user_id):
     users=following.objects.filter(followed_id=user_id)
     

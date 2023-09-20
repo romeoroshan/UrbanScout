@@ -132,3 +132,7 @@ class likes(models.Model):
 class following(models.Model):
     followed=models.ForeignKey(User,on_delete=models.CASCADE,related_name='following_followed')
     following=models.ForeignKey(User,on_delete=models.CASCADE,related_name='following_following')
+class Notification(models.Model):
+    followed=models.ForeignKey(User,on_delete=models.CASCADE,related_name='notification_followed')
+    followingg=models.ForeignKey(User,on_delete=models.CASCADE,related_name='notification_followingg')
+    timestamp=models.DateTimeField(auto_now_add=True)

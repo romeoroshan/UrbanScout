@@ -17,6 +17,12 @@
             z-index: 1;
             top: 75px;
         }
+        #notification-results{
+            position: fixed;
+            background-color: white;
+            z-index: 1;
+            top: 75px;
+        }
         .search-container {
         position: relative;
         width: 50%;
@@ -64,6 +70,13 @@
             z-index: 1;
             top: 125px;
         }
+        #notification-results{
+            position: fixed;
+            background-color: white;
+            z-index: 1;
+            top: 125px;
+        }
+
 }
     </style>
     <link rel="stylesheet" href="{% static 'style.css' %}">
@@ -765,7 +778,15 @@
 
                     </ul>
                 </div>
+                
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="d-flex flex-column justify-content-center"><button data-user-id="{{user.id}}" class="btn" id="notification-button"><i class="bi bi-bell-fill text-white  fs-4"></i></button>
+                        
+                    </div>
+                    <div id="notification-results" class="col-lg-4 col-11 rounded shadow-lg">
+                        <!-- Results will be displayed here -->
+                    </div>
+                    
                     <div class="border rounded p-2 pb-0 mt-2 ms-3">
                         <p class="text-light "><i class="bi bi-person-circle"></i> {{user.first_name}}</p>
                     </div>
@@ -1158,5 +1179,56 @@
                 }
             })
         })
+        $("#notification-button").click(function (){
+    var user_id = $(this).data("user-id");
+    console.log(user_id)
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "{% url 'notificationUsers' 0 %}".replace('0', user_id),
+        success: function (data) {
+            console.log(typeof(data));
+            console.log(data);
+            var users = JSON.parse(data);
+            for (var i = 0; i < users.length; i++) {
+
+                var user = users[0];
+                console.log("user " + user);
+                var userHtml = '<div class="user-box">';
+                userHtml += '<img class="user-img" src="' + user.fields.img + '" alt="User Image">';
+                userHtml += '<p class="user-name">';
+
+                // Check if the user is a Scout and add a link to ScoutHome
+                if (user.fields.is_scout) {
+                    userHtml += '<a class="text-decoration-none text-dark" href="{% url "scout-home" 0 %}'.replace("0", user.pk) + '">';
+                    userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+                }
+                // Check if the user is a Player and add a link to PlayerHome
+                else if (user.fields.is_player) {
+                    userHtml += '<a class="text-decoration-none text-dark" href="{% url "player-home" 0 %}'.replace("0", user.pk) + '">';
+                    userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+                }
+                else {
+                    userHtml += '<a class="text-decoration-none text-dark" href="{% url "clubHome" 0 %}'.replace("0", user.pk) + '">';
+                    userHtml += user.fields.club_name;
+                }
+                userHtml+='<p class=""> has started following you</p>';
+                // Close the anchor tag if added
+                userHtml += '</a>';
+                userHtml += '</p>';
+                userHtml += '</div>';
+
+                $("#notification-results").append(userHtml);
+            }
+
+            // Show the user list
+            $("#notification-results").show();
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+});
+
     });
 </script>

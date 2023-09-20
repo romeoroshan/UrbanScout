@@ -55,6 +55,7 @@ urlpatterns = [
     path('follower/<int:user_id>',views.follower,name="follower"),
     path('followingUsers/<int:user_id>',views.followingUsers,name="followingUsers"),
     path('likesUsers/<int:feed_id>',views.likesUsers,name="likesUsers"),
+    path('notificationUsers/<int:user_id>',views.notificationUsers,name="notificationUsers"),
 
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
