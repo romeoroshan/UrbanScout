@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     followingg=following.objects.filter(following_id=request.user.id).count()
     followers=following.objects.filter(followed_id=request.user.id).count()
-    
+    notifications=Notification.objects.filter(followed_id=request.user.id).count()
     print(followers)
     print(followingg)
     users=User.objects.all()
@@ -56,6 +56,7 @@ def index(request):
                     'following':followingg,
                     'followers':followers,
                     'post_count':post_count,
+                    'notification':notifications
                     })
 def deleteUser(request,delete_id):
     delUser=User.objects.get(id=delete_id)
@@ -907,19 +908,18 @@ def searchByName(request,name):
     # Return the serialized data as JSON response
     return JsonResponse(user_data, safe=False)
 def notificationUsers(request,user_id):
-    print(user_id)
-    # name=name.lower()
+
     users = Notification.objects.filter(followed_id=user_id)
-    print(users)
+
     data = []
 
     # Loop through notifications and include user details
     for notification in users:
         user=User.objects.filter(id=notification.followingg_id)
-        print(user)
+
         
         data.extend(user)
-    print(data)
+
     data=serializers.serialize('json',data)
 
     # Return the serialized data as JSON response
@@ -936,6 +936,11 @@ def likesUsers(request,feed_id):
     users=likes.objects.filter(feed_id=feed_id)
     
     return render(request,'likes.html',{'likes':users})
+def deleteNotification(request,user_id):
+    print(user_id)
+    Notification.objects.get(followingg_id=user_id,followed_id=request.user.id).delete()
+    notificationUsers(request,request.user.id)
+    return JsonResponse({'message': 'success'})
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 

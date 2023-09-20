@@ -63,6 +63,17 @@
     .user-name {
         font-weight: bold;
     }
+    .notification-badge {
+  position: absolute;
+  top: 15;
+  right: 50;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
     @media (max-width: 991.98px) {
         #search-results{
             position: fixed;
@@ -192,6 +203,12 @@
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="d-flex flex-column justify-content-center"><button data-user-id="{{user.id}}" class="btn" id="notification-button"><i class="bi bi-bell-fill text-white  fs-4"></i></button>
+                        
+                    </div>
+                    <div id="notification-results" class="col-lg-4 col-11 rounded shadow-lg">
+                        <!-- Results will be displayed here -->
+                    </div>
                     <div class="border rounded p-2 pb-0 mt-2 ms-3">
                         <p class="text-light "><i class="bi bi-person-circle"></i> Admin</p>
                     </div>
@@ -298,6 +315,14 @@
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="d-flex flex-column justify-content-center"><button data-user-id="{{user.id}}" class="btn shadow-none" id="notification-button"><i class="bi bi-bell-fill text-white  fs-4"></i>
+                        <span class="notification-badge">{{notification}}</span>
+                    </button>
+                        
+                    </div>
+                    <div id="notification-results" class="col-lg-4 col-11 rounded shadow-lg">
+                        <!-- Results will be displayed here -->
+                    </div>
                     <div class="border rounded p-2 pb-0 mt-2 ms-3">
                         <p class="text-light "><i class="bi bi-shield-fill"></i> {{user.club_name}} </p>
                     </div>
@@ -553,6 +578,14 @@
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="d-flex flex-column justify-content-center"><button data-user-id="{{user.id}}" class="btn shadow-none" id="notification-button"><i class="bi bi-bell-fill text-white  fs-4"></i>
+                        <span class="notification-badge">{{notification}}</span>
+                    </button>
+                        
+                    </div>
+                    <div id="notification-results" class="col-lg-4 col-11 rounded shadow-lg">
+                        <!-- Results will be displayed here -->
+                    </div>
                     <div class="border rounded p-2 pb-0 mt-2 ms-3">
                         <p class="text-light "><i class="bi bi-binoculars-fill"></i> {{user.first_name}}</p>
                     </div>
@@ -780,7 +813,9 @@
                 </div>
                 
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
-                    <div class="d-flex flex-column justify-content-center"><button data-user-id="{{user.id}}" class="btn" id="notification-button"><i class="bi bi-bell-fill text-white  fs-4"></i></button>
+                    <div class="d-flex flex-column justify-content-center"><button data-user-id="{{user.id}}" class="btn shadow-none" id="notification-button"><i class="bi bi-bell-fill text-white  fs-4"></i>
+                        <span class="notification-badge">{{notification}}</span>
+                    </button>
                         
                     </div>
                     <div id="notification-results" class="col-lg-4 col-11 rounded shadow-lg">
@@ -1057,6 +1092,7 @@
 
 <script>
     $(document).ready(function () {
+        
         $(".like-button").each(function () {
             var feedId = $(this).data("feed-id");
             var likeButton = $(this);
@@ -1179,56 +1215,93 @@
                 }
             })
         })
-        $("#notification-button").click(function (){
-    var user_id = $(this).data("user-id");
-    console.log(user_id)
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        url: "{% url 'notificationUsers' 0 %}".replace('0', user_id),
-        success: function (data) {
-            console.log(typeof(data));
-            console.log(data);
-            var users = JSON.parse(data);
-            for (var i = 0; i < users.length; i++) {
+        // Initialize a flag to track the visibility state
+var isResultsVisible = false;
 
-                var user = users[0];
-                console.log("user " + user);
-                var userHtml = '<div class="user-box">';
-                userHtml += '<img class="user-img" src="' + user.fields.img + '" alt="User Image">';
-                userHtml += '<p class="user-name">';
 
-                // Check if the user is a Scout and add a link to ScoutHome
-                if (user.fields.is_scout) {
-                    userHtml += '<a class="text-decoration-none text-dark" href="{% url "scout-home" 0 %}'.replace("0", user.pk) + '">';
-                    userHtml += user.fields.first_name + ' ' + user.fields.last_name;
-                }
-                // Check if the user is a Player and add a link to PlayerHome
-                else if (user.fields.is_player) {
-                    userHtml += '<a class="text-decoration-none text-dark" href="{% url "player-home" 0 %}'.replace("0", user.pk) + '">';
-                    userHtml += user.fields.first_name + ' ' + user.fields.last_name;
-                }
-                else {
-                    userHtml += '<a class="text-decoration-none text-dark" href="{% url "clubHome" 0 %}'.replace("0", user.pk) + '">';
-                    userHtml += user.fields.club_name;
-                }
-                userHtml+='<p class=""> has started following you</p>';
-                // Close the anchor tag if added
-                userHtml += '</a>';
-                userHtml += '</p>';
-                userHtml += '</div>';
+$("#notification-button").click(function () {
+    // Toggle the flag
+    isResultsVisible = !isResultsVisible;
 
-                $("#notification-results").append(userHtml);
+    if (isResultsVisible) {
+        $("#notification-results").empty();
+        var user_id = $(this).data("user-id");
+        console.log(user_id);
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "{% url 'notificationUsers' 0 %}".replace('0', user_id),
+            success: function (data) {
+                console.log(data);
+                var users = JSON.parse(data);
+                for (var i = 0; i < users.length; i++) {
+
+                    var user = users[0];
+                    
+                    var userHtml = '<div class="user-box">';
+                    userHtml += '<img class="user-img" src="' + user.fields.img + '" alt="User Image">';
+                    userHtml += '<p class="user-name">';
+
+                    // Check if the user is a Scout and add a link to ScoutHome
+                    if (user.fields.is_scout) {
+                        userHtml += '<a class="text-decoration-none text-dark" href="{% url "scout-home" 0 %}'.replace("0", user.pk) + '">';
+                        userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+                    }
+                    // Check if the user is a Player and add a link to PlayerHome
+                    else if (user.fields.is_player) {
+                        userHtml += '<a class="text-decoration-none text-dark" href="{% url "player-home" 0 %}'.replace("0", user.pk) + '">';
+                        userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+                    } else {
+                        userHtml += '<a class="text-decoration-none text-dark" href="{% url "clubHome" 0 %}'.replace("0", user.pk) + '">';
+                        userHtml += user.fields.club_name;
+                    }
+                    userHtml += '<p class="ms-1 col-5">has started following you</p>';
+                    
+                    // Close the anchor tag if added
+                    userHtml += '</a>';
+
+                    userHtml += '</p>';
+                    userHtml += '<div class="d-flex col-2 justify-content-end"><button data-user-id1="'+ user.pk +'" id="notification_marked" class="btn btn-primary"><i class="bi bi-bookmark-check-fill"></i></button></div>';
+                    userHtml += '</div>';
+
+                    $("#notification-results").append(userHtml);
+                }
+
+                // Show the user list
+                $("#notification-results").show();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
             }
-
-            // Show the user list
-            $("#notification-results").show();
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-        }
-    });
+        });
+    } else {
+        // Hide the user list
+        $("#notification-results").hide();
+    }
 });
+$("#notification-results").on("click", "#notification_marked", function () {
+        console.log("hello");
+        var user_id = $(this).data("user-id1");
+        var headers = {
+                "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val()
+            };
+        console.log(user_id);
+        $.ajax({
+            type:"POST",
+            headers: headers,
+            url:"{% url 'deleteNotification' 0 %}".replace("0",user_id),
+            success: function (data) {
+                console.log(data["message"])
+                if(data["message"]=="success"){
+                    $("#notification_marked").html('<i class="bi bi-check2-all text-info"></i>').prop("disabled", true).removeClass("btn btn-primary").addClass("btn shadow-none") ;
+
+                }
+
+            }
+        })
+    });
+
 
     });
+
 </script>
