@@ -3,6 +3,9 @@
             $("#fn").keyup(function () {
                 validateName("#fn");
             });
+            $("#ln").keyup(function () {
+                validateName("#ln");
+            });
 
             $("#sn").keyup(function () {
                 validateName2("#sn");
@@ -30,28 +33,50 @@
 
         function validateName(fieldId) {
             var name = $(fieldId).val();
-            console.log(name)
-
+            console.log(name);
+            var submit = document.getElementById("submit_button");
+            console.log(submit);
             var lettersWithSpaces = /^[A-Za-z\s]+$/;
+        
             if (name.trim() === "") {
-                console.log("entered")
+                console.log("entered");
                 $("#fname").html("Enter the Name").css("color", "red");
+                submit.disabled = true;
             } else if (!lettersWithSpaces.test(name)) {
+                // Use the disabled property directly
+                submit.disabled = true;
                 $("#fname").html("Name field required only alphabet characters with spaces").css("color", "red");
             } else {
                 $("#fname").html("");
+                // Re-enable the button if needed
+                submit.disabled = false;
+                $(".submit-btn")
             }
         }
+        
 
         function validateName2(fieldId) {
             var name = $(fieldId).val();
+            console.log(name);
+            var submit = document.getElementById("submit_button");
+            var para=document.getElementById("fname");
+            console.log(para)
+            console.log(submit);
             var lettersWithSpaces = /^[A-Za-z\s]+$/;
+        
             if (name.trim() === "") {
-                $("#lname").html("Enter the Name").css("color", "red");
+                console.log("entered");
+                para.html("Enter the Name").css("color", "red");
+                submit.disabled = true;
             } else if (!lettersWithSpaces.test(name)) {
-                $("#lname").html("Name field required only alphabet characters with spaces").css("color", "red");
+                // Use the disabled property directly
+                submit.disabled = true;
+                para.html("Name field required only alphabet characters with spaces").css("color", "red");
             } else {
-                $("#lname").html("");
+                para.html("");
+                // Re-enable the button if needed
+                submit.disabled = false;
+                $(".submit-btn")
             }
         }
 

@@ -940,7 +940,8 @@ def deleteNotification(request,user_id):
     print(user_id)
     Notification.objects.get(followingg_id=user_id,followed_id=request.user.id).delete()
     notificationUsers(request,request.user.id)
-    return JsonResponse({'message': 'success'})
+    count=Notification.objects.filter(followed_id=request.user.id).count()
+    return JsonResponse({'message': 'success','notification_count':count})
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 

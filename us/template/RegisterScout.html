@@ -131,13 +131,17 @@
                         <div class="d-flex justify-content-center gap-2 m-5">
                             <div class="d-flex flex-column w-100">
                                 <label for="firstname">First Name</label>
-                                <input class="form-control" type="text" name="firstname" placeholder="First Name">
+                                <input class="form-control" id="fn" type="text" name="firstname" placeholder="First Name">
+                                
                             </div>
                             <div class="d-flex flex-column w-100">
-                                <label for="lastname">First Name</label>
-                                <input class="form-control" type="text" name="lastname" placeholder="Last Name">
+                                <label for="lastname">Last Name</label>
+                                <input class="form-control" id="ln" type="text" name="lastname" placeholder="Last Name">
+                                
                             </div>
+                            
                         </div>
+                        <div class="d-flex justify-content-center"><p id="fname" class="text-danger"></p></div>
                         <div class="d-flex mt-0 m-5">
                             <div class="d-flex flex-column w-100">
                                 <label for="email">Email</label>
@@ -172,7 +176,7 @@
                         </div>
                         
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-success">Register Scout</button>
+                            <button type="submit" id="submit_button" class="btn btn-success">Register Scout</button>
                         </div>
                         {% if msg %}
                 <p class="m-3 text-danger">{{ msg }}</p>
@@ -185,6 +189,7 @@
 </body>
 
 </html>
+<script src="{% static 'regval.js' %}"></script>
 <script>
     $(document).ready(function () {
         $("#search_bar").keyup(function(){

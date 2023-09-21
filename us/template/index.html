@@ -1291,10 +1291,10 @@ $("#notification-results").on("click", "#notification_marked", function () {
             headers: headers,
             url:"{% url 'deleteNotification' 0 %}".replace("0",user_id),
             success: function (data) {
-                console.log(data["message"])
+                console.log(data)
                 if(data["message"]=="success"){
                     $("#notification_marked").html('<i class="bi bi-check2-all text-info"></i>').prop("disabled", true).removeClass("btn btn-primary").addClass("btn shadow-none") ;
-
+                    $(".notification-badge").html(data["notification_count"]);
                 }
 
             }
