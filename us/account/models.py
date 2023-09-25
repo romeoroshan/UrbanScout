@@ -75,6 +75,7 @@ class User(AbstractUser):
     desc=models.CharField(("Description"),max_length=100, default='')
     club_name=models.CharField((("Club Name")),default='',max_length=30)
     scouted_by=models.CharField(max_length=30,default='')
+    subscribed=models.BooleanField(default=False)
     REQUIRED_FIELDS = [] 
     
 class Player(models.Model):
@@ -136,3 +137,8 @@ class Notification(models.Model):
     followed=models.ForeignKey(User,on_delete=models.CASCADE,related_name='notification_followed')
     followingg=models.ForeignKey(User,on_delete=models.CASCADE,related_name='notification_followingg')
     timestamp=models.DateTimeField(auto_now_add=True)
+class Proof(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='proof_user')
+    order_id=models.CharField(max_length=120,null=True)
+    payment_id=models.CharField(max_length=120,null=True)
+    signature=models.CharField(max_length=120,null=True)

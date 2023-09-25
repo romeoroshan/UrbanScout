@@ -203,6 +203,7 @@
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <a href="{% url 'payment' %}"><button class="btn"><i class="bi bi-pen-fill"></i></button></a>
                     <div class="d-flex flex-column justify-content-center"><button data-user-id="{{user.id}}" class="btn" id="notification-button"><i class="bi bi-bell-fill text-white  fs-4"></i></button>
                         
                     </div>
@@ -315,7 +316,12 @@
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
-                    <div class="d-flex flex-column justify-content-center"><button data-user-id="{{user.id}}" class="btn shadow-none" id="notification-button"><i class="bi bi-bell-fill text-white  fs-4"></i>
+                    <div class="d-flex flex-column justify-content-center">
+                    <a href="{% url 'payment' %}"><button class="btn"><i class="bi bi-pen-fill text-white  fs-4"></i></button></a>
+                </div>
+                    <div class="d-flex flex-column justify-content-center">
+                        
+                        <button data-user-id="{{user.id}}" class="btn shadow-none" id="notification-button"><i class="bi bi-bell-fill text-white  fs-4"></i>
                         <span class="notification-badge">{{notification}}</span>
                     </button>
                         
@@ -578,6 +584,9 @@
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="d-flex flex-column justify-content-center">
+                        <a href="{% url 'payment' %}"><button class="btn"><i class="bi bi-pen-fill text-white  fs-4"></i></button></a>
+                    </div>
                     <div class="d-flex flex-column justify-content-center"><button data-user-id="{{user.id}}" class="btn shadow-none" id="notification-button"><i class="bi bi-bell-fill text-white  fs-4"></i>
                         <span class="notification-badge">{{notification}}</span>
                     </button>
@@ -813,6 +822,9 @@
                 </div>
                 
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="d-flex flex-column justify-content-center">
+                        <a href="{% url 'payment' %}"><button class="btn"><i class="bi bi-pen-fill text-white  fs-4"></i></button></a>
+                    </div>
                     <div class="d-flex flex-column justify-content-center"><button data-user-id="{{user.id}}" class="btn shadow-none" id="notification-button"><i class="bi bi-bell-fill text-white  fs-4"></i>
                         <span class="notification-badge">{{notification}}</span>
                     </button>

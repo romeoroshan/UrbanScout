@@ -159,3 +159,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'romeoroshan2001@gmail.com'
 EMAIL_HOST_PASSWORD = 'bpgbigjrbkkuwrfj'
 EMAIL_DEBUG = True
+
+RAZOR_KEY_ID = 'rzp_test_7nX5mNRbK3lpqF'
+RAZOR_KEY_SECRET = '2BwWWBkdTS5aiHSon4hLuLf7'
