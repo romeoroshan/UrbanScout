@@ -59,6 +59,7 @@ urlpatterns = [
     path('notificationUsers/<int:user_id>',views.notificationUsers,name="notificationUsers"),
     path('deleteNotification/<int:user_id>',views.deleteNotification,name="deleteNotification"),
     path('paymenthandler/', views.paymenthandler, name='paymenthandler'),
+    path('contract/pdf/<int:player_id>/', views.render_contract_as_pdf, name='render_contract_as_pdf'),
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 

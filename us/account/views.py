@@ -1045,4 +1045,32 @@ def paymenthandler(request):
         
     else:
         return HttpResponseBadRequest()
-    
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
+from xhtml2pdf import pisa
+from .models import Contract
+
+def render_contract_as_pdf(request, player_id):
+
+    contract = Contract.objects.get(player_id=player_id,club_id=request.user.id)
+    template_path = 'template\ContractTemplate.html'  # Update with the actual path to your HTML template.
+
+    # Context data to pass to the template
+    context = {'contract': contract}
+
+    # Create a PDF response
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="contract_{player_id}.pdf"'
+
+    # Render the HTML template to PDF
+    with open(template_path, 'r') as template_file:
+        template_content = template_file.read()
+        rendered_html = render(request, 'ContractTemplate.html', context)
+
+        # Create a PDF using pisa
+        pisa_status = pisa.CreatePDF(
+            rendered_html.content,
+            dest=response,
+            link_callback=None  # Optional: Handle external links
+        )
+    return response

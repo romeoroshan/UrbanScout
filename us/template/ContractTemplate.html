@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .col-2{
+            width: 250px;
+        }
+        .w-100{
+            width: 150px;
+            height: 150px;
+        }
+        /* Apply Bootstrap-style display:flex and justify-content-between to the parent container */
+.signatures {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Style the signature boxes */
+.signature-box {
+    border: 1px solid #ccc; /* Add a border for visibility */
+    padding: 10px;
+    padding-bottom: 50px;
+    margin: 5px;
+    text-align: center;
+}
+
+.signature-box p {
+    margin: 0; /* Remove default paragraph margin */
+}
+
+/* Style the strong text inside the signature boxes */
+.signature-box strong {
+    font-weight: bold;
+    color: #333; /* Set text color */
+}
+
+        .rounded-circle{
+            border-radius: 100%;
+        }
+        .text-center{
+            text-align: center;
+        }
+        .fw-bold{
+            font-weight: bold;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Club-Player Contract</title>
+    
+
+</head>
+<body>
+    <div class="container m-4">
+        <div class="d-flex justify-content-center">
+            <center><div class="col-2"><img class="w-100 rounded-circle" src="{{contract.club.img}}" alt=""></div></center>
+        </div>
+        <div class="text-center">
+            <h1>Player Contract</h1>
+
+        <div class="contract-details">
+            <p><strong>Player:</strong> {{ contract.player.first_name }} {{ contract.player.last_name }}</p>
+            <p><strong>Club:</strong> {{ contract.club.club_name }}</p>
+        </div>
+
+        
+
+        <div class="terms-and-conditions">
+            <p><strong>Terms and Conditions:</strong></p>
+            <p>The Club  {{ contract.club.club_name }} agrees to pay the Player a wage of Rs. {{contract.wage}} per game.
+                The Club shall pay the Player a signing fee of Rs. {{contract.fees}} upon execution of this Contract. This Contract shall be governed by and construed in accordance with the laws.  The Player may be eligible for bonuses as outlined.
+
+            </p>
+            <p class="fw-bold">Bonus: </p>
+            
+                <p>{{contract.bonus}}</p>
+            
+        </div>
+        </div>
+        <div class="signatures d-flex justify-content-between">
+            <div class="signature-box">
+                <p><strong>Player Signature</strong></p>
+                
+                
+            </div>
+
+            <div class="signature-box">
+                <p><strong>Club Secretary Signature</strong></p>
+                
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
