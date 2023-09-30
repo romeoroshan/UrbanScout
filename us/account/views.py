@@ -7,7 +7,7 @@ from .models import Pos_Choice, District_Choice,Ability_Choice
 from datetime import date
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-
+from datetime import date, timedelta
 
 from django.shortcuts import render
 import razorpay
@@ -115,10 +115,13 @@ def registerPlayer(request):
         player_form = PlayerSignUpForm()
     return render(request, 'register.html', {'playerForm': player_form, 'msg': msg})
 def registerClub(request):
+    print("in here")
     msg = None
     if request.method == 'POST':
         club_form = ClubRegistraionForm(request.POST,request.FILES)
+        print(club_form)
         if club_form.is_valid():
+            print("post")
             email = club_form.cleaned_data.get('email')
             if User.objects.filter(email=email).exists():
                 msg = 'Email already exists. Please use a different email address.'
@@ -763,6 +766,12 @@ def contract(request,user_id):
         wage=request.POST.get('wage')
         fees=request.POST.get('fee')
         bonus=request.POST.get('bonus')
+        start_date = request.POST.get('start_date')  # Get the start date from the form
+        contract_years = int(request.POST.get('contract_years'))  # Get the number of years as an integer
+        start_date = date.fromisoformat(start_date)
+        end_date = start_date + timedelta(days=contract_years * 365) 
+        print(start_date)
+        print(end_date)
         cont=Contract(
             wage=wage,
             fees=fees,
@@ -771,6 +780,9 @@ def contract(request,user_id):
             club_id=club_id,
             player_negotiating=True,
             contractAccepted=False,
+            start_date=start_date,
+            end_date=end_date,
+            years=contract_years
         )
         cont.save()
         return redirect('ClubPlayer')
@@ -786,11 +798,17 @@ def contractNegotiation(request,user_id):
         wage=request.POST.get('wage')
         fees=request.POST.get('fee')
         bonus=request.POST.get('bonus')
+        start_date = request.POST.get('start_date')  # Get the start date from the form
+        contract_years = int(request.POST.get('contract_years'))  # Get the number of years as an integer
+        start_date = date.fromisoformat(start_date)
+        end_date = start_date + timedelta(days=contract_years * 365) 
         updateCont.wage=wage
         updateCont.fees=fees
         updateCont.bonus=bonus
         updateCont.player_negotiating=False
-        
+        updateCont.start_date=start_date
+        updateCont.end_date=end_date
+        updateCont.years=contract_years
         updateCont.save()
         return redirect('player-club')
         print(wage,fees,bonus,player_id,club_id)
@@ -805,11 +823,17 @@ def contractNegotiationClub(request,user_id):
         wage=request.POST.get('wage')
         fees=request.POST.get('fee')
         bonus=request.POST.get('bonus')
+        start_date = request.POST.get('start_date')  # Get the start date from the form
+        contract_years = int(request.POST.get('contract_years'))  # Get the number of years as an integer
+        start_date = date.fromisoformat(start_date)
+        end_date = start_date + timedelta(days=contract_years * 365) 
         updateCont.wage=wage
         updateCont.fees=fees
         updateCont.bonus=bonus
         updateCont.player_negotiating=True
-        
+        updateCont.start_date=start_date
+        updateCont.end_date=end_date
+        updateCont.years=contract_years
         updateCont.save()
         return redirect('ClubPlayer')
         print(wage,fees,bonus,player_id,club_id)
@@ -978,14 +1002,14 @@ from django.http import HttpResponseBadRequest
 def payment(request):
     currency = 'INR'
     amount = 20000  # Rs. 200
- 
+
     # Create a Razorpay Order
     razorpay_order = razorpay_client.order.create(dict(amount=amount,currency=currency,payment_capture='0'))
- 
+
     # order id of newly created order.
     razorpay_order_id = razorpay_order['id']
     callback_url = '/paymenthandler/'
- 
+
     # we need to pass these details to frontend.
     context = {}
     context['razorpay_order_id'] = razorpay_order_id
@@ -994,10 +1018,9 @@ def payment(request):
     context['currency'] = currency
     context['callback_url'] = callback_url
     context['user']=request.user
- 
+
     return render(request, 'payment.html', context=context)
- 
- 
+
 # we need to csrf_exempt this url as
 # POST request will be made by Razorpay
 # and it won't have the csrf token.

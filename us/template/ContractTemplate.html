@@ -73,10 +73,9 @@
 
         <div class="terms-and-conditions">
             <p><strong>Terms and Conditions:</strong></p>
-            <p>The Club  {{ contract.club.club_name }} agrees to pay the Player a wage of Rs. {{contract.wage}} per game.
-                The Club shall pay the Player a signing fee of Rs. {{contract.fees}} upon execution of this Contract. This Contract shall be governed by and construed in accordance with the laws.  The Player may be eligible for bonuses as outlined.
-
-            </p>
+            <p>The Club {{ contract.club.club_name }} agrees to pay the Player a wage of Rs. {{contract.wage}} per game starting from {{contract.start_date}} and ending on {{contract.end_date}}.
+                The Club shall pay the Player a signing fee of Rs. {{contract.fees}} upon execution of this Contract. This Contract shall be governed by and construed in accordance with the laws. The Player may be eligible for bonuses as outlined.</p>
+                
             <p class="fw-bold">Bonus: </p>
             
                 <p>{{contract.bonus}}</p>

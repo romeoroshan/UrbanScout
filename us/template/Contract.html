@@ -226,6 +226,11 @@
                                 <input class="form-control shadow-none" type="number" name="fee" value="0">
                             </div>
                         </div>
+                        <label for="start_date">Start Date:</label>
+                        <input class="form-control" type="date" id="start_date" name="start_date" required><br>
+                        
+                        <label for="contract_years">Contract Years:</label>
+                        <input class="form-control" type="number" id="contract_years" name="contract_years" min="1" max="10" required><br>
                         <div class="d-flex flex-column w-100 mt-4">
                             <label for="bonus">Bonus</label>
                             <textarea name="bonus" class="form-control" id="" cols="30" rows="10"></textarea>

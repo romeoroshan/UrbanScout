@@ -119,6 +119,9 @@ class Contract(models.Model):
     bonus=models.CharField(max_length=200)
     contractAccepted=models.BooleanField(default=False)
     player_negotiating=models.BooleanField(default=False)
+    start_date = models.DateField(null=True)  
+    end_date = models.DateField(null=True)  
+    years=models.IntegerField(null=True)
 class NewFeeds(models.Model):
     feed=models.CharField(max_length=200)
     img=models.ImageField(upload_to='pics',null=True)
