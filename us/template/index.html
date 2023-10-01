@@ -3,7 +3,11 @@
 <html lang="en">
 
 <head>
-    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script>
         var count = 0;
 
@@ -241,40 +245,53 @@
                     <div id="piechart_club_3d" style="width: 240px; height: 240px;"></div>
                 </div>
             </div>
-            <div class="table-responsive">
-                <table class="table rounded text-center table-hover table-bordered">
-                    <tr class="thead fw-bold">
-
-                        <td>Email</td>
-                        <td>User Role</td>
-                        <td>Status</td>
-                        <td>Edit Status</td>
-                        <td>Delete User</td>
-
-                    </tr>
-                    {% for i in users %}
-                    {% if not i.is_staff %}
-                    <tr id="user-{{i.id}}">
-
-                        <td>{{i.email}}</td>
-                        <td>{% if i.is_player %}
-                            Player
-                            {% elif i.is_club %}
-                            Club
-                            {% else %}
-                            Scout
-                            {% endif %}</td>
-                        <td>{{i.is_active}}</td>
-                        <td><a href="{% url 'updateStatus' i.id %}"><button class="btn btn-primary"><i
-                                        class="bi bi-pencil-square"></i></button></a></td>
-                        <td><a href="{% url 'deleteUser' i.id %}"><button class="btn btn-danger delete-button"><i
-                            class="bi bi-trash3-fill"></i></button></a></td>
-
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
+            <div class="table-responsive m-2">
+                <table id="userbox" class="table rounded text-center table-hover table-bordered">
+                    <thead class="fw-bold">
+                        <tr>
+                            <th>Email</th>
+                            <th>User Role</th>
+                            <th>Status</th>
+                            <th>Edit Status</th>
+                            <th>Delete User</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in users %}
+                        {% if not i.is_staff %}
+                        <tr id="user-{{i.id}}">
+                            <td>{{i.email}}</td>
+                            <td>
+                                {% if i.is_player %}
+                                Player
+                                {% elif i.is_club %}
+                                Club
+                                {% else %}
+                                Scout
+                                {% endif %}
+                            </td>
+                            <td>{{i.is_active}}</td>
+                            <td><a href="{% url 'updateStatus' i.id %}"><button class="btn btn-primary"><i
+                                            class="bi bi-pencil-square"></i></button></a></td>
+                            <td><a href="{% url 'deleteUser' i.id %}"><button class="btn btn-danger delete-button"><i
+                                        class="bi bi-trash3-fill"></i></button></a></td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
+            
+            <script>
+                $(document).ready(function () {
+                    new DataTable('#userbox');
+                    
+                    // Set a placeholder for the search input
+                    $('div.dataTables_wrapper div.dataTables_filter input').attr('placeholder', 'Search anything');
+                });
+            </script>
+            
+            
 
         </div>
     </div>
