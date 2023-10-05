@@ -656,7 +656,7 @@ def deleteByRequest(player_id,club_id):
     return redirect('ClubPlayer')
 from joblib import load
 import numpy as np
-
+from datetime import datetime
 def scoutPlayerEdit(request, update_id):
     
     updateUser = User.objects.get(id=update_id)
@@ -671,15 +671,20 @@ def scoutPlayerEdit(request, update_id):
         dribbling = request.POST.get('dribbling')
         defending = request.POST.get('defending')
         physical = request.POST.get('physical')
-        age = request.POST.get('age')
         goalkeeping_diving = request.POST.get('goalkeeping_diving')
         goalkeeping_handling = request.POST.get('goalkeeping_handling')
         goalkeeping_kicking = request.POST.get('goalkeeping_kicking')
         goalkeeping_positioning = request.POST.get('goalkeeping_positioning')
         goalkeeping_reflexes = request.POST.get('goalkeeping_reflexes')
         goalkeeping_speed = request.POST.get('goalkeeping_speed')
+        dob=updateUser.player_dob
 
-        
+# Calculate the current date
+        current_date = datetime.now().date()
+
+# Calculate the age
+        age = current_date.year - dob.year - ((current_date.month, current_date.day) < (dob.month, dob.day))
+        print(f"age={age}")
         # Print input data for debugging
         print(f"Input Data: Pace={pace}, Shooting={shooting}, Passing={passing}, Dribbling={dribbling}, Defending={defending}, Physical={physical}, Age={age}")
         
