@@ -8,18 +8,18 @@ from django.core.validators import FileExtensionValidator
 # Create your models here.
 
 Pos_Choice = (
-    ("GoalKeeper", "GoalKeeper"),
-    ("Left Back", "Left Back"),
-    ("Right Back", "Right Back"),
-    ("Centre Back", "Centre Back"),
-    ("Centre Defensive Midfielder", "Centre Defensive Midfielder"),
-    ("cm", "Centre Midfielder"),
-    ("Centre Attackin Midfielder", "Centre Attackin Midfielder"),
-    ("Left Midfileder", "Left Midfileder"),
-    ("Right Midfielder", "Right Midfielder"),
-    ("Left Winger", "Left Winger"),
-    ("Right Winger", "Right Winger"),
-    ("Striker", "Striker"),
+    ("GK", "GoalKeeper"),
+    ("LB", "Left Back"),
+    ("RB", "Right Back"),
+    ("CB", "Centre Back"),
+    ("CDM", "Centre Defensive Midfielder"),
+    ("CM", "Centre Midfielder"),
+    ("CAM", "Centre Attackin Midfielder"),
+    ("LM", "Left Midfileder"),
+    ("RM", "Right Midfielder"),
+    ("LM", "Left Winger"),
+    ("RW", "Right Winger"),
+    ("ST", "Striker"),
 )
 
 Foot_Choice = (
