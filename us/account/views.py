@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes,following,Notification,Proof
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes,following,Notification,Proof,History
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -655,9 +655,11 @@ def deleteByRequest(player_id,club_id):
     delete_data.delete()
     return redirect('ClubPlayer')
 from joblib import load
+import numpy as np
+
 def scoutPlayerEdit(request, update_id):
-    potential_model=load('./player model/model.joblib')
-    ability_model=load('./player model/ability_model.joblib')
+    potential_model=load('./player model/potential_model1.joblib')
+    ability_model=load('./player model/ability_model1.joblib')
     print(potential_model)
     updateUser = User.objects.get(id=update_id)
     user = request.user
@@ -684,13 +686,15 @@ def scoutPlayerEdit(request, update_id):
             # Make predictions
         predictions = potential_model.predict(input_data)
         ability_prediction=ability_model.predict(input_data)
+        ability_prediction=(ability_prediction / 95) * 5
+        predictions = (predictions / 95) * 5
         print(predictions)
         print(ability_prediction)
 
             # Extract ability and potential from predictions
-        potential =int(predictions)
+        potential =np.round(predictions).astype(int)
         print(potential)
-        ability=int(ability_prediction)
+        ability=np.round(ability_prediction).astype(int)
         print(ability)
         if potential>=5:
             potential=5
@@ -784,6 +788,19 @@ def contract(request,user_id):
             end_date=end_date,
             years=contract_years
         )
+        cont1=History(
+            wage=wage,
+            fees=fees,
+            bonus=bonus,
+            player_id=player_id,
+            club_id=club_id,
+            player_negotiating=True,
+            contractAccepted=False,
+            start_date=start_date,
+            end_date=end_date,
+            years=contract_years
+        )
+        cont1.save()
         cont.save()
         return redirect('ClubPlayer')
         print(wage,fees,bonus,player_id,club_id)
@@ -794,6 +811,7 @@ def contractNegotiation(request,user_id):
     player_id=user.id
     updateCont=Contract.objects.get(player_id=player_id,club_id=club_id)
     cont=Contract.objects.filter(player_id=player_id,club_id=club_id)
+    history1=History.objects.filter(player_id=player_id,club_id=club_id)
     if request.method=='POST':
         wage=request.POST.get('wage')
         fees=request.POST.get('fee')
@@ -802,6 +820,17 @@ def contractNegotiation(request,user_id):
         contract_years = int(request.POST.get('contract_years'))  # Get the number of years as an integer
         start_date = date.fromisoformat(start_date)
         end_date = start_date + timedelta(days=contract_years * 365) 
+        history=History.objects.get(player_id=player_id,club_id=club_id)
+        
+        print(history1)
+        history.wage=updateCont.wage
+        history.fees=updateCont.fees
+        history.bonus=updateCont.bonus
+        history.player_negotiating=updateCont.player_negotiating
+        history.start_date=updateCont.start_date
+        history.end_date=updateCont.end_date
+        history.years=updateCont.years
+        history.save()
         updateCont.wage=wage
         updateCont.fees=fees
         updateCont.bonus=bonus
@@ -812,13 +841,14 @@ def contractNegotiation(request,user_id):
         updateCont.save()
         return redirect('player-club')
         print(wage,fees,bonus,player_id,club_id)
-    return render(request,'EditContract.html',{'cont':cont})
+    return render(request,'EditContract.html',{'cont':cont,'history':history1})
 def contractNegotiationClub(request,user_id):
     player_id=user_id
     user=request.user
     club_id=user.id
     updateCont=Contract.objects.get(player_id=player_id,club_id=club_id)
     cont=Contract.objects.filter(player_id=player_id,club_id=club_id)
+    history1=History.objects.filter(player_id=player_id,club_id=club_id)
     if request.method=='POST':
         wage=request.POST.get('wage')
         fees=request.POST.get('fee')
@@ -826,7 +856,16 @@ def contractNegotiationClub(request,user_id):
         start_date = request.POST.get('start_date')  # Get the start date from the form
         contract_years = int(request.POST.get('contract_years'))  # Get the number of years as an integer
         start_date = date.fromisoformat(start_date)
-        end_date = start_date + timedelta(days=contract_years * 365) 
+        end_date = start_date + timedelta(days=contract_years * 365)
+        history=History.objects.get(player_id=player_id,club_id=club_id)
+        history.wage=updateCont.wage
+        history.fees=updateCont.fees
+        history.bonus=updateCont.bonus
+        history.player_negotiating=updateCont.player_negotiating
+        history.start_date=updateCont.start_date
+        history.end_date=updateCont.end_date
+        history.years=updateCont.years
+        history.save() 
         updateCont.wage=wage
         updateCont.fees=fees
         updateCont.bonus=bonus
@@ -837,7 +876,7 @@ def contractNegotiationClub(request,user_id):
         updateCont.save()
         return redirect('ClubPlayer')
         print(wage,fees,bonus,player_id,club_id)
-    return render(request,'EditContractClub.html',{'cont':cont})
+    return render(request,'EditContractClub.html',{'cont':cont,'history':history1})
 def acceptContract(request,user_id):
     user=request.user
     player_id=user.id
@@ -860,6 +899,7 @@ def rejectContract(request,user_id):
     club_id=user_id
     deleteCont=Contract.objects.get(player_id=player_id,club_id=club_id)
     deleteCont.delete()
+    History.objects.get(player_id=player_id,club_id=club_id).delete()
     return redirect('player-club')
 def rejectContractClub(request,user_id):
     user=request.user
@@ -868,6 +908,7 @@ def rejectContractClub(request,user_id):
     print(club_id,player_id)
     deleteCont=Contract.objects.get(player_id=player_id,club_id=club_id)
     deleteCont.delete()
+    History.objects.get(player_id=player_id,club_id=club_id).delete()
     return redirect('ClubPlayer')
 
 from django.http import JsonResponse
