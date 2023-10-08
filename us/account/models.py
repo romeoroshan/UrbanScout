@@ -133,6 +133,7 @@ class History(models.Model):
     start_date = models.DateField(null=True)  
     end_date = models.DateField(null=True)  
     years=models.IntegerField(null=True)
+    first=models.BooleanField(default=False)
 class NewFeeds(models.Model):
     feed=models.CharField(max_length=200)
     img=models.ImageField(upload_to='pics',null=True)

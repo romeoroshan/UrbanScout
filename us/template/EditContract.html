@@ -205,6 +205,64 @@
         </div>
     </nav>
     {% endif %}
+    {% if first %}
+    <div class="d-flex justify-content-center">
+        <div class="bg-white shadow-lg mt-4 pb-3 rounded col-12 col-lg-8">
+            <p class="m-4 text-secondary fs-4 fw-bold">Current contract</p>
+            <form action="" method="post"  enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for i in cont %}
+                <div class="d-flex justify-content-center">
+                    <div class="col-lg-8 col-12">
+                        <div class="d-flex flex-column w-100">
+                            <label for="wage">Appearance Fee</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input class="form-control shadow-none wage-input" type="number" name="wage" value={{i.wage}}>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column w-100 mt-4">
+                            <label for="fee">Signing on fee</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input class="form-control shadow-none wage-input" type="number" name="fee" value={{i.fees}}>
+                            </div>
+                        </div>
+                        <label for="start_date">Start Date:</label>
+                        
+                        
+                        <input class="form-control wage-input" value="{{ i.start_date|date:'Y-m-d' }}" type="date" id="start_date" name="start_date" required><br>
+                        
+                        <label for="contract_years">Contract Years:</label>
+                        <input class="form-control wage-input" type="number" value="{{i.years}}" id="contract_years" name="contract_years" min="1" max="10" required><br>
+                        <div class="d-flex flex-column w-100 mt-4">
+                            <label for="bonus">Bonus</label>
+                            <textarea name="bonus" class="form-control wage-input" id="" cols="30" rows="10">{{i.bonus}}</textarea>
+                            
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn mt-5 btn-primary" id="negotiate-button" disabled>Negotiate</button>
+                        </div>
+                    </div>
+                </div>
+                
+            </form>
+            <div class="d-flex justify-content-evenly mt-3">
+                <button class="btn btn-success" id="accept-button">Accept Contract</a></button>
+                <script>
+                    document.getElementById("accept-button").addEventListener("click", function() {
+                        var url = "{% url 'AcceptContractClub' i.player_id %}";
+                        window.location.href = url;
+                    });
+                    </script>
+                <a href="{% url 'RejectContractClub' i.player_id %}"><button class="btn btn-danger">Reject Contract</button></a>
+            </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+    {% else %}
+    
     <div class="d-flex justify-content-center">
         <div class="bg-white shadow-lg mt-4 pb-3 rounded col-12 col-lg-5 m-3">
             <p class="m-4 text-secondary fs-4 fw-bold">Current contract</p>
@@ -298,6 +356,7 @@
             
         </div>
     </div>
+    {% endif %}
 </body>
 
 </html>

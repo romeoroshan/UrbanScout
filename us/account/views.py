@@ -818,7 +818,8 @@ def contract(request,user_id):
             contractAccepted=False,
             start_date=start_date,
             end_date=end_date,
-            years=contract_years
+            years=contract_years,
+            first=True
         )
         cont1.save()
         cont.save()
@@ -832,6 +833,8 @@ def contractNegotiation(request,user_id):
     updateCont=Contract.objects.get(player_id=player_id,club_id=club_id)
     cont=Contract.objects.filter(player_id=player_id,club_id=club_id)
     history1=History.objects.filter(player_id=player_id,club_id=club_id)
+    history=History.objects.get(player_id=player_id,club_id=club_id)
+    first=history.first
     if request.method=='POST':
         wage=request.POST.get('wage')
         fees=request.POST.get('fee')
@@ -850,6 +853,7 @@ def contractNegotiation(request,user_id):
         history.start_date=updateCont.start_date
         history.end_date=updateCont.end_date
         history.years=updateCont.years
+        history.first=False
         history.save()
         updateCont.wage=wage
         updateCont.fees=fees
@@ -861,13 +865,15 @@ def contractNegotiation(request,user_id):
         updateCont.save()
         return redirect('player-club')
         print(wage,fees,bonus,player_id,club_id)
-    return render(request,'EditContract.html',{'cont':cont,'history':history1})
+    return render(request,'EditContract.html',{'cont':cont,'history':history1,'first':first})
 def contractNegotiationClub(request,user_id):
     player_id=user_id
     user=request.user
     club_id=user.id
     updateCont=Contract.objects.get(player_id=player_id,club_id=club_id)
     cont=Contract.objects.filter(player_id=player_id,club_id=club_id)
+    history=History.objects.get(player_id=player_id,club_id=club_id)
+
     history1=History.objects.filter(player_id=player_id,club_id=club_id)
     if request.method=='POST':
         wage=request.POST.get('wage')
@@ -877,7 +883,7 @@ def contractNegotiationClub(request,user_id):
         contract_years = int(request.POST.get('contract_years'))  # Get the number of years as an integer
         start_date = date.fromisoformat(start_date)
         end_date = start_date + timedelta(days=contract_years * 365)
-        history=History.objects.get(player_id=player_id,club_id=club_id)
+        
         history.wage=updateCont.wage
         history.fees=updateCont.fees
         history.bonus=updateCont.bonus
@@ -885,6 +891,7 @@ def contractNegotiationClub(request,user_id):
         history.start_date=updateCont.start_date
         history.end_date=updateCont.end_date
         history.years=updateCont.years
+        history.first=False
         history.save() 
         updateCont.wage=wage
         updateCont.fees=fees
