@@ -4,7 +4,7 @@ from datetime import date
 import datetime
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
-
+from django.core.validators import RegexValidator
 # Create your models here.
 
 Pos_Choice = (
@@ -56,6 +56,10 @@ District_Choice=(
 def validate_dob(value):
     if value > date(2016, 1, 1):
         raise ValidationError("Date of Birth cannot be later than 2016.")
+phone_number_validator = RegexValidator(
+    regex=r'^\d{10}$',
+    message="Phone number must be 10 digits without spaces or special characters.",
+)
 class User(AbstractUser):
     username=models.CharField(max_length=32, blank=True, null=True)
     USERNAME_FIELD = 'email'
@@ -76,7 +80,9 @@ class User(AbstractUser):
     club_name=models.CharField((("Club Name")),default='',max_length=30)
     scouted_by=models.CharField(max_length=30,default='')
     subscribed=models.BooleanField(default=False)
+    phone = models.CharField(("Phone Number"), null=True, max_length=10, validators=[phone_number_validator])
     REQUIRED_FIELDS = [] 
+
     
 class Player(models.Model):
     first_name=models.CharField(max_length=30)

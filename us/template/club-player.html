@@ -151,6 +151,7 @@
                     <div><p class="text-success text-end"><i class="bi bi-check-circle-fill"></i> You both agreed on terms</p></div>
                     {% if user.subscribed is True %}
                     <div class="d-flex justify-content-end"><a class="w-100 d-flex text-decoration-none justify-content-end" href="{% url 'render_contract_as_pdf' i.id %}"><button class="btn btn-outline-primary w-50">Download Contract</button></a></div>
+                    <div class="d-flex justify-content-end mt-2"><a class="w-100 d-flex text-decoration-none justify-content-end" href="{% url 'contact' i.id %}"><button class="btn btn-outline-primary w-50">View Player Contacts</button></a></div>
                     {% else %}
                     <div class="d-flex justify-content-end"><button disabled class="btn btn-outline-primary w-50">Download Contract</button></div>
                     <div class="d-flex justify-content-end"><p class="text-danger">Get premium to download this contract</p></div>

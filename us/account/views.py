@@ -1165,3 +1165,6 @@ def render_contract_as_pdf(request, player_id):
             link_callback=None  # Optional: Handle external links
         )
     return response
+def contact(request,user_id):
+    player=User.objects.get(id=user_id)
+    return render(request,"PlayerDetails.html",{'player':player})

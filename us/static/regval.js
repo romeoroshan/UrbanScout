@@ -23,8 +23,9 @@
                 validateConfirmPassword("#cpass");
             });
 
-            $("#number").keyup(function () {
-                validatePhoneNumber("#number");
+            $("#phone").keyup(function () {
+                console.log("Keyup")
+                validatePhoneNumber("#phone");
             });
             $('#dateofbirth').change(function(){
                 TDate();
@@ -121,17 +122,22 @@
         }
 
         function validatePhoneNumber(fieldId) {
+            console.log("Entered")
             var numberRegex = /^[-+]?\d*\.?\d+$/;
             var phoneNumber = $(fieldId).val();
 
             if (phoneNumber === "") {
-                $("#error").html("Enter the Phone number").css("color", "red");
+                $("#phone1").html("Enter the Phone number").css("color", "red");
             } else if (!numberRegex.test(phoneNumber)) {
-                $("#error").html("Invalid phone Number").css("color", "red");
+                $("#phone1").html("Invalid phone Number").css("color", "red");
             } else if (phoneNumber.length > 10) {
-                $("#error").html("Use correct phone Number").css("color", "red");
-            } else {
-                $("#error").html("");
+                $("#phone1").html("The phone number should have 10 numbers").css("color", "red");
+            }
+            else if (phoneNumber.length < 10) {
+                $("#phone1").html("The phone number should have 10 numbers").css("color", "red");
+            }
+            else {
+                $("#phone1").html("");
             }
         }
 

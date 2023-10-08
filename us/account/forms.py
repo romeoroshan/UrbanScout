@@ -68,12 +68,20 @@ class PlayerSignUpForm(UserCreationForm):
             }
         )
     )
+    phone = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "",
+                "id":"phone"
+            }
+        )
+    )
     email=forms.EmailField(widget=forms.EmailInput(attrs={"id":"mail"}))
     player_dob=forms.DateField(widget=forms.DateInput(attrs={"id":"dateofbirth","type":"date"}))
     
     class Meta:
         model = User
-        fields = ('img','first_name','last_name','email', 'password1', 'password2','player_dob')
+        fields = ('img','first_name','last_name','email', 'password1', 'password2','player_dob','phone')
         widgets={
             'player_dob':DateInput(),
         }

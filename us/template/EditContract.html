@@ -251,11 +251,11 @@
                 <button class="btn btn-success" id="accept-button">Accept Contract</a></button>
                 <script>
                     document.getElementById("accept-button").addEventListener("click", function() {
-                        var url = "{% url 'AcceptContractClub' i.player_id %}";
+                        var url = "{% url 'AcceptContract' i.club_id %}";
                         window.location.href = url;
                     });
                     </script>
-                <a href="{% url 'RejectContractClub' i.player_id %}"><button class="btn btn-danger">Reject Contract</button></a>
+                <a href="{% url 'RejectContract' i.club_id %}"><button class="btn btn-danger">Reject Contract</button></a>
             </div>
             {% endfor %}
             
