@@ -699,15 +699,20 @@ def scoutPlayerEdit(request, update_id):
             ability_model=load('./player model/gkability_model1.joblib')
             predictions = potential_model.predict(input_data1)
             ability_prediction=ability_model.predict(input_data1)
+            print("abilityb"+str(ability_prediction)+"Potential"+str(predictions))
+            ability_prediction=(ability_prediction / 85) * 5
+            predictions = (predictions / 85) * 5
+            print("ability"+str(ability_prediction)+"Potential"+str(predictions))
         else:
             input_data = [[int(age), int(pace), int(shooting), int(passing), int(dribbling), int(defending), int(physical)]]
             potential_model=load('./player model/potential_model1.joblib')
             ability_model=load('./player model/ability_model1.joblib')
             predictions = potential_model.predict(input_data)
             ability_prediction=ability_model.predict(input_data)
+            ability_prediction=(ability_prediction / 95) * 5
+            predictions = (predictions / 95) * 5
         
-        ability_prediction=(ability_prediction / 95) * 5
-        predictions = (predictions / 95) * 5
+        
         print(predictions)
         print(ability_prediction)
 
