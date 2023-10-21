@@ -684,10 +684,6 @@ def scoutPlayerEdit(request, update_id):
 
 # Calculate the age
         age = current_date.year - dob.year - ((current_date.month, current_date.day) < (dob.month, dob.day))
-        print(f"age={age}")
-        # Print input data for debugging
-        print(f"Input Data: Pace={pace}, Shooting={shooting}, Passing={passing}, Dribbling={dribbling}, Defending={defending}, Physical={physical}, Age={age}")
-        
 
             
             # Prepare input data as a list of lists
@@ -709,8 +705,10 @@ def scoutPlayerEdit(request, update_id):
             ability_model=load('./player model/ability_model1.joblib')
             predictions = potential_model.predict(input_data)
             ability_prediction=ability_model.predict(input_data)
+            print("abilityb"+str(ability_prediction)+"Potential"+str(predictions))
             ability_prediction=(ability_prediction / 95) * 5
             predictions = (predictions / 95) * 5
+            print("ability"+str(ability_prediction)+"Potential"+str(predictions))
         
         
         print(predictions)
