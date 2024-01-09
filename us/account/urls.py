@@ -60,7 +60,9 @@ urlpatterns = [
     path('deleteNotification/<int:user_id>',views.deleteNotification,name="deleteNotification"),
     path('paymenthandler/', views.paymenthandler, name='paymenthandler'),
     path('contract/pdf/<int:player_id>/', views.render_contract_as_pdf, name='render_contract_as_pdf'),
-    path('contact/<int:user_id>',views.contact,name="contact")
+    path('contact/<int:user_id>',views.contact,name="contact"),
+    path('tour',views.tour,name="tour"),
+    path('tournaments',views.tournaments,name="tournaments"),
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 

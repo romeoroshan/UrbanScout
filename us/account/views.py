@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes,following,Notification,Proof,History
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes,following,Notification,Proof,History,Tour
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -1049,6 +1049,33 @@ def deleteNotification(request,user_id):
     notificationUsers(request,request.user.id)
     count=Notification.objects.filter(followed_id=request.user.id).count()
     return JsonResponse({'message': 'success','notification_count':count})
+def tour(request):
+    if request.method=='POST':
+        img=request.FILES.get('img')
+        title=request.POST.get('title')
+        desc=request.POST.get('desc')
+        place=request.POST.get('place')
+        district=request.POST.get('dist')
+        tour_date=request.POST.get('tourdate')
+        tour_var=Tour(
+            user_id=request.user.id,
+            img=img,
+            title=title,
+            desc=desc,
+            tour_date=tour_date,
+            place=place,
+            district=district,
+            time=timezone.now()
+        )
+        tour_var.save()
+        return redirect('index')
+    return render(request,'Tour.html',{
+        'district_choices': District_Choice,
+    })
+def tournaments(request):
+    tournament=Tour.objects.filter(district=request.user.district).order_by('-time')
+    print(tournament)
+    return render(request,'Tournaments.html',{'feeds':tournament})
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 
@@ -1139,6 +1166,7 @@ def paymenthandler(request):
         
     else:
         return HttpResponseBadRequest()
+    
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from xhtml2pdf import pisa

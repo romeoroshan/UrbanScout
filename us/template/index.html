@@ -324,6 +324,10 @@
                             <a class="nav-link text-secondary" aria-current="page"
                                 href="{% url 'following_feeds' %}">Feeds</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'tournaments' %}">Tournaments</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
@@ -417,6 +421,7 @@
                     </form>
                     <div class="d-flex justify-content-evenly">
                         <a href="{% url 'PostImage' %}"><button class="btn btn-outline-primary"><i class="bi bi-image"></i> Photo</button></a>
+                        <a href="{% url 'tour' %}"><button class="btn btn-outline-danger"><i class="bi bi-trophy-fill"></i> Tournaments</button></a>
                     <a href="{% url 'PostVideo' %}"><button class="btn btn-outline-success"><i class="bi bi-play-btn-fill"></i> Video</button></a>
                     </div>
                 </div>

@@ -163,3 +163,13 @@ class Proof(models.Model):
     order_id=models.CharField(max_length=120,null=True)
     payment_id=models.CharField(max_length=120,null=True)
     signature=models.CharField(max_length=120,null=True)
+class Tour(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    title=models.CharField(max_length=120)
+    desc=models.CharField(max_length=500)
+    img=models.ImageField(upload_to='pics')
+    tour_date=models.DateTimeField(null=True)
+    time=models.DateTimeField(null=True)
+    active=models.BooleanField(default=True)
+    place=models.CharField(max_length=120,null=True)
+    district = models.CharField(("District"),null=True,max_length=20,choices=District_Choice)
