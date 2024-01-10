@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'usapp',
     'social_django',
+    'rest_framework',
     
 ]
 

@@ -1199,3 +1199,25 @@ def render_contract_as_pdf(request, player_id):
 def contact(request,user_id):
     player=User.objects.get(id=user_id)
     return render(request,"PlayerDetails.html",{'player':player})
+
+
+
+
+
+
+
+
+
+
+
+
+################## serializers #################
+
+
+
+from rest_framework import generics
+from .serializers import UserSerializer
+
+class UserListCreateView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

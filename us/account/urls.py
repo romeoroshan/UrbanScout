@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import UserListCreateView
 urlpatterns = [
     
     path('',views.index,name='index'),
@@ -63,6 +64,8 @@ urlpatterns = [
     path('contact/<int:user_id>',views.contact,name="contact"),
     path('tour',views.tour,name="tour"),
     path('tournaments',views.tournaments,name="tournaments"),
+    path('api/your-model/', UserListCreateView.as_view(), name='your-model-list-create'),
+
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 
