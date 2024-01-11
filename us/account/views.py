@@ -20,6 +20,7 @@ razorpay_client = razorpay.Client(
 
 # Create your views here.
 def index(request):
+    Tour.objects.filter(tour_date__lt=timezone.now()).update(active=False)
     followingg=following.objects.filter(following_id=request.user.id).count()
     followers=following.objects.filter(followed_id=request.user.id).count()
     notifications=Notification.objects.filter(followed_id=request.user.id).count()
@@ -1073,7 +1074,7 @@ def tour(request):
         'district_choices': District_Choice,
     })
 def tournaments(request):
-    tournament=Tour.objects.filter(district=request.user.district).order_by('-time')
+    tournament=Tour.objects.filter(district=request.user.district,active=True).order_by('-time')
     print(tournament)
     return render(request,'Tournaments.html',{'feeds':tournament})
 from django.http import JsonResponse
