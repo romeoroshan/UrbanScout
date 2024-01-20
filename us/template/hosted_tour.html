@@ -1,5 +1,4 @@
 {% load static %}
-{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -205,13 +204,13 @@
                             <a class="nav-link text-secondary" aria-current="page"
                                 href="{% url 'ClubScout' %}">Scouts</a>
                         </li>
-                        
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
-                                href="{% url 'following_feeds' %}">Feeds</a>
+                                href="{% url 'ClubPlayer' %}">Players</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link text-white" aria-current="page"
+                            <a class="nav-link text-secondary" aria-current="page"
                                 href="{% url 'tournaments' %}">Tournaments</a>
                         </li>
                         <li class="nav-item">
@@ -219,8 +218,7 @@
                                 href="{% url 'enrolled' %}">Enrolled</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" aria-current="page"
-                                href="{% url 'hosted_tour' %}">Hosted</a>
+                            <a class="nav-link text-white" aria-current="page" href="{% url 'hosted_tour' %}">Hosted</a>
                         </li>
                     </ul>
                 </div>
@@ -237,9 +235,9 @@
     {% endif %}
     <div class="d-flex flex-wrap justify-content-center mt-4">
 
-        <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
+        <div class="col-lg-8 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
             <div>
-                <p class="h4 text-secondary fw-bold">Tournaments in your district</p>
+                <p class="h4 text-secondary fw-bold">Hosted Tournaments</p>
 
             </div>
 
@@ -247,122 +245,49 @@
             {% for i in feeds %}
 
             <div class="mt-4 border-top pt-4">
-                <div class="d-flex">
-                    <div class="feed-img">
-                        <img class="w-100 rounded-circle" src={{i.user.img.url}} alt="">
-                    </div>
-                    <div class="ms-2 d-flex">
-                        <p class="fw-bold">
-                            {{i.user.club_name}}
-                        </p>
-                        <p class="ms-2 text-secondary">{{i.time}}</p>
-                    </div>
-                </div>
-                <div class="w-100 mt-3">
 
-                    {% if i.img.url != '' %}
-                    <div class="w-100 mt-3">
-                        <img class="w-100" src="{{i.img}}" alt="">
+                <div class="d-flex flex-lg-row flex-column gap-5">
+                    <div class="col-lg-4 col-12  mt-3">
+                        {% if i.img.url != '' %}
+                        <div class="mt-3">
+                            <img class="w-100" src="{{i.img}}" alt="">
+                        </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
-                </div>
-                <p class="fw-bold mt-5">{{i.title}}</p>
-                <p>{{i.desc}}</p>
-                <div class="mt-3">
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Tournament Conductors: </p>
-                        <p>{{i.user.club_name}}</p>
+                    <div class="col-lg-5 col-12">
+                        <p class="fw-bold mt-5">{{i.title}}</p>
+                        <p>{{i.desc}}</p>
+                        <div class="mt-3">
+                            
+    
+                            <div class="d-flex gap-1">
+                                <p class="fw-bold">Date: </p>
+                                <p>{{i.tour_date}}</p>
+                            </div>
+                            <div class="d-flex gap-1">
+                                <p class="fw-bold">Venue: </p>
+                                <p>{{i.place}}</p>
+                            </div>
+                            <div class="d-flex gap-1">
+                                <p class="fw-bold">District: </p>
+                                <p>{{i.district}}</p>
+                            </div>
+                            
+                        </div>
                     </div>
-
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Date: </p>
-                        <p>{{i.tour_date}}</p>
+                    <div class="d-flex flex-column justify-content-center">
+                        <a href="{% url 'tour_participants' i.id %}" class="btn btn-danger">View Participants</a>
                     </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Venue: </p>
-                        <p>{{i.place}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">District: </p>
-                        <p>{{i.district}}</p>
-                    </div>
-                    
-                    <button onclick="showConfirmation('{{i.id}}')" class="btn btn-primary">Enroll</button>
-                    
-
                 </div>
             </div>
             {% endfor %}
             {% else %}
-            <p class="text-danger">No upcoming tounaments in your district</p>
+            <p class="text-danger">No participants yet</p>
             {% endif %}
 
 
         </div>
-        <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
-            <div>
-                <p class="h4 text-secondary fw-bold">Other Tournaments</p>
 
-            </div>
-
-
-            {% if feeds1 %}
-            {% for i in feeds1 %}
-
-            <div class="mt-4 border-top pt-4">
-                <div class="d-flex">
-                    <div class="feed-img">
-                        <img class="w-100 rounded-circle" src={{i.user.img.url}} alt="">
-                    </div>
-                    <div class="ms-2 d-flex">
-                        <p class="fw-bold">
-                            {{i.user.club_name}}
-                        </p>
-                        <p class="ms-2 text-secondary">{{i.time}}</p>
-                    </div>
-                </div>
-                <div class="w-100 mt-3">
-
-                    {% if i.img.url != '' %}
-                    <div class="w-100 mt-3">
-                        <img class="w-100" src="{{i.img}}" alt="">
-                    </div>
-                    {% endif %}
-                </div>
-                <p class="fw-bold mt-5">{{i.title}}</p>
-                <p>{{i.desc}}</p>
-                <div class="mt-3">
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Tournament Conductors: </p>
-                        <p>{{i.user.club_name}}</p>
-                    </div>
-
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Date: </p>
-                        <p>{{i.tour_date}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Venue: </p>
-                        <p>{{i.place}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">District: </p>
-                        <p>{{i.district}}</p>
-                    </div>
-
-    <button onclick="showConfirmation('{{ i.id }}')" class="btn btn-primary">Enroll</button>
-
-
-
-
-                </div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <p class="text-danger">No upcoming tounaments</p>
-            {% endif %}
-
-        </div>
 
     </div>
 </body>
@@ -449,24 +374,4 @@
             })
         })
     });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script>
-    function showConfirmation(tour_id) {
-        console.log(tour_id);
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'Do you want to enroll in this tournament?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "{% url 'enrol_tour' 0 %}".replace('0', tour_id);
-            }
-        });
-    }
 </script>

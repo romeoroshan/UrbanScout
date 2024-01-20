@@ -1097,6 +1097,14 @@ def enrolled(request):
     enrolled_tour=TourEnrole.objects.filter(user_id=request.user.id).order_by('tour__tour_date')
     return render(request,'enrolled.html',{'feeds':enrolled_tour})
     
+def hosted_tour(request):
+    tours=Tour.objects.filter(user_id=request.user.id,active=True).order_by('tour_date')
+    return render(request,'hosted_tour.html',{'feeds':tours})
+def tour_participants(request,tour_id):
+    participants=TourEnrole.objects.filter(tour_id=tour_id)
+    print(participants)
+    ability_range = range(0, 5)
+    return render(request,'tour_participants.html',{'participants':participants,'abilityRange':ability_range,})
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 
