@@ -1,63 +1,69 @@
 {% load static %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <style>
-        #search-results{
+        #search-results {
             position: fixed;
             background-color: white;
             z-index: 1;
             top: 75px;
         }
+
         .search-container {
-        position: relative;
-        width: 50%;
-        margin-left: 3px;
-    }
-
-    /* Style for the user list container */
-    .user-list {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        max-height: 200px; /* Set a maximum height for the list */
-        overflow-y: auto; /* Enable vertical scrolling */
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-top: none;
-        display: none; /* Hide by default */
-    }
-
-    /* Style for each user box */
-    .user-box {
-        display: flex;
-        align-items: center;
-        border-bottom: 1px solid #ccc;
-        padding: 10px;
-    }
-
-    /* Style for user image */
-    .user-img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        margin-right: 10px;
-    }
-
-    /* Style for user name */
-    .user-name {
-        font-weight: bold;
-    }
-    @media (max-width: 991.98px) {
-        #search-results{
-            position: fixed;
-            background-color: white;
-            z-index: 1;
-            top: 125px;
+            position: relative;
+            width: 50%;
+            margin-left: 3px;
         }
-}
+
+        /* Style for the user list container */
+        .user-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 200px;
+            /* Set a maximum height for the list */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
+            display: none;
+            /* Hide by default */
+        }
+
+        /* Style for each user box */
+        .user-box {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        /* Style for user image */
+        .user-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Style for user name */
+        .user-name {
+            font-weight: bold;
+        }
+
+        @media (max-width: 991.98px) {
+            #search-results {
+                position: fixed;
+                background-color: white;
+                z-index: 1;
+                top: 125px;
+            }
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta charset="UTF-8">
@@ -98,7 +104,8 @@
                             <a class="nav-link  text-secondary" aria-current="page" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" aria-current="page" href="{% url 'ScoutClub' %}">Clubs</a>
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'ScoutClub' %}">Clubs</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
@@ -157,6 +164,7 @@
                                 href="{% url 'following_feeds' %}">Feeds</a>
                         </li>
 
+
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
@@ -209,6 +217,10 @@
                             <a class="nav-link text-white" aria-current="page"
                                 href="{% url 'tournaments' %}">Tournaments</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'enrolled' %}">Enrolled</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
@@ -223,32 +235,33 @@
     </nav>
     {% endif %}
     <div class="d-flex flex-wrap justify-content-center mt-4">
-        
-        <div class="col-lg-8 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
-            <div><p class="h4 text-secondary fw-bold">Tournaments</p>
-            <p>Upcomming tournaments in your district</p>
+
+        <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
+            <div>
+                <p class="h4 text-secondary fw-bold">Tournaments in your district</p>
+
             </div>
+
+            {% if feeds %}
             {% for i in feeds %}
-            
+
             <div class="mt-4 border-top pt-4">
                 <div class="d-flex">
                     <div class="feed-img">
-                        <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
+                        <img class="w-100 rounded-circle" src={{i.user.img.url}} alt="">
                     </div>
                     <div class="ms-2 d-flex">
                         <p class="fw-bold">
-                            {{user.club_name}}
+                            {{i.user.club_name}}
                         </p>
                         <p class="ms-2 text-secondary">{{i.time}}</p>
-                    </div>  
+                    </div>
                 </div>
                 <div class="w-100 mt-3">
-                    
+
                     {% if i.img.url != '' %}
                     <div class="w-100 mt-3">
-                        <img class="w-100"
-                            src="{{i.img}}"
-                            alt="">
+                        <img class="w-100" src="{{i.img}}" alt="">
                     </div>
                     {% endif %}
                 </div>
@@ -257,9 +270,72 @@
                 <div class="mt-3">
                     <div class="d-flex gap-1">
                         <p class="fw-bold">Tournament Conductors: </p>
-                        <p>{{user.club_name}}</p>
+                        <p>{{i.user.club_name}}</p>
+                    </div>
+
+                    <div class="d-flex gap-1">
+                        <p class="fw-bold">Date: </p>
+                        <p>{{i.tour_date}}</p>
+                    </div>
+                    <div class="d-flex gap-1">
+                        <p class="fw-bold">Venue: </p>
+                        <p>{{i.place}}</p>
+                    </div>
+                    <div class="d-flex gap-1">
+                        <p class="fw-bold">District: </p>
+                        <p>{{i.district}}</p>
                     </div>
                     
+                    <button onclick="showConfirmation('{{i.id}}')" class="btn btn-primary">Enroll</button>
+                    
+
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-danger">No upcoming tounaments in your district</p>
+            {% endif %}
+
+
+        </div>
+        <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
+            <div>
+                <p class="h4 text-secondary fw-bold">Other Tournaments</p>
+
+            </div>
+
+
+            {% if feeds1 %}
+            {% for i in feeds1 %}
+
+            <div class="mt-4 border-top pt-4">
+                <div class="d-flex">
+                    <div class="feed-img">
+                        <img class="w-100 rounded-circle" src={{i.user.img.url}} alt="">
+                    </div>
+                    <div class="ms-2 d-flex">
+                        <p class="fw-bold">
+                            {{i.user.club_name}}
+                        </p>
+                        <p class="ms-2 text-secondary">{{i.time}}</p>
+                    </div>
+                </div>
+                <div class="w-100 mt-3">
+
+                    {% if i.img.url != '' %}
+                    <div class="w-100 mt-3">
+                        <img class="w-100" src="{{i.img}}" alt="">
+                    </div>
+                    {% endif %}
+                </div>
+                <p class="fw-bold mt-5">{{i.title}}</p>
+                <p>{{i.desc}}</p>
+                <div class="mt-3">
+                    <div class="d-flex gap-1">
+                        <p class="fw-bold">Tournament Conductors: </p>
+                        <p>{{i.user.club_name}}</p>
+                    </div>
+
                     <div class="d-flex gap-1">
                         <p class="fw-bold">Date: </p>
                         <p>{{i.tour_date}}</p>
@@ -273,13 +349,20 @@
                         <p>{{i.district}}</p>
                     </div>
 
+    <button onclick="showConfirmation('{{ i.id }}')" class="btn btn-primary">Enroll</button>
+
+
+
+
                 </div>
             </div>
             {% endfor %}
-
+            {% else %}
+            <p class="text-danger">No upcoming tounaments</p>
+            {% endif %}
 
         </div>
-        
+
     </div>
 </body>
 
@@ -294,68 +377,68 @@
         function getCSRFToken() {
             return $('input[name="csrfmiddlewaretoken"]').val();
         }
-        
-        $("#search_bar").keyup(function(){
-            
+
+        $("#search_bar").keyup(function () {
+
             var headers = {
                 "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val()
             };
             var searchTerm = $(this).val();
             console.log(searchTerm)
             if (searchTerm.trim() === "") {
-        // If it's empty, hide the container and return
-        $("#search-results").hide();
-        return;
-    }
-    
+                // If it's empty, hide the container and return
+                $("#search-results").hide();
+                return;
+            }
+
             $.ajax({
-                type:"GET",
+                type: "GET",
                 headers: headers,
-                dataType:'Json',
-                url:"{% url 'search_by_name' 0 %}".replace('0',searchTerm),
+                dataType: 'Json',
+                url: "{% url 'search_by_name' 0 %}".replace('0', searchTerm),
                 success: function (data) {
                     // Clear previous results
                     $("#search-results").empty();
 
                     // Parse the JSON data
                     var users = JSON.parse(data);
-                    
+
                     // Loop through the users and create HTML elements
                     for (var i = 0; i < users.length; i++) {
-                        
-    var user = users[i];
-    console.log(user.pk)
-    var userHtml = '<div class="user-box">';
-    userHtml += '<img class="user-img" src="' + user.fields.img + '" alt="User Image">';
-    userHtml += '<p class="user-name">';
-    
-    // Check if the user is a Scout and add a link to ScoutHome
-    if (user.fields.is_scout) {
-        userHtml += '<a class="text-decoration-none text-dark" href="{% url "scout-home" 0 %}">'.replace("0",user.pk);
-        userHtml += user.fields.first_name + ' ' + user.fields.last_name;
-    }
-    // Check if the user is a Player and add a link to PlayerHome
-    else if (user.fields.is_player) {
-        userHtml += '<a class="text-decoration-none text-dark" href="{% url "player-home" 0 %}">'.replace("0",user.pk);
-        userHtml += user.fields.first_name + ' ' + user.fields.last_name;
-    }
-    else{
-        userHtml += '<a class="text-decoration-none text-dark" href="{% url "clubHome" 0 %}">'.replace("0",user.pk);
-        userHtml += user.fields.club_name;
-    }
-    
-    // Close the anchor tag if added
-    if (user.fields.isScout || user.fields.isPlayer) {
-        userHtml += '</a>';
-    }
-    
-    userHtml += '</p>';
-    userHtml += '</div>';
 
-    $("#search-results").append(userHtml);
-}
+                        var user = users[i];
+                        console.log(user.pk)
+                        var userHtml = '<div class="user-box">';
+                        userHtml += '<img class="user-img" src="' + user.fields.img + '" alt="User Image">';
+                        userHtml += '<p class="user-name">';
 
-                    
+                        // Check if the user is a Scout and add a link to ScoutHome
+                        if (user.fields.is_scout) {
+                            userHtml += '<a class="text-decoration-none text-dark" href="{% url "scout-home" 0 %}">'.replace("0", user.pk);
+                            userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+                        }
+                        // Check if the user is a Player and add a link to PlayerHome
+                        else if (user.fields.is_player) {
+                            userHtml += '<a class="text-decoration-none text-dark" href="{% url "player-home" 0 %}">'.replace("0", user.pk);
+                            userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+                        }
+                        else {
+                            userHtml += '<a class="text-decoration-none text-dark" href="{% url "clubHome" 0 %}">'.replace("0", user.pk);
+                            userHtml += user.fields.club_name;
+                        }
+
+                        // Close the anchor tag if added
+                        if (user.fields.isScout || user.fields.isPlayer) {
+                            userHtml += '</a>';
+                        }
+
+                        userHtml += '</p>';
+                        userHtml += '</div>';
+
+                        $("#search-results").append(userHtml);
+                    }
+
+
                     // Show the user list
                     $("#search-results").show();
                 },
@@ -365,4 +448,24 @@
             })
         })
     });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function showConfirmation(tour_id) {
+        console.log(tour_id);
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to enroll in this tournament?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{% url 'enrol_tour' 0 %}".replace('0', tour_id);
+            }
+        });
+    }
 </script>

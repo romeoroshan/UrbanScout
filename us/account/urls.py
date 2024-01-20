@@ -64,6 +64,8 @@ urlpatterns = [
     path('contact/<int:user_id>',views.contact,name="contact"),
     path('tour',views.tour,name="tour"),
     path('tournaments',views.tournaments,name="tournaments"),
+    path('enrolled',views.enrolled,name="enrolled"),
+    path('enrol_tour/<int:tour_id>',views.enrol_tour,name="enrol_tour"),
     path('api/your-model/', UserListCreateView.as_view(), name='your-model-list-create'),
 
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),

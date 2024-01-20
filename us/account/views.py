@@ -1073,10 +1073,30 @@ def tour(request):
     return render(request,'Tour.html',{
         'district_choices': District_Choice,
     })
+from .models import TourEnrole
 def tournaments(request):
-    tournament=Tour.objects.filter(district=request.user.district,active=True).order_by('-time')
-    print(tournament)
-    return render(request,'Tournaments.html',{'feeds':tournament})
+    tour_enrollments = TourEnrole.objects.filter(user_id=request.user.id)
+    enrolled_tour_ids = tour_enrollments.values_list('tour__id', flat=True)
+
+    tournament = Tour.objects.filter(district=request.user.district, active=True).exclude(id__in=enrolled_tour_ids).order_by('-time')
+    tournament1 = Tour.objects.filter(~Q(district=request.user.district), active=True).exclude(id__in=enrolled_tour_ids).order_by('-time')
+
+    print(tour_enrollments)
+    return render(request, 'Tournaments.html', {'feeds': tournament, 'feeds1': tournament1, 'enrol': tour_enrollments})
+
+
+def enrol_tour(request,tour_id):
+    varTour=TourEnrole(
+        tour_id=tour_id,
+        user_id=request.user.id,
+        date_of_join=timezone.now()
+    )
+    varTour.save()
+    return redirect('tournaments')
+def enrolled(request):
+    enrolled_tour=TourEnrole.objects.filter(user_id=request.user.id).order_by('tour__tour_date')
+    return render(request,'enrolled.html',{'feeds':enrolled_tour})
+    
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 
