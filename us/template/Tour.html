@@ -236,7 +236,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <input type="text" name="place" class="form-control" placeholder="Venue">
+                            <input type="text" name="place" class="form-control" placeholder="Venue" required>
 
 
                             <textarea class="form-control" required name="title" id="" cols="30" rows="2"
@@ -246,7 +246,7 @@
 
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="submit" class="btn btn-success" disabled>Submit</button>
                         </div>
                     </div>
                 </div>
@@ -339,4 +339,39 @@ document.getElementsByName("tourdate")[0].min = today;
     const currentDate = new Date().toISOString().split('T')[0];
     // Set the minimum attribute of the date input to the current date
     document.getElementById('tourdate').setAttribute('min', currentDate);
+</script>
+<script>
+    $(document).ready(function () {
+        // Get references to the input fields and submit button
+        var tourdateInput = $('#tourdate');
+        var titleInput = $('textarea[name="title"]');
+        var descInput = $('textarea[name="desc"]');
+        var submitButton = $('button[type="submit"]');
+        
+        // Add event listeners for keyup on the input fields
+        tourdateInput.on('keyup', validateForm);
+        titleInput.on('keyup', validateForm);
+        descInput.on('keyup', validateForm);
+
+        // Function to perform validation
+        function validateForm() {
+            // Get the values from the input fields
+            var tourdateValue = tourdateInput.val().trim();
+            var titleValue = titleInput.val().trim();
+            var descValue = descInput.val().trim();
+
+            // Perform your validation logic here
+             // Placeholder for your validation logic
+
+            
+            if (titleValue === '' || descValue === '') {
+                isValid = false;
+            }
+            else{
+                isValid=true;
+            }
+            // Enable or disable the submit button based on validation result
+            submitButton.prop('disabled', !isValid);
+        }
+    });
 </script>
