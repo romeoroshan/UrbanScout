@@ -77,7 +77,29 @@
   padding: 2px 6px;
   border-radius: 50%;
 }
+#iframe {
+            display: none; 
+            position: fixed;
+            bottom: 100px;
+            right: 100px;
+            z-index: 1;
+            border-radius: 1em;
+        }
 
+        #toggleButton {
+            z-index: 1;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ff000000;
+            color: #ac2424;
+            border: none;
+            border-radius: 100%;
+            padding: 0;
+            cursor: pointer;
+            height: 85px;
+            width: 85px;
+        }
     @media (max-width: 991.98px) {
         #search-results{
             position: fixed;
@@ -353,7 +375,16 @@
             </div>
         </div>
     </nav>
+    <!-- Toggle Button -->
+    <button id="toggleButton" onclick="toggleIframe()"><i class="bi bi-robot fs-3"></i></button>
+    <iframe id="iframe"
+    allow="microphone;"
+    width="350"
+    height="430"
+    src="https://console.dialogflow.com/api-client/demo/embedded/20576aee-d901-427c-a366-de87dca82e20">
+</iframe>
     <div class="d-flex flex-wrap justify-content-center mt-4">
+        
         <div class="col-lg-3 h-50 col-12 m-3 p-5 rounded bg-white shadow-lg position-sticky">
             <div class="">
                 <div class="d-flex justify-content-center">
@@ -1330,4 +1361,11 @@ $("#notification-results").on("click", "#notification_marked", function () {
 
     });
 
+</script>
+<script>
+    function toggleIframe() {
+        console.log("Clicked")
+        var iframe = document.getElementById("iframe");
+        iframe.style.display = (iframe.style.display === "none") ? "block" : "none";
+    }
 </script>

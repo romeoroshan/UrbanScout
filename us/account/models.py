@@ -172,6 +172,7 @@ class Tour(models.Model):
     time=models.DateTimeField(null=True)
     active=models.BooleanField(default=True)
     place=models.CharField(max_length=120,null=True)
+    contact=models.IntegerField(null=True)
     district = models.CharField(("District"),null=True,max_length=20,choices=District_Choice)
 class TourEnrole(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)

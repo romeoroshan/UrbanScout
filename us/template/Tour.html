@@ -236,6 +236,8 @@
                                     {% endfor %}
                                 </select>
                             </div>
+                            <input type="number" name="contact" class="form-control" placeholder="Contact Number" required>
+                            <label for="contact" id="contactErrorLabel" class="text-danger"></label>
                             <input type="text" name="place" class="form-control" placeholder="Venue" required>
 
 
@@ -347,8 +349,9 @@ document.getElementsByName("tourdate")[0].min = today;
         var titleInput = $('textarea[name="title"]');
         var descInput = $('textarea[name="desc"]');
         var submitButton = $('button[type="submit"]');
-        
-        // Add event listeners for keyup on the input fields
+        var contactInput = $('input[name="contact"]');
+        var contactErrorLabel = $('#contactErrorLabel');
+        contactInput.on('keyup', validateForm);
         tourdateInput.on('keyup', validateForm);
         titleInput.on('keyup', validateForm);
         descInput.on('keyup', validateForm);
@@ -359,12 +362,18 @@ document.getElementsByName("tourdate")[0].min = today;
             var tourdateValue = tourdateInput.val().trim();
             var titleValue = titleInput.val().trim();
             var descValue = descInput.val().trim();
+            var contactValue = contactInput.val().trim();
 
             // Perform your validation logic here
              // Placeholder for your validation logic
-
-            
-            if (titleValue === '' || descValue === '') {
+            var phoneRegex = /^\d{10}$/; // Assumes a 10-digit phone number format
+            var isPhoneValid = phoneRegex.test(contactValue);
+            if (!isPhoneValid) {
+                contactErrorLabel.text('Invalid phone number');
+            } else {
+                contactErrorLabel.text(''); // Clear error message
+            }
+            if (titleValue === '' || descValue === '' || !isPhoneValid) {
                 isValid = false;
             }
             else{

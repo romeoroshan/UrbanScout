@@ -1057,6 +1057,7 @@ def tour(request):
         desc=request.POST.get('desc')
         place=request.POST.get('place')
         district=request.POST.get('dist')
+        contact=request.POST.get('contact')
         tour_date=request.POST.get('tourdate')
         tour_var=Tour(
             user_id=request.user.id,
@@ -1065,6 +1066,7 @@ def tour(request):
             desc=desc,
             tour_date=tour_date,
             place=place,
+            contact=contact,
             district=district,
             time=timezone.now()
         )
