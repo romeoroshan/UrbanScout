@@ -1059,6 +1059,7 @@ def tour(request):
         district=request.POST.get('dist')
         contact=request.POST.get('contact')
         tour_date=request.POST.get('tourdate')
+        slot=request.POST.get('slots')
         tour_var=Tour(
             user_id=request.user.id,
             img=img,
@@ -1068,6 +1069,7 @@ def tour(request):
             place=place,
             contact=contact,
             district=district,
+            slots=slot,
             time=timezone.now()
         )
         tour_var.save()
@@ -1094,6 +1096,9 @@ def enrol_tour(request,tour_id):
         date_of_join=timezone.now()
     )
     varTour.save()
+    TourEdit=Tour.objects.get(id=tour_id)
+    TourEdit.slots=TourEdit.slots-1
+    TourEdit.save()
     return redirect('tournaments')
 def enrolled(request):
     enrolled_tour=TourEnrole.objects.filter(user_id=request.user.id).order_by('tour__tour_date')

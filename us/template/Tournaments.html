@@ -290,8 +290,16 @@
                         <p class="fw-bold">Contact Number: </p>
                         <p>+91 {{i.contact}}</p>
                     </div>
-                    
-                    <button onclick="showConfirmation('{{i.id}}')" class="btn btn-primary">Enroll</button>
+                    {% if i.slots <= 0 %}
+                    <p class="text-danger">No slots left in this tournament</p>
+                    {% else %}
+                    <div class="d-flex gap-1 text-success">
+                        <p class="fw-bold">Slots Left: </p>
+                        <p>{{i.slots}}</p>
+                    </div>
+
+    <button onclick="showConfirmation('{{ i.id }}')" class="btn btn-primary">Enroll</button>
+    {% endif %}
                     
 
                 </div>
@@ -353,8 +361,16 @@
                         <p class="fw-bold">District: </p>
                         <p>{{i.district}}</p>
                     </div>
+                    {% if i.slots <= 0 %}
+                    <p class="text-danger">No slots left in this tournament</p>
+                    {% else %}
+                    <div class="d-flex gap-1 text-success">
+                        <p class="fw-bold">Slots Left: </p>
+                        <p>{{i.slots}}</p>
+                    </div>
 
     <button onclick="showConfirmation('{{ i.id }}')" class="btn btn-primary">Enroll</button>
+    {% endif %}
 
 
 
