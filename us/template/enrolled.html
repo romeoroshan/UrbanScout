@@ -54,6 +54,9 @@
         .user-name {
             font-weight: bold;
         }
+        .font-italic {
+            font-style: italic;
+        }
 
         @media (max-width: 991.98px) {
             #search-results {
@@ -254,6 +257,9 @@
                             {{i.tour.user.club_name}}
                         </p>
                         <p class="ms-2 text-secondary">{{i.tour.time}}</p>
+                        {% if i.tour.edited %}
+                            <p class="ms-2 font-italic text-secondary">Edited</p>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="w-100 mt-3">

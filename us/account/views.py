@@ -1078,7 +1078,7 @@ def tour(request):
         'district_choices': District_Choice,
     })
 
-from .models import TourEnrole
+from .models import TourEnrole,TournamentWinner
 def tournaments(request):
     tour_enrollments = TourEnrole.objects.filter(user_id=request.user.id)
     enrolled_tour_ids = tour_enrollments.values_list('tour__id', flat=True)
@@ -1107,18 +1107,49 @@ def enrolled(request):
     
 def hosted_tour(request):
     tours=Tour.objects.filter(user_id=request.user.id,active=True).order_by('tour_date')
-    return render(request,'hosted_tour.html',{'feeds':tours})
+    tour_enrollments = TournamentWinner.objects.all().values_list('tour__id', flat=True)
+    finished=Tour.objects.filter(user_id=request.user.id,active=False,cancelled=False).exclude(id__in=tour_enrollments).order_by('tour_date')
+    return render(request,'hosted_tour.html',{'feeds':tours,'finished':finished})
 def tour_participants(request,tour_id):
     participants=TourEnrole.objects.filter(tour_id=tour_id)
     print(participants)
     ability_range = range(0, 5)
     return render(request,'tour_participants.html',{'participants':participants,'abilityRange':ability_range,})
+def select_winner(request,tour_id):
+    participants=TourEnrole.objects.filter(tour_id=tour_id)
+    print(participants)
+    ability_range = range(0, 5)
+    return render(request,'select_winner.html',{'participants':participants,'abilityRange':ability_range,})
+def winner(request,tour_id,user_id):
+    print(tour_id,user_id)
+    var=TournamentWinner(
+        tour_id=tour_id,
+        winner_id=user_id
+    )
+    var.save()
+    return redirect('hosted_tour')
 def cancel_tour(request,tour_id):
     tour_ed=Tour.objects.get(id=tour_id)
     tour_ed.active=False
     tour_ed.cancelled=True
     tour_ed.save()
     return redirect('hosted_tour')
+def edit_tour(request,tour_id):
+    edit=Tour.objects.get(id=tour_id)
+    tour_enrolled_count=TourEnrole.objects.filter(tour_id=tour_id).count()
+    if request.method=='POST':
+        edit.img=request.FILES.get('img')
+        edit.title=request.POST.get('title')
+        edit.desc=request.POST.get('desc')
+        edit.place=request.POST.get('place')
+        edit.district=request.POST.get('dist')
+        edit.contact=request.POST.get('contact')
+        edit.tour_date=request.POST.get('tourdate')
+        edit.slots=request.POST.get('slots')
+        edit.edited=True
+        edit.save()
+        return redirect('hosted_tour')
+    return render(request,'edit_tour.html',{'tour':edit,'district_choices': District_Choice,'count':tour_enrolled_count})
 from .models import Trials,TrailEnrol
 def trial(request):
     if request.method=='POST':

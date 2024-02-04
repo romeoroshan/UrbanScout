@@ -1,5 +1,4 @@
 {% load static %}
-{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -101,7 +100,7 @@
                 <div class="ms-3">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link  text-secondary" aria-current="page" href="{% url 'index' %}">Home</a>
+                            <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
@@ -110,10 +109,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
                                 href="{% url 'ScoutPlayer' %}">Players</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" aria-current="page"
-                                href="{% url 'following_feeds' %}">Feeds</a>
                         </li>
                     </ul>
                 </div>
@@ -127,7 +122,7 @@
             </div>
         </div>
     </nav>
-    {% elif user.is_player %}
+    {% elif user.is_club %}
     <nav class="navbar player-navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
@@ -149,27 +144,21 @@
                 <div class="ms-3">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link  text-secondary" aria-current="page" href="{% url 'index' %}">Home</a>
+                            <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
-                                href="{% url 'PlayerScout' %}">Scouts</a>
+                                href="{% url 'ClubScout' %}">Scouts</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
-                                href="{% url 'player-club' %}">Clubs</a>
+                                href="{% url 'ClubPlayer' %}">Players</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" aria-current="page"
-                                href="{% url 'following_feeds' %}">Feeds</a>
-                        </li>
-
-
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
                     <div class="border rounded p-2 pb-0 mt-2 ms-3">
-                        <p class="text-light "><i class="bi bi-person-circle"></i> {{user.first_name}}</p>
+                        <p class="text-light "><i class="bi bi-shield-fill"></i> {{user.club_name}}</p>
                     </div>
                     <a class="d-flex flex-column justify-content-center text-decoration-none"
                         href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
@@ -199,34 +188,22 @@
                 <div class="ms-3">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link  text-secondary" aria-current="page" href="{% url 'index' %}">Home</a>
+                            <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
-                                href="{% url 'ClubScout' %}">Scouts</a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link text-secondary" aria-current="page"
-                                href="{% url 'following_feeds' %}">Feeds</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" aria-current="page"
-                                href="{% url 'tournaments' %}">Tournaments</a>
+                                href="{% url 'PlayerScout' %}">Scouts</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
-                                href="{% url 'enrolled' %}">Enrolled</a>
+                                href="{% url 'player-club' %}">Clubs</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-secondary" aria-current="page"
-                                href="{% url 'hosted_tour' %}">Hosted</a>
-                        </li>
+
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
                     <div class="border rounded p-2 pb-0 mt-2 ms-3">
-                        <p class="text-light "><i class="bi bi-shield-fill"></i> {{user.club_name}} </p>
+                        <p class="text-light "><i class="bi bi-person-circle"></i> {{user.first_name}}</p>
                     </div>
                     <a class="d-flex flex-column justify-content-center text-decoration-none"
                         href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
@@ -235,173 +212,60 @@
         </div>
     </nav>
     {% endif %}
-    <div class="d-flex flex-wrap justify-content-center mt-4">
+    <div class="d-flex justify-content-center">
+        <div class="bg-white shadow-lg mt-4 pb-3 rounded col-12 col-lg-8">
+            <p class="m-4 text-secondary fs-4 fw-bold">Tournament Info</p>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="d-flex justify-content-center"><input type="file" required class="mt-4" name="img"
+                        value="Change image" accept="image/*"></div>
+                <div class="d-flex justify-content-center">
+                    <div class="col-lg-8 col-12">
 
-        <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
-            <div>
-                <p class="h4 text-secondary fw-bold">Tournaments in your district</p>
+                        <div class="d-flex justify-content-center gap-2 m-5 flex-column">
+                            <label for="tourdate">New Date:</label>
+                            <input type="datetime-local" value="{{tour.tour_date}}" class="form-control" required name="tourdate" id="tourdate">
 
-            </div>
 
-            {% if feeds %}
-            {% for i in feeds %}
 
-            <div class="mt-4 border-top pt-4">
-                <div class="d-flex">
-                    <div class="feed-img">
-                        <img class="w-100 rounded-circle" src={{i.user.img.url}} alt="">
-                    </div>
-                    <div class="ms-2 d-flex">
-                        <p class="fw-bold">
-                            {{i.user.club_name}}
-                        </p>
-                        <p class="ms-2 text-secondary">{{i.time}}</p>
+                            <div class="d-flex flex-column w-100">
+                                <label for="dist">District</label>
+                                <select class="form-control" name="dist" id="">
+                                    <option value="{{tour.district}}">{{ tour.district }}</option>
+                                    {% for choice_value,choice in district_choices %}
+                                    <option value="{{choice}}">{{ choice }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <input type="number" value="{{tour.contact}}" name="contact" min="0" class="form-control" placeholder="Contact Number" required>
+                            <label for="contact" id="contactErrorLabel" class="text-danger"></label>
+                            <input type="text" name="place" class="form-control" value="{{tour.place}}" placeholder="Venue" required>
+
+
+                            <textarea class="form-control" required name="title" id="" cols="30" rows="2"
+                                placeholder="Title">{{tour.title}}</textarea>
+                            <textarea class="form-control" required name="desc" id="" cols="30" rows="5"
+                                placeholder="Description">{{tour.desc}}</textarea>
+                            <input type="number" max="32" value="{{tour.slots}}" min="{{count}}" name="slots" class="form-control" placeholder="Number of teams" required>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-success" disabled>Submit</button>
+                        </div>
                     </div>
                 </div>
-                <div class="w-100 mt-3">
-
-                    {% if i.img.url != '' %}
-                    <div class="w-100 mt-3">
-                        <img class="w-100" src="{{i.img}}" alt="">
-                    </div>
-                    {% endif %}
-                </div>
-                <p class="fw-bold mt-5">{{i.title}}</p>
-                <p>{{i.desc}}</p>
-                <div class="mt-3">
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Tournament Conductors: </p>
-                        <p>{{i.user.club_name}}</p>
-                    </div>
-
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Date: </p>
-                        <p>{{i.tour_date}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Venue: </p>
-                        <p>{{i.place}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">District: </p>
-                        <p>{{i.district}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Contact Number: </p>
-                        <p>+91 {{i.contact}}</p>
-                    </div>
-                    {% if i.slots <= 0 %}
-                    <p class="text-danger">No slots left in this tournament</p>
-                    {% else %}
-                    <div class="d-flex gap-1 text-success">
-                        <p class="fw-bold">Slots Left: </p>
-                        <p>{{i.slots}}</p>
-                    </div>
-
-    <button onclick="showConfirmation('{{ i.id }}')" class="btn btn-primary">Enroll</button>
-    {% endif %}
-                    
-
-                </div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <p class="text-danger">No upcoming tounaments in your district</p>
-            {% endif %}
-
-
+            </form>
         </div>
-        <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
-            <div>
-                <p class="h4 text-secondary fw-bold">Other Tournaments</p>
-
-            </div>
-
-
-            {% if feeds1 %}
-            {% for i in feeds1 %}
-
-            <div class="mt-4 border-top pt-4">
-                <div class="d-flex">
-                    <div class="feed-img">
-                        <img class="w-100 rounded-circle" src={{i.user.img.url}} alt="">
-                    </div>
-                    <div class="ms-2 d-flex">
-                        <p class="fw-bold">
-                            {{i.user.club_name}}
-                        </p>
-                        <p class="ms-2 text-secondary">{{i.time}}</p>
-                        {% if i.edited %}
-                            <p class="ms-2 text-secondary">Edited</p>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="w-100 mt-3">
-
-                    {% if i.img.url != '' %}
-                    <div class="w-100 mt-3">
-                        <img class="w-100" src="{{i.img}}" alt="">
-                    </div>
-                    {% endif %}
-                </div>
-                <p class="fw-bold mt-5">{{i.title}}</p>
-                <p>{{i.desc}}</p>
-                <div class="mt-3">
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Tournament Conductors: </p>
-                        <p>{{i.user.club_name}}</p>
-                    </div>
-
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Date: </p>
-                        <p>{{i.tour_date}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Venue: </p>
-                        <p>{{i.place}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">District: </p>
-                        <p>{{i.district}}</p>
-                    </div>
-                    {% if i.slots <= 0 %}
-                    <p class="text-danger">No slots left in this tournament</p>
-                    {% else %}
-                    <div class="d-flex gap-1 text-success">
-                        <p class="fw-bold">Slots Left: </p>
-                        <p>{{i.slots}}</p>
-                    </div>
-
-    <button onclick="showConfirmation('{{ i.id }}')" class="btn btn-primary">Enroll</button>
-    {% endif %}
-
-
-
-
-                </div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <p class="text-danger">No upcoming tounaments</p>
-            {% endif %}
-
-        </div>
-
     </div>
 </body>
 
 </html>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<form action="post">
-    {% csrf_token %}
-</form>
+
 
 <script>
     $(document).ready(function () {
-        function getCSRFToken() {
-            return $('input[name="csrfmiddlewaretoken"]').val();
-        }
+        var today = new Date().toISOString().slice(0, 16);
 
+document.getElementsByName("tourdate")[0].min = today;
         $("#search_bar").keyup(function () {
 
             var headers = {
@@ -471,25 +335,56 @@
                 }
             })
         })
-    });
+    })
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
-    function showConfirmation(tour_id) {
-        console.log(tour_id);
+    // Get the current date in the format "YYYY-MM-DD"
+    const currentDate = new Date().toISOString().split('T')[0];
+    // Set the minimum attribute of the date input to the current date
+    document.getElementById('tourdate').setAttribute('min', currentDate);
+</script>
+<script>
+    $(document).ready(function () {
+        // Get references to the input fields and submit button
+        var tourdateInput = $('#tourdate');
+        var titleInput = $('textarea[name="title"]');
+        var descInput = $('textarea[name="desc"]');
+        var submitButton = $('button[type="submit"]');
+        var contactInput = $('input[name="contact"]');
+        var slots = $('input[name="slots"]');
+        var contactErrorLabel = $('#contactErrorLabel');
+        contactInput.on('keyup', validateForm);
+        tourdateInput.on('change', validateForm);
+        titleInput.on('keyup', validateForm);
+        descInput.on('keyup', validateForm);
+        slots.on('keyup', validateForm);
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'Do you want to enroll in this tournament?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "{% url 'enrol_tour' 0 %}".replace('0', tour_id);
+        // Function to perform validation
+        function validateForm() {
+            // Get the values from the input fields
+            var tourdateValue = tourdateInput.val().trim();
+            var titleValue = titleInput.val().trim();
+            var descValue = descInput.val().trim();
+            var contactValue = contactInput.val().trim();
+            var slotsValue = slots.val().trim();
+
+            // Perform your validation logic here
+             // Placeholder for your validation logic
+            var phoneRegex = /^\d{10}$/; // Assumes a 10-digit phone number format
+            var isPhoneValid = phoneRegex.test(contactValue);
+            if (!isPhoneValid) {
+                contactErrorLabel.text('Invalid phone number');
+            } else {
+                contactErrorLabel.text(''); // Clear error message
             }
-        });
-    }
+            if (titleValue === '' || descValue === '' || !isPhoneValid || slotsValue === '') {
+                isValid = false;
+            }
+            else{
+                isValid=true;
+            }
+            // Enable or disable the submit button based on validation result
+            submitButton.prop('disabled', !isValid);
+        }
+    });
 </script>

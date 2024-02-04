@@ -174,6 +174,7 @@ class Tour(models.Model):
     place=models.CharField(max_length=120,null=True)
     contact=models.IntegerField(null=True)
     district = models.CharField(("District"),null=True,max_length=20,choices=District_Choice)
+    edited=models.BooleanField(default=False)
     cancelled=models.BooleanField(default=False)
     slots=models.IntegerField(default=16)
 class TourEnrole(models.Model):
@@ -192,3 +193,6 @@ class TrailEnrol(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     trial=models.ForeignKey(Trials,on_delete=models.CASCADE)
     date_of_join=models.DateTimeField(null=True)
+class TournamentWinner(models.Model):
+    winner=models.ForeignKey(User,on_delete=models.CASCADE)
+    tour=models.ForeignKey(Tour,on_delete=models.CASCADE)
