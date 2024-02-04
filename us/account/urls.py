@@ -68,8 +68,11 @@ urlpatterns = [
     path('enrol_tour/<int:tour_id>',views.enrol_tour,name="enrol_tour"),
     path('hosted_tour',views.hosted_tour,name="hosted_tour"),
     path('tour_participants/<int:tour_id>',views.tour_participants,name="tour_participants"),
+    path('trial',views.trial,name="trial"),
+    path('trial_list',views.trial_list,name="trial_list"),
     path('api/your-model/', UserListCreateView.as_view(), name='your-model-list-create'),
-
+    path('enroltrial/<int:tour_id>',views.enroltrial,name="enroltrial"),
+    path('enrolled_trials',views.enrolled_trials,name="enrolled_trials"),
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 

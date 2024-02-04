@@ -1077,6 +1077,7 @@ def tour(request):
     return render(request,'Tour.html',{
         'district_choices': District_Choice,
     })
+
 from .models import TourEnrole
 def tournaments(request):
     tour_enrollments = TourEnrole.objects.filter(user_id=request.user.id)
@@ -1112,6 +1113,43 @@ def tour_participants(request,tour_id):
     print(participants)
     ability_range = range(0, 5)
     return render(request,'tour_participants.html',{'participants':participants,'abilityRange':ability_range,})
+from .models import Trials,TrailEnrol
+def trial(request):
+    if request.method=='POST':
+        place=request.POST.get('place')
+        district=request.POST.get('dist')
+        contact=request.POST.get('contact')
+        tour_date=request.POST.get('tourdate')
+        tour_var=Trials(
+            user_id=request.user.id,
+            trail_date=tour_date,
+            place=place,
+            contact=contact,
+            district=district,
+            time=timezone.now()
+        )
+        tour_var.save()
+        return redirect('index')
+    return render(request,'Trials.html',{
+        'district_choices': District_Choice,
+    })
+def trial_list(request):
+    trial_enrol = TrailEnrol.objects.filter(user_id=request.user.id)
+    enroled_ids = trial_enrol.values_list('trial_id', flat=True)
+    trials = Trials.objects.filter(active=True).exclude(id__in=enroled_ids).order_by('-time')
+
+    return render(request, 'trial_list.html', {'feeds': trials})
+def enroltrial(request,tour_id):
+    varTour=TrailEnrol(
+        trial_id=tour_id,
+        user_id=request.user.id,
+        date_of_join=timezone.now()
+    )
+    varTour.save()
+    return redirect('trial_list')
+def enrolled_trials(request):
+    enrolled_trial=TrailEnrol.objects.filter(user_id=request.user.id)
+    return render(request,'trial_enrolled.html',{'feeds':enrolled_trial})
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 

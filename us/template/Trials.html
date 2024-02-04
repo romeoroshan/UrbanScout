@@ -1,0 +1,379 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        #search-results {
+            position: fixed;
+            background-color: white;
+            z-index: 1;
+            top: 75px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 50%;
+            margin-left: 3px;
+        }
+
+        /* Style for the user list container */
+        .user-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 200px;
+            /* Set a maximum height for the list */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
+            display: none;
+            /* Hide by default */
+        }
+
+        /* Style for each user box */
+        .user-box {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        /* Style for user image */
+        .user-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Style for user name */
+        .user-name {
+            font-weight: bold;
+        }
+
+        @media (max-width: 991.98px) {
+            #search-results {
+                position: fixed;
+                background-color: white;
+                z-index: 1;
+                top: 125px;
+            }
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>Document</title>
+</head>
+
+<body class="bg-light">
+    {% if user.is_scout %}
+    <nav class="navbar player-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
+                <p class="text-white">Urban</p>
+                <p class="text-warning">Scout</p>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="ms-3 d-flex w-75">
+                    <input type="text" class="form-control" id="search_bar" placeholder="Search">
+                    <button class="btn shadow-none"><i class="bi bi-search fs-3 text-white"></i></button>
+                </div>
+                <div id="search-results" class="col-lg-3 col-11 rounded shadow-lg">
+                    <!-- Results will be displayed here -->
+                </div>
+                <div class="ms-3">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'ScoutClub' %}">Clubs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'ScoutPlayer' %}">Players</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="border rounded p-2 pb-0 mt-2 ms-3">
+                        <p class="text-light "><i class="bi bi-binoculars-fill"></i> {{user.first_name}}</p>
+                    </div>
+                    <a class="d-flex flex-column justify-content-center text-decoration-none"
+                        href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% elif user.is_club %}
+    <nav class="navbar player-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
+                <p class="text-white">Urban</p>
+                <p class="text-warning">Scout</p>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="ms-3 d-flex w-75">
+                    <input type="text" class="form-control" id="search_bar" placeholder="Search">
+                    <button class="btn shadow-none"><i class="bi bi-search fs-3 text-white"></i></button>
+                </div>
+                <div id="search-results" class="col-lg-3 col-11 rounded shadow-lg">
+                    <!-- Results will be displayed here -->
+                </div>
+                <div class="ms-3">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'ClubScout' %}">Scouts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'ClubPlayer' %}">Players</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="border rounded p-2 pb-0 mt-2 ms-3">
+                        <p class="text-light "><i class="bi bi-shield-fill"></i> {{user.club_name}}</p>
+                    </div>
+                    <a class="d-flex flex-column justify-content-center text-decoration-none"
+                        href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% else %}
+    <nav class="navbar player-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
+                <p class="text-white">Urban</p>
+                <p class="text-warning">Scout</p>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="ms-3 d-flex w-75">
+                    <input type="text" class="form-control" id="search_bar" placeholder="Search">
+                    <button class="btn shadow-none"><i class="bi bi-search fs-3 text-white"></i></button>
+                </div>
+                <div id="search-results" class="col-lg-3 col-11 rounded shadow-lg">
+                    <!-- Results will be displayed here -->
+                </div>
+                <div class="ms-3">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'PlayerScout' %}">Scouts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'player-club' %}">Clubs</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="border rounded p-2 pb-0 mt-2 ms-3">
+                        <p class="text-light "><i class="bi bi-person-circle"></i> {{user.first_name}}</p>
+                    </div>
+                    <a class="d-flex flex-column justify-content-center text-decoration-none"
+                        href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+    <div class="d-flex justify-content-center">
+        <div class="bg-white shadow-lg mt-4 pb-3 rounded col-12 col-lg-8">
+            <p class="m-4 text-secondary fs-4 fw-bold">Quick Trial Offer</p>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="d-flex justify-content-center">
+                    <div class="col-lg-8 col-12">
+
+                        <div class="d-flex justify-content-center gap-2 m-5 flex-column">
+                            <label for="tourdate">Trial Date:</label>
+                            <input type="datetime-local" class="form-control" required name="tourdate" id="tourdate">
+
+
+
+                            <div class="d-flex flex-column w-100">
+                                <label for="dist">District</label>
+                                <select class="form-control" name="dist" id="">
+                                    {% for choice_value,choice in district_choices %}
+                                    <option value="{{ choice }}">{{ choice }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <input type="number" name="contact" min="0" class="form-control" placeholder="Contact Number" required>
+                            <label for="contact" id="contactErrorLabel" class="text-danger"></label>
+                            <input type="text" name="place" class="form-control" placeholder="Venue" required>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-success" disabled>Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+<script>
+    $(document).ready(function () {
+        var today = new Date().toISOString().slice(0, 16);
+
+document.getElementsByName("tourdate")[0].min = today;
+        $("#search_bar").keyup(function () {
+
+            var headers = {
+                "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val()
+            };
+            var searchTerm = $(this).val();
+            console.log(searchTerm)
+            if (searchTerm.trim() === "") {
+                // If it's empty, hide the container and return
+                $("#search-results").hide();
+                return;
+            }
+
+            $.ajax({
+                type: "GET",
+                headers: headers,
+                dataType: 'Json',
+                url: "{% url 'search_by_name' 0 %}".replace('0', searchTerm),
+                success: function (data) {
+                    // Clear previous results
+                    $("#search-results").empty();
+
+                    // Parse the JSON data
+                    var users = JSON.parse(data);
+
+                    // Loop through the users and create HTML elements
+                    for (var i = 0; i < users.length; i++) {
+
+                        var user = users[i];
+                        console.log(user.pk)
+                        var userHtml = '<div class="user-box">';
+                        userHtml += '<img class="user-img" src="' + user.fields.img + '" alt="User Image">';
+                        userHtml += '<p class="user-name">';
+
+                        // Check if the user is a Scout and add a link to ScoutHome
+                        if (user.fields.is_scout) {
+                            userHtml += '<a class="text-decoration-none text-dark" href="{% url "scout-home" 0 %}">'.replace("0", user.pk);
+                            userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+                        }
+                        // Check if the user is a Player and add a link to PlayerHome
+                        else if (user.fields.is_player) {
+                            userHtml += '<a class="text-decoration-none text-dark" href="{% url "player-home" 0 %}">'.replace("0", user.pk);
+                            userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+                        }
+                        else {
+                            userHtml += '<a class="text-decoration-none text-dark" href="{% url "clubHome" 0 %}">'.replace("0", user.pk);
+                            userHtml += user.fields.club_name;
+                        }
+
+                        // Close the anchor tag if added
+                        if (user.fields.isScout || user.fields.isPlayer) {
+                            userHtml += '</a>';
+                        }
+
+                        userHtml += '</p>';
+                        userHtml += '</div>';
+
+                        $("#search-results").append(userHtml);
+                    }
+
+
+                    // Show the user list
+                    $("#search-results").show();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            })
+        })
+    })
+</script>
+<script>
+    // Get the current date in the format "YYYY-MM-DD"
+    const currentDate = new Date().toISOString().split('T')[0];
+    // Set the minimum attribute of the date input to the current date
+    document.getElementById('tourdate').setAttribute('min', currentDate);
+</script>
+<script>
+    $(document).ready(function () {
+        console.log("Function called")
+        // Get references to the input fields and submit button
+        var submitButton = $('button[type="submit"]');
+        var contactInput = $('input[name="contact"]');
+        var contactErrorLabel = $('#contactErrorLabel');
+        var place = $('input[name="place"]');
+        contactInput.on('keyup', validateForm);
+        place.on('keyup', validateForm);
+
+
+        // Function to perform validation
+        function validateForm() {
+            console.log("validation")
+            // Get the values from the input fields
+
+            var contactValue = contactInput.val().trim();
+            var trimplace = place.val().trim();
+
+            // Perform your validation logic here
+             // Placeholder for your validation logic
+            var phoneRegex = /^\d{10}$/; // Assumes a 10-digit phone number format
+            var isPhoneValid = phoneRegex.test(contactValue);
+            if (!isPhoneValid) {
+                contactErrorLabel.text('Invalid phone number');
+                console.log("False");
+            } else {
+                console.log("True");
+                contactErrorLabel.text(''); // Clear error message
+            }
+            if(trimplace==='' || !isPhoneValid){
+                isValid=false
+            }
+            else{
+                isValid=true
+            }
+            
+            // Enable or disable the submit button based on validation result
+            submitButton.prop('disabled', !isValid);
+        }
+    });
+</script>

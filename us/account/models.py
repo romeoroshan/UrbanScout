@@ -179,3 +179,15 @@ class TourEnrole(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     tour=models.ForeignKey(Tour,on_delete=models.CASCADE)
     date_of_join=models.DateTimeField(null=True)
+class Trials(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    trail_date=models.DateTimeField(null=True)
+    time=models.DateTimeField(null=True)
+    active=models.BooleanField(default=True)
+    place=models.CharField(max_length=120,null=True)
+    contact=models.IntegerField(null=True)
+    district = models.CharField(("District"),null=True,max_length=20,choices=District_Choice)
+class TrailEnrol(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    trial=models.ForeignKey(Trials,on_delete=models.CASCADE)
+    date_of_join=models.DateTimeField(null=True)
