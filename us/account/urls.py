@@ -67,6 +67,7 @@ urlpatterns = [
     path('enrolled',views.enrolled,name="enrolled"),
     path('enrol_tour/<int:tour_id>',views.enrol_tour,name="enrol_tour"),
     path('hosted_tour',views.hosted_tour,name="hosted_tour"),
+    path('cancel_tour<int:tour_id>',views.cancel_tour,name="cancel_tour"),
     path('tour_participants/<int:tour_id>',views.tour_participants,name="tour_participants"),
     path('trial',views.trial,name="trial"),
     path('trial_list',views.trial_list,name="trial_list"),

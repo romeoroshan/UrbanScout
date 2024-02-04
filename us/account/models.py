@@ -174,6 +174,7 @@ class Tour(models.Model):
     place=models.CharField(max_length=120,null=True)
     contact=models.IntegerField(null=True)
     district = models.CharField(("District"),null=True,max_length=20,choices=District_Choice)
+    cancelled=models.BooleanField(default=False)
     slots=models.IntegerField(default=16)
 class TourEnrole(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)

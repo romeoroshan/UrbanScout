@@ -290,6 +290,9 @@
                     </div>
                     <p class="text-success"><i class="bi bi-check2-all"></i> You registered for this tournament
                         on {{i.date_of_join}}</p>
+                    {% if i.tour.cancelled %}
+                    <p class="text-danger"><i class="bi bi-x-lg"></i> This Tournament is cancelled by {{i.tour.user.club_name}}</p>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}

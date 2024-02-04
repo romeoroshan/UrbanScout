@@ -1102,7 +1102,7 @@ def enrol_tour(request,tour_id):
     TourEdit.save()
     return redirect('tournaments')
 def enrolled(request):
-    enrolled_tour=TourEnrole.objects.filter(user_id=request.user.id).order_by('tour__tour_date')
+    enrolled_tour=TourEnrole.objects.filter(user_id=request.user.id).order_by('-tour__tour_date')
     return render(request,'enrolled.html',{'feeds':enrolled_tour})
     
 def hosted_tour(request):
@@ -1113,6 +1113,12 @@ def tour_participants(request,tour_id):
     print(participants)
     ability_range = range(0, 5)
     return render(request,'tour_participants.html',{'participants':participants,'abilityRange':ability_range,})
+def cancel_tour(request,tour_id):
+    tour_ed=Tour.objects.get(id=tour_id)
+    tour_ed.active=False
+    tour_ed.cancelled=True
+    tour_ed.save()
+    return redirect('hosted_tour')
 from .models import Trials,TrailEnrol
 def trial(request):
     if request.method=='POST':

@@ -275,8 +275,10 @@
                             
                         </div>
                     </div>
-                    <div class="d-flex flex-column justify-content-center">
-                        <a href="{% url 'tour_participants' i.id %}" class="btn btn-danger">View Participants</a>
+                    <div class="d-flex flex-column gap-3 justify-content-center">
+                        <a href="{% url 'tour_participants' i.id %}" class="btn btn-success">View Participants</a>
+                        <a href="" class="btn btn-primary">Edit Tournament</a>
+                        <button onclick="showConfirmation('{{ i.id }}')" class="btn btn-danger">Cancel Tournament</button>
                     </div>
                 </div>
             </div>
@@ -374,4 +376,24 @@
             })
         })
     });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function showConfirmation(tour_id) {
+        console.log(tour_id);
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to cancel this tournament?',
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{% url 'cancel_tour' 0 %}".replace('0', tour_id);
+            }
+        });
+    }
 </script>
