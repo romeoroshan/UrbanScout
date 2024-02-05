@@ -1126,8 +1126,18 @@ def winner(request,tour_id,user_id):
         tour_id=tour_id,
         winner_id=user_id
     )
+    tour_var=Tour.objects.get(id=tour_id)
+    feed=NewFeeds(
+        feed = "The club triumphed in the tournament titled '{}' held on {} in {}, {}, organized by {}, showcasing their excellence in the competition.".format(tour_var.title, tour_var.tour_date, tour_var.place, tour_var.district, tour_var.user.club_name),
+        user_id=user_id,
+        datetime=timezone.now()
+    )
+    feed.save()
     var.save()
     return redirect('hosted_tour')
+def show_ach(request,user_id):
+    feeds=TournamentWinner.objects.filter(winner_id=user_id).order_by('-tour__tour_date')
+    return render(request,'show_ach.html',{'feeds':feeds})
 def cancel_tour(request,tour_id):
     tour_ed=Tour.objects.get(id=tour_id)
     tour_ed.active=False

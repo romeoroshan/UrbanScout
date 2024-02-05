@@ -72,6 +72,7 @@ urlpatterns = [
     path('tour_participants/<int:tour_id>',views.tour_participants,name="tour_participants"),
     path('select_winner/<int:tour_id>',views.select_winner,name="select_winner"),
     path('winner/<int:tour_id>/<int:user_id>',views.winner,name="winner"),
+    path('show_ach/<int:user_id>',views.show_ach,name="show_ach"),
     path('trial',views.trial,name="trial"),
     path('trial_list',views.trial_list,name="trial_list"),
     path('api/your-model/', UserListCreateView.as_view(), name='your-model-list-create'),
