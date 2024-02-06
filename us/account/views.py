@@ -1143,7 +1143,24 @@ def cancel_tour(request,tour_id):
     tour_ed.active=False
     tour_ed.cancelled=True
     tour_ed.save()
+    sendCancelEmail(tour_id)
     return redirect('hosted_tour')
+def sendCancelEmail(tour_id):
+    print('Cancelled mail')
+    cancelled=Tour.objects.get(id=tour_id)
+    email_subject = 'Tournament Cancellation Notice'
+    email_body = 'Dear participant, It is confirmed that the tournament '+cancelled.title+' on the date '+str(cancelled.tour_date)+' is cancelled by '+cancelled.user.club_name
+    from_email = settings.EMAIL_HOST_USER
+    user_ids = TourEnrole.objects.filter(tour_id=tour_id).values_list('user__id', flat=True)
+    emails = list(User.objects.filter(id__in=user_ids).values_list('email', flat=True))
+
+    # Remove the square brackets around 'emails'
+    recipient_list = emails
+
+    email = EmailMessage(email_subject, email_body, from_email, recipient_list)
+    print(email)
+    email.send()
+
 def edit_tour(request,tour_id):
     edit=Tour.objects.get(id=tour_id)
     tour_enrolled_count=TourEnrole.objects.filter(tour_id=tour_id).count()
@@ -1158,8 +1175,32 @@ def edit_tour(request,tour_id):
         edit.slots=request.POST.get('slots')
         edit.edited=True
         edit.save()
+        sendEditEmail(tour_id)
         return redirect('hosted_tour')
     return render(request,'edit_tour.html',{'tour':edit,'district_choices': District_Choice,'count':tour_enrolled_count})
+def sendEditEmail(tour_id):
+    print('Edited mail')
+    edited=Tour.objects.get(id=tour_id)
+    email_subject = 'Tournament Update'
+    email_body = 'We are reaching out to share important updates on a tournament that you are participated. As per the host, The new Tournament details:\n\n'
+    email_body += f'Tournament Name: {edited.title}\n'
+    email_body += f'Date: {edited.tour_date}\n'
+    email_body += f'Venue: {edited.place}\n'
+    email_body += f'District: {edited.district}\n'
+    email_body += f'Contact: {edited.contact}\n'
+    email_body += f'Number of teams: {edited.slots}\n'
+    email_body += 'Please make a note of these changes and adjust your plans accordingly.\n\n'
+    email_body += 'Thank you for your understanding and cooperation.\n'
+    from_email = settings.EMAIL_HOST_USER
+    user_ids = TourEnrole.objects.filter(tour_id=tour_id).values_list('user__id', flat=True)
+    emails = list(User.objects.filter(id__in=user_ids).values_list('email', flat=True))
+
+    # Remove the square brackets around 'emails'
+    recipient_list = emails
+
+    email = EmailMessage(email_subject, email_body, from_email, recipient_list)
+    print(email)
+    email.send()
 from .models import Trials,TrailEnrol
 def trial(request):
     if request.method=='POST':

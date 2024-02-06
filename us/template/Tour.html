@@ -245,7 +245,14 @@
                                 placeholder="Title"></textarea>
                             <textarea class="form-control" required name="desc" id="" cols="30" rows="5"
                                 placeholder="Description"></textarea>
-                            <input type="number" max="32" min="2" name="slots" class="form-control" placeholder="Number of teams" required>
+                                <label for="slots">Number of teams</label>
+                                <select name="slots" required class="form-control" id="">
+                                    <option value="2">2</option>
+                                    <option value="4">4</option>
+                                    <option value="8">8</option>
+                                    <option value="16">16</option>
+                                    <option value="32">32</option>
+                                </select>
                         </div>
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-success" disabled>Submit</button>
@@ -350,13 +357,11 @@ document.getElementsByName("tourdate")[0].min = today;
         var descInput = $('textarea[name="desc"]');
         var submitButton = $('button[type="submit"]');
         var contactInput = $('input[name="contact"]');
-        var slots = $('input[name="slots"]');
         var contactErrorLabel = $('#contactErrorLabel');
         contactInput.on('keyup', validateForm);
         tourdateInput.on('keyup', validateForm);
         titleInput.on('keyup', validateForm);
         descInput.on('keyup', validateForm);
-        slots.on('keyup', validateForm);
 
         // Function to perform validation
         function validateForm() {
@@ -365,7 +370,6 @@ document.getElementsByName("tourdate")[0].min = today;
             var titleValue = titleInput.val().trim();
             var descValue = descInput.val().trim();
             var contactValue = contactInput.val().trim();
-            var slotsValue = slots.val().trim();
 
             // Perform your validation logic here
              // Placeholder for your validation logic
@@ -376,7 +380,7 @@ document.getElementsByName("tourdate")[0].min = today;
             } else {
                 contactErrorLabel.text(''); // Clear error message
             }
-            if (titleValue === '' || descValue === '' || !isPhoneValid || slotsValue === '') {
+            if (titleValue === '' || descValue === '' || !isPhoneValid) {
                 isValid = false;
             }
             else{
