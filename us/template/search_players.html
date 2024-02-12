@@ -1,0 +1,469 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        #search-results {
+            position: fixed;
+            background-color: white;
+            z-index: 1;
+            top: 75px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 50%;
+            margin-left: 3px;
+        }
+
+        /* Style for the user list container */
+        .user-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 200px;
+            /* Set a maximum height for the list */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
+            display: none;
+            /* Hide by default */
+        }
+
+        /* Style for each user box */
+        .user-box {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        /* Style for user image */
+        .user-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Style for user name */
+        .user-name {
+            font-weight: bold;
+        }
+
+        body {
+            margin-top: 20px;
+            background: #eee;
+        }
+
+        .btn {
+            margin-bottom: 5px;
+        }
+
+        .grid {
+            position: relative;
+            width: 100%;
+            background: #fff;
+            color: #666666;
+            border-radius: 2px;
+            margin-bottom: 25px;
+            box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .grid .grid-body {
+            padding: 15px 20px 15px 20px;
+            font-size: 0.9em;
+            line-height: 1.9em;
+        }
+
+        .search table tr td.rate {
+            color: #f39c12;
+            line-height: 50px;
+        }
+
+        .search table tr:hover {
+            cursor: pointer;
+        }
+
+        .search table tr td.image {
+            width: 50px;
+        }
+
+        .search table tr td img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .search table tr td.rate {
+            color: #f39c12;
+            line-height: 50px;
+        }
+
+        .search table tr td.price {
+            font-size: 1.5em;
+            line-height: 50px;
+        }
+
+        .search #price1,
+        .search #price2 {
+            display: inline;
+            font-weight: 600;
+        }
+
+        @media (max-width: 991.98px) {
+            #search-results {
+                position: fixed;
+                background-color: white;
+                z-index: 1;
+                top: 125px;
+            }
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <title>Document</title>
+</head>
+
+<body class="bg-white">
+    <nav class="navbar player-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
+                <p class="text-white">Urban</p>
+                <p class="text-warning">Scout</p>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="ms-3 d-flex col-5">
+                    <input type="text" class="form-control" id="search_bar" placeholder="Search">
+                    <a href="{% url 'search_players' %}" class="btn shadow-none"><i
+                            class="bi bi-search fs-3 text-white"></i></a>
+                </div>
+                <div id="search-results" class="col-lg-3 col-11 rounded shadow-lg">
+                    <!-- Results will be displayed here -->
+                </div>
+                <div class="ms-3">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'ClubScout' %}">Scouts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'ClubPlayer' %}">Players</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'following_feeds' %}">Feeds</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'tournaments' %}">Tournaments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'hosted_trials' %}">Trials</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class=" d-flex justify-content-end w-100">
+                    <div class="border rounded p-2 pb-0 mt-2 ms-3">
+                        <p class="text-light "><i class="bi bi-shield-fill"></i> {{user.club_name}} </p>
+                    </div>
+                    <a class="d-flex flex-column justify-content-center text-decoration-none"
+                        href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <!-- BEGIN SEARCH RESULT -->
+            <div class="col-md-12">
+                <div class="grid search">
+                    <div class="grid-body">
+                        <div class="row">
+                            <!-- BEGIN FILTERS -->
+                            <div class="col-md-3">
+                                <h2 class="grid-title"><i class="fa fa-filter"></i> Filters</h2>
+                                <hr>
+
+                                <!-- BEGIN FILTER BY CATEGORY -->
+                                <h4>By Ability:</h4>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" class="icheck" name="ability" value="0"> 0</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" class="icheck" name="ability" value="1"> 1</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" class="icheck" name="ability" value="2"> 2</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" class="icheck" name="ability" value="3"> 3</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" class="icheck" name="ability" value="4"> 4</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" class="icheck" name="ability" value="5"> 5</label>
+                                </div>
+
+                                <!-- END FILTER BY CATEGORY -->
+
+                                <div class="padding"></div>
+
+                                <!-- BEGIN FILTER BY DATE -->
+                                
+                                <!-- END FILTER BY DATE -->
+
+                                <div class="padding"></div>
+
+                                <!-- BEGIN FILTER BY PRICE -->
+                                
+                                <!-- END FILTER BY PRICE -->
+                            </div>
+                            <!-- END FILTERS -->
+                            <!-- BEGIN RESULT -->
+                            <div class="col-md-9">
+                                <h2><i class="fa fa-file-o"></i> Result</h2>
+                                <hr>
+                                <!-- BEGIN SEARCH INPUT -->
+
+                                <div class="padding"></div>
+
+                                <div class="row">
+                                    <!-- BEGIN ORDER RESULT -->
+                                    <div class="col-sm-6">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default dropdown-toggle"
+                                                data-toggle="dropdown">
+                                                Order by <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="#">Name</a></li>
+                                                <li><a href="#">Date</a></li>
+                                                <li><a href="#">View</a></li>
+                                                <li><a href="#">Rating</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- END ORDER RESULT -->
+
+
+                                </div>
+
+                                <!-- BEGIN TABLE RESULT -->
+                                <div id="filter_result" class="col-8">
+
+                                </div>
+                                <!-- END TABLE RESULT -->
+
+                                <!-- BEGIN PAGINATION -->
+
+                                <!-- END PAGINATION -->
+                            </div>
+                            <!-- END RESULT -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END SEARCH RESULT -->
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    $(document).ready(function () {
+        $("#search_bar").keyup(function () {
+
+            var headers = {
+                "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val()
+            };
+            var searchTerm = $(this).val();
+            console.log(searchTerm)
+            if (searchTerm.trim() === "") {
+                // If it's empty, hide the container and return
+                $("#search-results").hide();
+                return;
+            }
+
+            $.ajax({
+                type: "GET",
+                headers: headers,
+                dataType: 'Json',
+                url: "{% url 'search_by_name' 0 %}".replace('0', searchTerm),
+                success: function (data) {
+                    // Clear previous results
+                    $("#filter_result").empty();
+
+                    // Parse the JSON data
+                    var users = JSON.parse(data);
+
+                    // Loop through the users and create HTML elements
+                    for (var i = 0; i < users.length; i++) {
+
+                        var user = users[i];
+                        console.log(user.pk)
+                        var userHtml = '<div class="user-box">';
+                        userHtml += '<img class="user-img" src="' + user.fields.img + '" alt="User Image">';
+                        userHtml += '<p class="user-name">';
+
+                        // Check if the user is a Scout and add a link to ScoutHome
+                        if (user.fields.is_scout) {
+                            userHtml += '<a class="text-decoration-none text-dark" href="{% url "scout-home" 0 %}">'.replace("0", user.pk);
+                            userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+                        }
+                        // Check if the user is a Player and add a link to PlayerHome
+                        else if (user.fields.is_player) {
+                            userHtml += '<a class="text-decoration-none text-dark" href="{% url "player-home" 0 %}">'.replace("0", user.pk);
+                            userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+                        }
+                        else {
+                            userHtml += '<a class="text-decoration-none text-dark" href="{% url "clubHome" 0 %}">'.replace("0", user.pk);
+                            userHtml += user.fields.club_name;
+                        }
+
+                        // Close the anchor tag if added
+                        if (user.fields.isScout || user.fields.isPlayer) {
+                            userHtml += '</a>';
+                        }
+
+                        userHtml += '</p>';
+                        userHtml += '</div>';
+
+                        $("#search-results").append(userHtml);
+                    }
+
+
+                    // Show the user list
+                    $("#search-results").show();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            })
+        })
+    })
+</script>
+<script>
+    $(document).ready(function () {
+        var userList = []; // Initialize an empty array to store user details
+
+        $('.icheck').change(function () {
+            if (this.checked) {
+                var headers = {
+                    "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val()
+                };
+                var selectedValue = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    headers: headers,
+                    dataType: 'Json',
+                    url: "{% url 'filter_by_ability' 0 %}".replace('0', selectedValue),
+                    success: function (data) {
+                        var users = JSON.parse(data);
+
+                        // Empty the userList array before updating it with new user details
+
+
+                        for (var i = 0; i < users.length; i++) {
+                            var user = users[i];
+
+                            // Push the details of each player into the userList array
+                            userList.push({
+                                id: user.pk,
+                                img: user.fields.img,
+                                firstName: user.fields.first_name,
+                                lastName: user.fields.last_name,
+                                isScout: user.fields.is_scout,
+                                isPlayer: user.fields.is_player,
+                                clubName: user.fields.club_name,
+                                player_ability: user.fields.player_ability
+                            });
+                        }
+
+                        // Call a function to build the HTML for each player using the userList array
+                        buildUserHtml();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+            else {
+                // If the checkbox is unchecked, remove the corresponding user details from the userList array
+                var uncheckedValue = $(this).val();
+                for (var i = userList.length - 1; i >= 0; i--) {
+                    console.log(userList[i].player_ability);
+                    if (userList[i].player_ability == uncheckedValue) {
+                        console.log("IF CONDITION");
+                        userList.splice(i, 1);
+                    }
+                }
+                console.log(userList)
+                // Call the function to rebuild the HTML for each player using the updated userList array
+                buildUserHtml();
+            }
+        });
+
+        // Function to build HTML for each player using the userList array
+        function buildUserHtml() {
+            $("#filter_result").empty(); // Empty the existing HTML
+
+            // Iterate over the userList array to build HTML for each player
+            for (var i = 0; i < userList.length; i++) {
+                var user = userList[i];
+                var userHtml = '<div class="user-box">';
+                userHtml += '<img class="user-img" src="' + user.img + '" alt="User Image">';
+                userHtml += '<p class="user-name">';
+
+                // Check if the user is a Scout and add a link to ScoutHome
+                if (user.isScout) {
+                    userHtml += '<a class="text-decoration-none text-dark" href="{% url "scout-home" 0 %}">'.replace("0", user.id);
+                    userHtml += user.firstName + ' ' + user.lastName;
+                }
+                // Check if the user is a Player and add a link to PlayerHome
+                else if (user.isPlayer) {
+                    userHtml += '<a class="text-decoration-none text-dark" href="{% url "player-home" 0 %}">'.replace("0", user.id);
+                    userHtml += user.firstName + ' ' + user.lastName;
+                }
+                else {
+                    userHtml += '<a class="text-decoration-none text-dark" href="{% url "clubHome" 0 %}">'.replace("0", user.id);
+                    userHtml += user.clubName;
+                }
+
+                // Close the anchor tag if added
+                if (user.isScout || user.isPlayer) {
+                    userHtml += '</a>';
+                }
+
+                userHtml += '</p>';
+                userHtml += '</div>';
+
+                $("#filter_result").append(userHtml);
+            }
+        }
+    });
+</script>

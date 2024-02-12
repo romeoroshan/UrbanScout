@@ -1016,6 +1016,13 @@ def searchByName(request,name):
 
     # Return the serialized data as JSON response
     return JsonResponse(user_data, safe=False)
+def filter_by_ability(request,ability):
+    
+    filtered=User.objects.filter(player_ability=ability)
+    user_data = serializers.serialize('json', filtered)
+
+    # Return the serialized data as JSON response
+    return JsonResponse(user_data,safe=False)
 def notificationUsers(request,user_id):
 
     users = Notification.objects.filter(followed_id=user_id)
@@ -1334,6 +1341,12 @@ def enroltrial(request,tour_id):
 def enrolled_trials(request):
     enrolled_trial=TrailEnrol.objects.filter(user_id=request.user.id).order_by('trial__trail_date')
     return render(request,'trial_enrolled.html',{'feeds':enrolled_trial})
+def search_players(request):
+    player_count=User.objects.filter(is_player=True).count()
+    context={
+        'player_count':player_count
+    }
+    return render(request,'search_players.html',context)
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 

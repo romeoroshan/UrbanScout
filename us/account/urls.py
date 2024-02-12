@@ -83,6 +83,8 @@ urlpatterns = [
     path('api/your-model/', UserListCreateView.as_view(), name='your-model-list-create'),
     path('enroltrial/<int:tour_id>',views.enroltrial,name="enroltrial"),
     path('enrolled_trials',views.enrolled_trials,name="enrolled_trials"),
+    path('search_players',views.search_players,name="search_players"),
+    path('filter_by_ability/<str:ability>/',views.filter_by_ability,name="filter_by_ability"),
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 
