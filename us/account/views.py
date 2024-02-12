@@ -21,6 +21,7 @@ razorpay_client = razorpay.Client(
 # Create your views here.
 def index(request):
     Tour.objects.filter(tour_date__lt=timezone.now()).update(active=False)
+    Trials.objects.filter(trail_date__lt=timezone.now()).update(active=False)
     followingg=following.objects.filter(following_id=request.user.id).count()
     followers=following.objects.filter(followed_id=request.user.id).count()
     notifications=Notification.objects.filter(followed_id=request.user.id).count()
@@ -1078,7 +1079,7 @@ def tour(request):
         'district_choices': District_Choice,
     })
 
-from .models import TourEnrole,TournamentWinner
+from .models import TourEnrole,TournamentWinner,TrialWinners
 def tournaments(request):
     tour_enrollments = TourEnrole.objects.filter(user_id=request.user.id)
     enrolled_tour_ids = tour_enrollments.values_list('tour__id', flat=True)
@@ -1110,16 +1111,56 @@ def hosted_tour(request):
     tour_enrollments = TournamentWinner.objects.all().values_list('tour__id', flat=True)
     finished=Tour.objects.filter(user_id=request.user.id,active=False,cancelled=False).exclude(id__in=tour_enrollments).order_by('tour_date')
     return render(request,'hosted_tour.html',{'feeds':tours,'finished':finished})
+def hosted_trials(request):
+    tours=Trials.objects.filter(user_id=request.user.id,active=True).order_by('trail_date')
+    tour_enrollments = TrialWinners.objects.all().values_list('tour__id', flat=True)
+    finished=Trials.objects.filter(user_id=request.user.id,active=False,cancelled=False).exclude(id__in=tour_enrollments).order_by('trail_date')
+    return render(request,'hosted_trials.html',{'feeds':tours,'finished':finished})
 def tour_participants(request,tour_id):
     participants=TourEnrole.objects.filter(tour_id=tour_id)
     print(participants)
     ability_range = range(0, 5)
     return render(request,'tour_participants.html',{'participants':participants,'abilityRange':ability_range,})
+def trial_party(request,trial_id):
+    participants=TrailEnrol.objects.filter(trial_id=trial_id)
+    print(participants)
+    return render(request,'trial_party.html',{'participants':participants})
 def select_winner(request,tour_id):
     participants=TourEnrole.objects.filter(tour_id=tour_id)
     print(participants)
     ability_range = range(0, 5)
     return render(request,'select_winner.html',{'participants':participants,'abilityRange':ability_range,})
+def trial_winners(request,tour_id):
+    participants=TrailEnrol.objects.filter(trial_id=tour_id)
+    print("participants")
+    ability_range = range(0, 5)
+    if request.method=='POST':
+        print("ENTeRED")
+        players=request.POST.getlist('players')
+        for i in players:
+            print(i)
+            var=TrialWinners(
+                winner_id=i,
+                tour_id=tour_id
+            )
+            var.save()
+        sendTrialWinnerMail(players,tour_id)
+        return redirect('hosted_trials')
+    return render(request,'trial_winners.html',{'participants':participants,'abilityRange':ability_range,})
+def sendTrialWinnerMail(players,tour_id):
+    trials=Trials.objects.get(id=tour_id)
+    print('Cancelled mail')
+    email_subject = 'Congratulations on Winning Your Position in the Club!'
+    email_body = "We are excited to share the news that after an impressive performance during the trial period, You are selected as one of the winners of the trial hosted by "+trials.user.club_name+" stay connected with club and wait for the club to initiate the contract negotiations."
+    from_email = settings.EMAIL_HOST_USER
+    emails = list(User.objects.filter(id__in=players).values_list('email', flat=True))
+
+    # Remove the square brackets around 'emails'
+    recipient_list = emails
+
+    email = EmailMessage(email_subject, email_body, from_email, recipient_list)
+    print(email)
+    email.send()
 def winner(request,tour_id,user_id):
     print(tour_id,user_id)
     var=TournamentWinner(
@@ -1145,6 +1186,28 @@ def cancel_tour(request,tour_id):
     tour_ed.save()
     sendCancelEmail(tour_id)
     return redirect('hosted_tour')
+def cancel_trial(request,tour_id):
+    tour_ed=Trials.objects.get(id=tour_id)
+    tour_ed.active=False
+    tour_ed.cancelled=True
+    tour_ed.save()
+    sendCancelEmailTrial(tour_id)
+    return redirect('hosted_trials')
+def sendCancelEmailTrial(tour_id):
+    print('Cancelled mail')
+    cancelled=Trials.objects.get(id=tour_id)
+    email_subject = 'Trial Cancellation Notice'
+    email_body = 'Dear participant, It is confirmed that the trial hosted by '+cancelled.user.club_name+' on the date '+str(cancelled.trail_date)+' is cancelled by the host'
+    from_email = settings.EMAIL_HOST_USER
+    user_ids = TrailEnrol.objects.filter(trial_id=tour_id).values_list('user__id', flat=True)
+    emails = list(User.objects.filter(id__in=user_ids).values_list('email', flat=True))
+
+    # Remove the square brackets around 'emails'
+    recipient_list = emails
+
+    email = EmailMessage(email_subject, email_body, from_email, recipient_list)
+    print(email)
+    email.send()
 def sendCancelEmail(tour_id):
     print('Cancelled mail')
     cancelled=Tour.objects.get(id=tour_id)
@@ -1178,6 +1241,39 @@ def edit_tour(request,tour_id):
         sendEditEmail(tour_id)
         return redirect('hosted_tour')
     return render(request,'edit_tour.html',{'tour':edit,'district_choices': District_Choice,'count':tour_enrolled_count})
+def edit_trial(request,tour_id):
+    edit=Trials.objects.get(id=tour_id)
+    if request.method=='POST':
+        edit.place=request.POST.get('place')
+        edit.district=request.POST.get('dist')
+        edit.contact=request.POST.get('contact')
+        edit.trail_date=request.POST.get('tourdate')
+        edit.edited=True
+        edit.save()
+        sendEditEmailTrial(tour_id)
+        return redirect('hosted_trials')
+    return render(request,'edit_trial.html',{'tour':edit,'district_choices': District_Choice})
+def sendEditEmailTrial(tour_id):
+    print('Edited mail')
+    edited=Trials.objects.get(id=tour_id)
+    email_subject = 'Trial Update of '+edited.user.club_name
+    email_body = 'We are reaching out to share important updates on your trial for the club '+edited.user.club_name+' that you are enrolled. As per the host, The new Trial details are:\n\n'
+    email_body += f'Date: {edited.trail_date}\n'
+    email_body += f'Venue: {edited.place}\n'
+    email_body += f'District: {edited.district}\n'
+    email_body += f'Contact: {edited.contact}\n'
+    email_body += 'Please make a note of these changes and adjust your plans accordingly.\n\n'
+    email_body += 'Thank you for your understanding and cooperation.\n'
+    from_email = settings.EMAIL_HOST_USER
+    user_ids = TrailEnrol.objects.filter(trial_id=tour_id).values_list('user__id', flat=True)
+    emails = list(User.objects.filter(id__in=user_ids).values_list('email', flat=True))
+
+    # Remove the square brackets around 'emails'
+    recipient_list = emails
+
+    email = EmailMessage(email_subject, email_body, from_email, recipient_list)
+    print(email)
+    email.send()
 def sendEditEmail(tour_id):
     print('Edited mail')
     edited=Tour.objects.get(id=tour_id)
@@ -1236,7 +1332,7 @@ def enroltrial(request,tour_id):
     varTour.save()
     return redirect('trial_list')
 def enrolled_trials(request):
-    enrolled_trial=TrailEnrol.objects.filter(user_id=request.user.id)
+    enrolled_trial=TrailEnrol.objects.filter(user_id=request.user.id).order_by('trial__trail_date')
     return render(request,'trial_enrolled.html',{'feeds':enrolled_trial})
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
