@@ -659,6 +659,9 @@ def deleteByRequest(player_id,club_id):
 from joblib import load
 import numpy as np
 from datetime import datetime
+import nltk
+nltk.download('vader_lexicon')
+from nltk.sentiment import SentimentIntensityAnalyzer
 def scoutPlayerEdit(request, update_id):
     
     updateUser = User.objects.get(id=update_id)
@@ -673,13 +676,17 @@ def scoutPlayerEdit(request, update_id):
         dribbling = request.POST.get('dribbling')
         defending = request.POST.get('defending')
         physical = request.POST.get('physical')
+        desc=request.POST.get('desc')
         goalkeeping_diving = request.POST.get('goalkeeping_diving')
         goalkeeping_handling = request.POST.get('goalkeeping_handling')
         goalkeeping_kicking = request.POST.get('goalkeeping_kicking')
         goalkeeping_positioning = request.POST.get('goalkeeping_positioning')
         goalkeeping_reflexes = request.POST.get('goalkeeping_reflexes')
         goalkeeping_speed = request.POST.get('goalkeeping_speed')
+        desc1=request.POST.get('desc1')
+        print(desc,desc1)
         dob=updateUser.player_dob
+        
 
 # Calculate the current date
         current_date = datetime.now().date()
@@ -692,6 +699,9 @@ def scoutPlayerEdit(request, update_id):
         
             # Make predictions
         if updateUser.player_pos=='GoalKeeper':
+            sentiment_analyzer = SentimentIntensityAnalyzer()        
+            sentiment_score = sentiment_analyzer.polarity_scores(desc1)['compound']
+            print("sentiment Score",sentiment_score)
             input_data1 = [[int(age),int(goalkeeping_diving), int(goalkeeping_handling), int(goalkeeping_kicking), int(goalkeeping_positioning), int(goalkeeping_reflexes), int(goalkeeping_speed)]]
             potential_model=load('./player model/gkpotential_model1.joblib')
             ability_model=load('./player model/gkability_model1.joblib')
@@ -701,7 +711,11 @@ def scoutPlayerEdit(request, update_id):
             ability_prediction=(ability_prediction / 85) * 5
             predictions = (predictions / 85) * 5
             print("ability"+str(ability_prediction)+"Potential"+str(predictions))
+            updateUser.desc=desc1
         else:
+            sentiment_analyzer = SentimentIntensityAnalyzer()        
+            sentiment_score = sentiment_analyzer.polarity_scores(desc)['compound']
+            print("sentiment Score",sentiment_score)
             input_data = [[int(age), int(pace), int(shooting), int(passing), int(dribbling), int(defending), int(physical)]]
             potential_model=load('./player model/potential_model1.joblib')
             ability_model=load('./player model/ability_model1.joblib')
@@ -711,6 +725,7 @@ def scoutPlayerEdit(request, update_id):
             ability_prediction=(ability_prediction / 95) * 5
             predictions = (predictions / 95) * 5
             print("ability"+str(ability_prediction)+"Potential"+str(predictions))
+            updateUser.desc=desc
         
         
         print(predictions)
@@ -725,6 +740,7 @@ def scoutPlayerEdit(request, update_id):
             potential=5
         if ability>=5:
             ability=5
+        updateUser.score=sentiment_score
         updateUser.player_ability=ability
         updateUser.player_potential=potential
         updateUser.scouted_by=username
@@ -1011,14 +1027,14 @@ from django.db.models import Q
 def searchByName(request,name):
     
     # name=name.lower()
-    users = User.objects.filter(Q(first_name__icontains=name) | Q(club_name__icontains=name) | Q(player_pos__icontains=name) | Q(district__icontains=name) | Q(locality__icontains=name))
+    users = User.objects.filter(Q(first_name__icontains=name) | Q(club_name__icontains=name) | Q(player_pos__icontains=name) | Q(district__icontains=name) | Q(locality__icontains=name)).order_by('-score')
     user_data = serializers.serialize('json', users)
 
     # Return the serialized data as JSON response
     return JsonResponse(user_data, safe=False)
 def filter_by_ability(request,ability):
     
-    filtered=User.objects.filter(player_ability=ability)
+    filtered=User.objects.filter(is_player=True,player_ability=ability)
     user_data = serializers.serialize('json', filtered)
 
     # Return the serialized data as JSON response
@@ -1492,3 +1508,5 @@ from .serializers import UserSerializer
 class UserListCreateView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+

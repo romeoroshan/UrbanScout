@@ -81,6 +81,7 @@ class User(AbstractUser):
     scouted_by=models.CharField(max_length=30,default='')
     subscribed=models.BooleanField(default=False)
     phone = models.CharField(("Phone Number"), null=True, max_length=10, validators=[phone_number_validator])
+    score=models.FloatField(default=0.0)
     REQUIRED_FIELDS = [] 
 
     
