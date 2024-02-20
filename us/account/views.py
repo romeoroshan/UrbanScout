@@ -1084,6 +1084,8 @@ def tour(request):
         contact=request.POST.get('contact')
         tour_date=request.POST.get('tourdate')
         slot=request.POST.get('slots')
+        lat=request.POST.get('lat')
+        lon=request.POST.get('lon')
         tour_var=Tour(
             user_id=request.user.id,
             img=img,
@@ -1094,6 +1096,8 @@ def tour(request):
             contact=contact,
             district=district,
             slots=slot,
+            latitude=lat,
+            longitude=lon,
             time=timezone.now()
         )
         tour_var.save()
@@ -1101,7 +1105,9 @@ def tour(request):
     return render(request,'Tour.html',{
         'district_choices': District_Choice,
     })
-
+def tour_map(request,tour_id):
+    tour_data=Tour.objects.get(id=tour_id)
+    return render(request,'tour_map.html',{'tour_data':tour_data})
 from .models import TourEnrole,TournamentWinner,TrialWinners
 def tournaments(request):
     tour_enrollments = TourEnrole.objects.filter(user_id=request.user.id)

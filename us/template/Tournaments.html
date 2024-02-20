@@ -300,6 +300,8 @@
 
     <button onclick="showConfirmation('{{ i.id }}')" class="btn btn-primary">Enroll</button>
     {% endif %}
+    <a class="btn btn-info" href="{% url 'tour_map' i.id %}">View in map</a>
+
                     
 
                 </div>
@@ -374,6 +376,7 @@
 
     <button onclick="showConfirmation('{{ i.id }}')" class="btn btn-primary">Enroll</button>
     {% endif %}
+    <a class="btn btn-info" href="{% url 'tour_map' i.id %}">View in map</a>
 
 
 

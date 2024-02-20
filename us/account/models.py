@@ -178,6 +178,8 @@ class Tour(models.Model):
     edited=models.BooleanField(default=False)
     cancelled=models.BooleanField(default=False)
     slots=models.IntegerField(default=16)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6,null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6,null=True)
 class TourEnrole(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     tour=models.ForeignKey(Tour,on_delete=models.CASCADE)
