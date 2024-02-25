@@ -122,6 +122,16 @@
                         {{ playerForm.player_dob }}
                         <p id="dob" class="text-danger"></p>
                     </div>
+                    <div class="form-group">
+                        <label for="{{ playerForm.district.id_for_label }}">District</label>
+                        {{ playerForm.district }}
+                        <p id="district" class="text-danger"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ playerForm.locality.id_for_label }}">Locality</label>
+                        {{ playerForm.locality }}
+                        <p id="dob" class="text-danger"></p>
+                    </div>
                     <div class="d-flex justify-content-center"><button type="submit"
                             class="btn btn-outline-primary text-light p-2 w-50 mt-3">Sign-up</button></div>
                 </form>

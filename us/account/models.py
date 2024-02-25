@@ -204,3 +204,19 @@ class TournamentWinner(models.Model):
 class TrialWinners(models.Model):
     winner=models.ForeignKey(User,on_delete=models.CASCADE)
     tour=models.ForeignKey(Trials,on_delete=models.CASCADE)
+class PlayerStats(models.Model):
+    pace = models.IntegerField(default=0)
+    shooting = models.IntegerField(default=0)
+    passing = models.IntegerField(default=0)
+    dribbling = models.IntegerField(default=0)
+    defending = models.IntegerField(default=0)
+    physical = models.IntegerField(default=0)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+class GoalkeepingStats(models.Model):
+    diving = models.IntegerField(default=0)
+    handling = models.IntegerField(default=0)
+    kicking = models.IntegerField(default=0)
+    positioning = models.IntegerField(default=0)
+    reflexes = models.IntegerField(default=0)
+    speed = models.IntegerField(default=0)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)

@@ -1,0 +1,310 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        #search-results{
+            position: fixed;
+            background-color: white;
+            z-index: 1;
+            top: 75px;
+        }
+        .search-container {
+        position: relative;
+        width: 50%;
+        margin-left: 3px;
+    }
+
+    /* Style for the user list container */
+    .user-list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        max-height: 200px; /* Set a maximum height for the list */
+        overflow-y: auto; /* Enable vertical scrolling */
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-top: none;
+        display: none; /* Hide by default */
+    }
+
+    /* Style for each user box */
+    .user-box {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        padding: 10px;
+    }
+
+    /* Style for user image */
+    .user-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    /* Style for user name */
+    .user-name {
+        font-weight: bold;
+    }
+    blockquote {
+        font-style: italic;
+        border-left: 4px solid #ccc; /* Add a left border */
+        padding-left: 10px; /* Add some padding to the left */
+        background-color: #f9f9f9; /* Add a background color */
+        margin: 20px 0; /* Add margin for spacing */
+    }
+
+    blockquote p {
+        margin: 0; /* Remove default paragraph margin */
+    }
+
+    @media (max-width: 991.98px) {
+        #search-results{
+            position: fixed;
+            background-color: white;
+            z-index: 1;
+            top: 125px;
+        }
+}
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>Document</title>
+</head>
+
+<body class="bg-light">
+    <nav class="navbar player-navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
+                <p class="text-white">Urban</p>
+                <p class="text-warning">Scout</p>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="ms-3 d-flex w-75">
+                    <input type="text" class="form-control" id="search_bar" placeholder="Search">
+                    <button class="btn shadow-none"><i class="bi bi-search fs-3 text-white"></i></button>
+                </div>
+                <div id="search-results" class="col-lg-3 col-11 rounded shadow-lg">
+                    <!-- Results will be displayed here -->
+                </div>
+                <div class="ms-3">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link  text-white" aria-current="page" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page" href="#">Scouts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" aria-current="page"
+                                href="{% url 'player-club' %}">Clubs</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="d-flex w-100 justify-content-start justify-content-sm-end">
+                    <div class="border rounded p-2 pb-0 mt-2 ms-3">
+                        <p class="text-light "><i class="bi bi-person-circle"></i> {{user.first_name}}</p>
+                    </div>
+                    <a href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="d-flex justify-content-center">
+        <div class="bg-white shadow-lg mt-4 pb-3 rounded col-12 col-lg-8">
+            <p class="m-4 text-secondary fs-4 fw-bold">Scout Report</p>
+            
+                <div class="d-flex justify-content-center"><img class="col-lg-2 col-5 rounded-circle" src={{user1.img.url}}
+                        alt="">
+                    
+                    </div>
+                    <div class="d-flex flex-column align-items-center justify-content-center">
+                        <p class="h3 fw-bold">{{user1.first_name}} {{user1.last_name}}</p>
+                        <div class="table-responsive w-50 mt-4">
+                            {% if stats %}
+                            {% if user1.player_pos is GoalKeeper %}
+                            <table class="table table-striped w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Attribute</th>
+                                        <th>Goalkeeping Stats</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="{% if stats.diving >= 80 %}text-success{% elif stats.diving >= 60 and stats.diving <= 79 %}text-warning{% else %}text-danger{% endif %}">Diving</td>
+                                        <td class="{% if stats.diving >= 80 %}text-success{% elif stats.diving >= 60 and stats.diving <= 79 %}text-warning{% else %}text-danger{% endif %}">{{ stats.diving }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="{% if stats.handling >= 80 %}text-success{% elif stats.handling >= 60 and stats.handling <= 79 %}text-warning{% else %}text-danger{% endif %}">Handling</td>
+                                        <td class="{% if stats.handling >= 80 %}text-success{% elif stats.handling >= 60 and stats.handling <= 79 %}text-warning{% else %}text-danger{% endif %}">{{ stats.handling }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="{% if stats.kicking >= 80 %}text-success{% elif stats.kicking >= 60 and stats.kicking <= 79 %}text-warning{% else %}text-danger{% endif %}">Kicking</td>
+                                        <td class="{% if stats.kicking >= 80 %}text-success{% elif stats.kicking >= 60 and stats.kicking <= 79 %}text-warning{% else %}text-danger{% endif %}">{{ stats.kicking }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="{% if stats.positioning >= 80 %}text-success{% elif stats.positioning >= 60 and stats.positioning <= 79 %}text-warning{% else %}text-danger{% endif %}">Positioning</td>
+                                        <td class="{% if stats.positioning >= 80 %}text-success{% elif stats.positioning >= 60 and stats.positioning <= 79 %}text-warning{% else %}text-danger{% endif %}">{{ stats.positioning }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="{% if stats.reflexes >= 80 %}text-success{% elif stats.reflexes >= 60 and stats.reflexes <= 79 %}text-warning{% else %}text-danger{% endif %}">Reflexes</td>
+                                        <td class="{% if stats.reflexes >= 80 %}text-success{% elif stats.reflexes >= 60 and stats.reflexes <= 79 %}text-warning{% else %}text-danger{% endif %}">{{ stats.reflexes }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="{% if stats.speed >= 80 %}text-success{% elif stats.speed >= 60 and stats.speed <= 79 %}text-warning{% else %}text-danger{% endif %}">Speed</td>
+                                        <td class="{% if stats.speed >= 80 %}text-success{% elif stats.speed >= 60 and stats.speed <= 79 %}text-warning{% else %}text-danger{% endif %}">{{ stats.speed }}</td>
+                                    </tr>
+                                </tbody>
+                                
+                            </table>
+                            {% else %}
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Attribute</th>
+                                        <th>Player Stats</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="{% if stats.pace >= 80 %}text-success{% elif stats.pace >= 60 and stats.pace <= 79 %}text-warning{% else %}text-danger{% endif %}">Pace</td>
+                                        <td class="{% if stats.pace >= 80 %}text-success{% elif stats.pace >= 60 and stats.pace <= 79 %}text-warning{% else %}text-danger{% endif %}">{{ stats.pace }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="{% if stats.shooting >= 80 %}text-success{% elif stats.shooting >= 60 and stats.shooting <= 79 %}text-warning{% else %}text-danger{% endif %}">Shooting</td>
+                                        <td class="{% if stats.shooting >= 80 %}text-success{% elif stats.shooting >= 60 and stats.shooting <= 79 %}text-warning{% else %}text-danger{% endif %}">{{ stats.shooting }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="{% if stats.passing >= 80 %}text-success{% elif stats.passing >= 60 and stats.passing <= 79 %}text-warning{% else %}text-danger{% endif %}">Passing</td>
+                                        <td class="{% if stats.passing >= 80 %}text-success{% elif stats.passing >= 60 and stats.passing <= 79 %}text-warning{% else %}text-danger{% endif %}">{{ stats.passing }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="{% if stats.dribbling >= 80 %}text-success{% elif stats.dribbling >= 60 and stats.dribbling <= 79 %}text-warning{% else %}text-danger{% endif %}">Dribbling</td>
+                                        <td class="{% if stats.dribbling >= 80 %}text-success{% elif stats.dribbling >= 60 and stats.dribbling <= 79 %}text-warning{% else %}text-danger{% endif %}">{{ stats.dribbling }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="{% if stats.defending >= 80 %}text-success{% elif stats.defending >= 60 and stats.defending <= 79 %}text-warning{% else %}text-danger{% endif %}">Defending</td>
+                                        <td class="{% if stats.defending >= 80 %}text-success{% elif stats.defending >= 60 and stats.defending <= 79 %}text-warning{% else %}text-danger{% endif %}">{{ stats.defending }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="{% if stats.physical >= 80 %}text-success{% elif stats.physical >= 60 and stats.physical <= 79 %}text-warning{% else %}text-danger{% endif %}">Physical</td>
+                                        <td class="{% if stats.physical >= 80 %}text-success{% elif stats.physical >= 60 and stats.physical <= 79 %}text-warning{% else %}text-danger{% endif %}">{{ stats.physical }}</td>
+                                    </tr>
+                                    <!-- Add more rows for additional attributes -->
+                                </tbody>
+                            </table>
+                            {% endif %}
+                            <blockquote>
+                                <p>
+                                    {{ user1.desc }}
+                                </p>
+                                <div class="d-flex justify-content-end"><p>
+                                    -{{ user1.scouted_by }}
+                                </p></div>
+                            </blockquote>
+                            {% else %}
+                            <p class="text-danger">
+                                Scout Report not registered
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    $(document).ready(function () {
+        $("#search_bar").keyup(function(){
+            
+            var headers = {
+                "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val()
+            };
+            var searchTerm = $(this).val();
+            console.log(searchTerm)
+            if (searchTerm.trim() === "") {
+        // If it's empty, hide the container and return
+        $("#search-results").hide();
+        return;
+    }
+    
+            $.ajax({
+                type:"GET",
+                headers: headers,
+                dataType:'Json',
+                url:"{% url 'search_by_name' 0 %}".replace('0',searchTerm),
+                success: function (data) {
+                    // Clear previous results
+                    $("#search-results").empty();
+
+                    // Parse the JSON data
+                    var users = JSON.parse(data);
+                    
+                    // Loop through the users and create HTML elements
+                    for (var i = 0; i < users.length; i++) {
+                        
+    var user = users[i];
+    console.log(user.pk)
+    var userHtml = '<div class="user-box">';
+    userHtml += '<img class="user-img" src="' + user.fields.img + '" alt="User Image">';
+    userHtml += '<p class="user-name">';
+    
+    // Check if the user is a Scout and add a link to ScoutHome
+    if (user.fields.is_scout) {
+        userHtml += '<a class="text-decoration-none text-dark" href="{% url "scout-home" 0 %}">'.replace("0",user.pk);
+        userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+    }
+    // Check if the user is a Player and add a link to PlayerHome
+    else if (user.fields.is_player) {
+        userHtml += '<a class="text-decoration-none text-dark" href="{% url "player-home" 0 %}">'.replace("0",user.pk);
+        userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+    }
+    else{
+        userHtml += '<a class="text-decoration-none text-dark" href="{% url "clubHome" 0 %}">'.replace("0",user.pk);
+        userHtml += user.fields.club_name;
+    }
+    
+    // Close the anchor tag if added
+    if (user.fields.isScout || user.fields.isPlayer) {
+        userHtml += '</a>';
+    }
+    
+    userHtml += '</p>';
+    userHtml += '</div>';
+
+    $("#search-results").append(userHtml);
+}
+
+                    
+                    // Show the user list
+                    $("#search-results").show();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            })
+        })
+    })
+</script>

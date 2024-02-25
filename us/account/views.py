@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes,following,Notification,Proof,History,Tour
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes,following,Notification,Proof,History,Tour,PlayerStats,GoalkeepingStats
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -712,6 +712,16 @@ def scoutPlayerEdit(request, update_id):
             predictions = (predictions / 85) * 5
             print("ability"+str(ability_prediction)+"Potential"+str(predictions))
             updateUser.desc=desc1
+            gk=GoalkeepingStats(
+                diving=goalkeeping_diving,
+                handling=goalkeeping_handling,
+                kicking=goalkeeping_kicking,
+                positioning=goalkeeping_positioning,
+                reflexes=goalkeeping_reflexes,
+                speed=goalkeeping_speed,
+                user_id=updateUser.id
+            )
+            gk.save()
         else:
             sentiment_analyzer = SentimentIntensityAnalyzer()        
             sentiment_score = sentiment_analyzer.polarity_scores(desc)['compound']
@@ -726,8 +736,16 @@ def scoutPlayerEdit(request, update_id):
             predictions = (predictions / 95) * 5
             print("ability"+str(ability_prediction)+"Potential"+str(predictions))
             updateUser.desc=desc
-        
-        
+            player=PlayerStats(
+                pace=pace,
+                shooting=shooting,
+                passing=passing,
+                dribbling=dribbling,
+                defending=defending,
+                physical=physical,
+                user_id=updateUser.id
+            )
+            player.save()
         print(predictions)
         print(ability_prediction)
 
@@ -1371,7 +1389,16 @@ def search_players(request):
     return render(request,'search_players.html',context)
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
+def scout_report(request,user_id):
+    print(user_id)
+    user=User.objects.get(id=user_id)
+    if user.player_pos=='GoalKeeper':
+        stats=GoalkeepingStats.objects.get(user_id=user_id)
+    else:
+        stats=PlayerStats.objects.get(user_id=user_id)
 
+    print(user)
+    return render(request,'scout_report.html',{'user1':user,'stats':stats})
 @csrf_protect
 def validate_email(request):
     if request.method == 'POST':

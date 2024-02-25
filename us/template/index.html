@@ -1243,7 +1243,8 @@
     console.log(user.pk)
     var userHtml = '<div class="user-box">';
     userHtml += '<img class="user-img" src="' + user.fields.img + '" alt="User Image">';
-    userHtml += '<p class="user-name">';
+
+    userHtml += '<p class="user-name w-100">';
     
     // Check if the user is a Scout and add a link to ScoutHome
     if (user.fields.is_scout) {
@@ -1254,6 +1255,8 @@
     else if (user.fields.is_player) {
         userHtml += '<a class="text-decoration-none text-dark" href="{% url "player-home" 0 %}">'.replace("0",user.pk);
         userHtml += user.fields.first_name + ' ' + user.fields.last_name;
+        userHtml += '<div class="d-flex w-100 justify-content-end"><a href="{% url "scout_report" 9 %}" class="btn btn-primary">More</a></div>'.replace("9",user.pk);
+        
     }
     else{
         userHtml += '<a class="text-decoration-none text-dark" href="{% url "clubHome" 0 %}">'.replace("0",user.pk);
@@ -1263,13 +1266,19 @@
     // Close the anchor tag if added
     if (user.fields.isScout || user.fields.isPlayer) {
         userHtml += '</a>';
+        
     }
     
     userHtml += '</p>';
+    
     userHtml += '</div>';
 
     $("#search-results").append(userHtml);
 }
+descHtml='<div class="p-3">';
+    descHtml+='<p>The searching is completely based on the optimization on the scout report. Click the button to view the scout report.</p>'
+    descHtml+='</div>'
+    $("#search-results").append(descHtml);
 
                     
                     // Show the user list

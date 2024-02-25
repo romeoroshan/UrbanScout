@@ -86,7 +86,7 @@ urlpatterns = [
     path('search_players',views.search_players,name="search_players"),
     path('filter_by_ability/<str:ability>/',views.filter_by_ability,name="filter_by_ability"),
     path('tour_map/<int:tour_id>/',views.tour_map,name="tour_map"),
-
+    path('scout_report/<int:user_id>/',views.scout_report,name="scout_report"),
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 

@@ -81,7 +81,7 @@ class PlayerSignUpForm(UserCreationForm):
     
     class Meta:
         model = User
-        fields = ('img','first_name','last_name','email', 'password1', 'password2','player_dob','phone')
+        fields = ('img','first_name','last_name','email', 'password1', 'password2','player_dob','phone','district','locality')
         widgets={
             'player_dob':DateInput(),
         }
