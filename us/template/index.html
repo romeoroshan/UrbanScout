@@ -7,7 +7,7 @@
 
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <script>
         var count = 0;
 
@@ -89,17 +89,38 @@
         #toggleButton {
             z-index: 1;
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #494949;
-            color: #ff0000;
+            bottom: 110px;
+            right: 30px;
+            background-color: #670467;
+            color: #ffffff;
             border: none;
             border-radius: 100%;
             padding: 0;
             cursor: pointer;
-            height: 85px;
-            width: 85px;
+            height: 45px;
+            width: 45px;
         }
+        #google_translate_element .skiptranslate{
+        display: inline !important;
+
+    }
+    .VIpgJd-ZVi9od-l4eHX-hSRGPd{
+        display: none;
+    }
+    .VIpgJd-ZVi9od-ORHb-OEVmcd{
+        display: none;
+    }
+    #startButton{
+        z-index: 1;
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            height: 45px;
+            width: 45px;
+            border-radius: 100%;
+            border: none;
+            background-color: #3a0150;
+    }
     @media (max-width: 991.98px) {
         #search-results{
             position: fixed;
@@ -115,6 +136,53 @@
         }
 
 }
+#google_translate_element .skiptranslate{
+        display: inline !important;
+
+    }
+    .goog-te-gadget{
+        color: transparent !important;
+    }
+    /* Dark Theme for the select dropdown */
+    .goog-te-combo {
+        padding: 8px; /* Add padding for spacing */
+        font-size: 14px; /* Set font size */
+        border: 1px solid #666; /* Dark border */
+        border-radius: 4px; /* Add rounded corners */
+        background-color: #333; /* Dark background color */
+        color: #fff; /* Light text color */
+    }
+
+    /* Style the select dropdown when it's hovered */
+    .goog-te-combo:hover {
+        border-color: #999; /* Darker border color on hover */
+    }
+
+    /* Style the select dropdown when it's focused (clicked) */
+    .goog-te-combo:focus {
+        outline: none; /* Remove the default focus outline */
+        border-color: #007bff; /* Change border color on focus */
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a shadow on focus */
+    }
+
+    /* Style the dropdown arrow */
+    .goog-te-combo-arrow {
+        font-size: 12px; /* Adjust arrow size */
+        color: #fff; /* Light arrow color */
+    }
+
+    /* Style the dropdown options */
+    .goog-te-menu-value {
+        font-size: 14px; /* Set font size for options */
+        color: #fff; /* Light text color for options */
+        background-color: #333; /* Dark background color for options */
+    }
+
+    /* Style the dropdown options on hover */
+    .goog-te-menu-value:hover {
+        background-color: #007bff; /* Change background color on hover */
+        color: #fff; /* Light text color on hover */
+    }
     </style>
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -123,7 +191,7 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <title>Document</title>
+    <title class="notranslate">Home</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script type="text/javascript" src="{% static 'ajax.js' %}"></script>
@@ -380,13 +448,7 @@
         </div>
     </nav>
     <!-- Toggle Button -->
-    <button id="toggleButton" onclick="toggleIframe()"><i class="bi bi-robot fs-3"></i></button>
-    <iframe id="iframe"
-    allow="microphone;"
-    width="350"
-    height="430"
-    src="https://console.dialogflow.com/api-client/demo/embedded/20576aee-d901-427c-a366-de87dca82e20">
-</iframe>
+    
     <div class="d-flex flex-wrap justify-content-center mt-4">
         
         <div class="col-lg-3 h-50 col-12 m-3 p-5 rounded bg-white shadow-lg position-sticky">
@@ -833,7 +895,7 @@
         </div>
     </div>
     {% elif user.is_player %}
-    <nav class="navbar player-navbar navbar-expand-lg">
+    <nav class="notranslate navbar player-navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
                 <p class="text-white">Urban</p>
@@ -897,7 +959,7 @@
         </div>
     </nav>
     <div class="d-flex flex-wrap justify-content-center mt-4">
-        <div class="col-lg-3 h-50 col-12 m-3 p-5 rounded bg-white shadow-lg position-sticky">
+        <div class="notranslate col-lg-3 h-50 col-12 m-3 p-5 rounded bg-white shadow-lg position-sticky">
             <div class="">
                 <div class="d-flex justify-content-center">
                     <div class="">
@@ -980,7 +1042,7 @@
             </div>
         </div>
         <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
-            <div class="d-flex justify-content-evenly mb-3">
+            <div class="notranslate d-flex justify-content-evenly mb-3">
                 <div class="text-center">
                     <p class="fs-4 fw-bold">{{post_count}}</p>
                     <p class="fs-5">Posts</p>
@@ -999,7 +1061,7 @@
                 </a>
             </div>
             <div class="w-100 d-flex justify-content-center">
-                <div class="w-100">
+                <div class="notranslate w-100">
                     <form method="post">
                         {% csrf_token %}
                     <textarea class="form-control" required name="feed" id="" cols="30" rows="5"
@@ -1016,9 +1078,12 @@
                     </div>
                 </div>
             </div>
+            <div class="d-flex flex-column align-items-center justify-content-center mt-3"><span>Select Language: </span>
+
+                <div id="google_translate_element"></div></div>
             {% for i in newfeeds %}
             <div class="mt-4 border-top pt-4">
-                <div class="d-flex">
+                <div class="d-flex notranslate">
                     <div class="feed-img">
                         <img class="w-100 rounded-circle" src={{user.img.url}} alt="">
                     </div>
@@ -1045,7 +1110,7 @@
                             alt="">
                     </div>
                     
-                    <p class="mt-3 fw-bold">{{user.first_name}} {{user.last_name}}
+                    <p class="mt-3 fw-bold notranslate">{{user.first_name}} {{user.last_name}}
                     {% endif %}
                 </div>
                 
@@ -1058,7 +1123,7 @@
                         <button class="btn shadow-none like-button" data-feed-id="{{ i.id }}">
                             <i class="bi bi-heart fs-5"></i>
                         </button>
-                        <a class="text-decoration-none text-dark" href="{% url 'likesUsers' i.id %}"><p id="likes-count-{{ i.id }}">{{ i.likes_cout }} likes</p></a>
+                        <a class="notranslate text-decoration-none text-dark" href="{% url 'likesUsers' i.id %}"><p id="likes-count-{{ i.id }}">{{ i.likes_cout }} likes</p></a>
                     </div>
                     
                 </div>
@@ -1068,7 +1133,7 @@
 
 
         </div>
-        <div class="col-lg-3 col-12">
+        <div class="notranslate col-lg-3 col-12">
             <div class="m-3 p-5 rounded player-recomendation bg-white shadow-lg">
                 <div>
                     <p class="fw-bold">Recommended Clubs</p>
@@ -1150,11 +1215,45 @@
         </div>
     </div>
     {% endif %}
-</body>
+    <div class="alan-btn"></div></body>
+    <button id="toggleButton" onclick="toggleIframe()"><i class="bi bi-robot fs-3"></i></button>
+    <iframe id="iframe"
+    allow="microphone;"
+    width="350"
+    height="430"
+    src="https://console.dialogflow.com/api-client/demo/embedded/20576aee-d901-427c-a366-de87dca82e20">
+</iframe>
 
 </html>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
+<script type="text/javascript"
+ src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
+<script>
+  var alanBtnInstance = alanBtn({
+    key: "c5c3927b6204baee8ef04ad65d7ab54e2e956eca572e1d8b807a3e2338fdd0dc/stage",
+    onCommand: function (commandData) {
+      if (commandData.command === "feed") {
+        window.location.href = "http://127.0.0.1:8000/following_feeds";
+      }else if (commandData.command === "scout") {
+            window.location.href = "http://127.0.0.1:8000/PlayerScout";
+        } else if (commandData.command === "club") {
+            window.location.href = "http://127.0.0.1:8000/player-club";
+        } else if (commandData.command === "trail") {
+            window.location.href = "http://127.0.0.1:8000/trial_list";
+        } else if (commandData.command === "tour") {
+            window.location.href = "http://127.0.0.1:8000/tournaments";
+        }else if (commandData.command === "home") {
+            window.location.href = "http://127.0.0.1:8000/";
+        }
+      
+    },
+    rootEl: document.getElementById("alan-btn"),
+  });
+</script>
+  
 <script>
     $(document).ready(function () {
         
@@ -1386,3 +1485,9 @@ $("#notification-results").on("click", "#notification_marked", function () {
         iframe.style.display = (iframe.style.display === "none") ? "block" : "none";
     }
 </script>
+<script type="text/javascript"> 
+    function googleTranslateElementInit() {
+new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

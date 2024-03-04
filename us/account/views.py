@@ -1391,11 +1391,13 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 def scout_report(request,user_id):
     print(user_id)
+    stats=None
     user=User.objects.get(id=user_id)
-    if user.player_pos=='GoalKeeper':
-        stats=GoalkeepingStats.objects.get(user_id=user_id)
-    else:
-        stats=PlayerStats.objects.get(user_id=user_id)
+    if GoalkeepingStats.objects.filter(user_id=user_id).exists() or PlayerStats.objects.filter(user_id=user_id).exists():
+        if user.player_pos=='GoalKeeper':
+            stats=GoalkeepingStats.objects.get(user_id=user_id)
+        else:
+            stats=PlayerStats.objects.get(user_id=user_id)
 
     print(user)
     return render(request,'scout_report.html',{'user1':user,'stats':stats})

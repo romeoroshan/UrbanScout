@@ -182,9 +182,36 @@
         </div>
         {% endfor %}
     </div>
+    <div class="alan-btn"></div></body>
+
 </body>
 
 </html>
+<script src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
+<script type="text/javascript"
+ src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
+<script>
+  var alanBtnInstance = alanBtn({
+    key: "c5c3927b6204baee8ef04ad65d7ab54e2e956eca572e1d8b807a3e2338fdd0dc/stage",
+    onCommand: function (commandData) {
+      if (commandData.command === "feed") {
+        window.location.href = "http://127.0.0.1:8000/following_feeds";
+      }else if (commandData.command === "scout") {
+            window.location.href = "http://127.0.0.1:8000/PlayerScout";
+        } else if (commandData.command === "club") {
+            window.location.href = "http://127.0.0.1:8000/player-club";
+        } else if (commandData.command === "trail") {
+            window.location.href = "http://127.0.0.1:8000/trial_list";
+        } else if (commandData.command === "tour") {
+            window.location.href = "http://127.0.0.1:8000/tournaments";
+        }else if (commandData.command === "home") {
+            window.location.href = "http://127.0.0.1:8000/";
+        }
+      
+    },
+    rootEl: document.getElementById("alan-btn"),
+  });
+</script>
 <script>
     $(document).ready(function () {
         $("#search_bar").keyup(function(){
