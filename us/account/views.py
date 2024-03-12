@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes,following,Notification,Proof,History,Tour,PlayerStats,GoalkeepingStats
+from .models import User,InterestedClubs,ShortlistedPlayers,ShortlistedScouts,ShortlistedClubScouts,PostFeed,PostImageFeed,PostVideoFeed,Contract,NewFeeds,likes,following,Notification,Proof,History,Tour,PlayerStats,GoalkeepingStats,ScoutPlayers,ScoutPlayerResult
 from .forms import PlayerSignUpForm,LoginForm,ClubRegistraionForm
 from django.contrib.auth import authenticate, login as auth_login,logout
 from django.contrib.auth.models import auth
@@ -29,7 +29,7 @@ def index(request):
     print(followingg)
     users=User.objects.all()
     usercout=users.count()
-    players = User.objects.filter(is_player=True)
+    players = User.objects.filter(is_player=True,player_ability=request.user.club_reputation)
     player_count = players.count()
     club = User.objects.filter(is_club=True)
     club_count = club.count()
@@ -574,6 +574,7 @@ def clubScout(request):
     user = request.user
     shortlisted_scouts = ShortlistedClubScouts.objects.filter(club_id=user.id).values_list('scout_id', flat=True)
     all_scouts = User.objects.filter(is_scout=True).values()
+    check=ScoutPlayers.objects.filter(club_id=request.user.id,active=True).exists()
     shortlisted_scout_list = []
     not_shortlisted_scout_list = []
     for scout in all_scouts:
@@ -594,6 +595,7 @@ def clubScout(request):
             not_shortlisted_scout_list.append(player_data)
 
     return render(request, 'ClubScout.html', {
+        'check':check,
         'shortlisted_scout': shortlisted_scout_list,
         'not_shortlisted_scout': not_shortlisted_scout_list,
     })
@@ -609,6 +611,8 @@ def shortlistClubScout(request,scout_id):
 def scoutClub(request):
     user = request.user
     interested_Clubs = ShortlistedClubScouts.objects.filter(scout_id=user.id).values_list('club_id', flat=True)
+    check=ScoutPlayers.objects.filter(active=True,scout_id=request.user.id).values_list('club_id',flat=True)
+
     all_clubs = User.objects.filter(is_club=True).values()
     fullname = "{} {}".format(user.first_name, user.last_name)
     print(fullname)
@@ -634,6 +638,7 @@ def scoutClub(request):
             not_interested_Clubs_list.append(Club_data)
     print(interested_Clubs_list)
     return render(request, 'ScoutClub.html', {
+        'check':check,
         'fullname':fullname,
         'abilityRange':ability_range,
         'interested_Clubs': interested_Clubs_list,
@@ -1162,7 +1167,13 @@ def hosted_trials(request):
     tours=Trials.objects.filter(user_id=request.user.id,active=True).order_by('trail_date')
     tour_enrollments = TrialWinners.objects.all().values_list('tour__id', flat=True)
     finished=Trials.objects.filter(user_id=request.user.id,active=False,cancelled=False).exclude(id__in=tour_enrollments).order_by('trail_date')
-    return render(request,'hosted_trials.html',{'feeds':tours,'finished':finished})
+    view=Trials.objects.filter(user_id=request.user.id,active=False,cancelled=False)
+    return render(request,'hosted_trials.html',{'feeds':tours,'finished':finished,'view_winners':view})
+def view_trial_winners(request,trial_id):
+    users=TrialWinners.objects.filter(tour=trial_id)
+    shorted=ShortlistedPlayers.objects.filter(club_id=request.user.id).values_list('player__id',flat=True)
+    print(shorted)
+    return render(request,'view_trial_winners.html',{'users':users,'shorted':shorted})
 def tour_participants(request,tour_id):
     participants=TourEnrole.objects.filter(tour_id=tour_id)
     print(participants)
@@ -1411,7 +1422,44 @@ def validate_email(request):
         # Handle GET requests or other methods if needed
         return JsonResponse({'error': 'Invalid request method'})
     
-
+def request_players(request,scout_id):
+    if request.method=='POST':
+        ScoutPlayers(
+            club_id=request.user.id,
+            scout_id=scout_id,
+            ability=request.POST.get('ability'),
+            potential=request.POST.get('potential'),
+            position=request.POST.get('position'),
+            time=timezone.now(),
+        ).save()
+        return redirect('ClubScout')
+    return render(request,'request_players.html',{'abilityChoices':Ability_Choice,'positionChoices':Pos_Choice})
+def select_player_scout(request,club_id):
+    con=ScoutPlayers.objects.get(club_id=club_id,scout_id=request.user.id,active=True)
+    players=User.objects.filter(player_ability__gte=con.ability,player_potential__gte=con.potential,player_pos=con.position)
+    print(players)
+    if request.method=='POST':
+        players=request.POST.getlist('players')
+        print(players)
+        if players is not None:
+            for i in players:
+                val=i
+                ScoutPlayerResult(
+                    scout_id=con.id,
+                    player_id=val
+                ).save()
+        con.active=False
+        con.save()
+        return redirect('ScoutClub')
+    return render(request,'select_player_scout.html',{'participants':players})
+def view_scout_result(request,scout_id):
+    results=ScoutPlayers.objects.filter(club_id=request.user.id,scout_id=scout_id,active=False)
+    print(results)
+    return render(request,'view_scout_result.html',{'result':results})
+def scout_result_players(request,scout_id):
+    results=ScoutPlayerResult.objects.filter(scout_id=scout_id)
+    shorted=ShortlistedPlayers.objects.filter(club_id=request.user.id).values_list('player__id',flat=True)
+    return render(request,'scout_result_players.html',{'result':results,'shorted':shorted})
 
 from django.shortcuts import render
 import razorpay

@@ -87,6 +87,16 @@ urlpatterns = [
     path('filter_by_ability/<str:ability>/',views.filter_by_ability,name="filter_by_ability"),
     path('tour_map/<int:tour_id>/',views.tour_map,name="tour_map"),
     path('scout_report/<int:user_id>/',views.scout_report,name="scout_report"),
+    path('view_trial_winners/<int:trial_id>/',views.view_trial_winners,name="view_trial_winners"),
+    path('request_players/<int:scout_id>/',views.request_players,name="request_players"),
+    path('select_player_scout/<int:club_id>/',views.select_player_scout,name="select_player_scout"),
+    path('view_scout_result/<int:scout_id>/',views.view_scout_result,name="view_scout_result"),
+    path('scout_result_players/<int:scout_id>/',views.scout_result_players,name="scout_result_players"),
+
+
+
+
+
     # path('auth/login/google-oauth2/', views.google_login, name='google_login'),
     # path('auth/login/google-oauth2/callback/', views.google_callback, name='google_callback'),
 

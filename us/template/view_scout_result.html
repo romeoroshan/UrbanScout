@@ -202,16 +202,16 @@
                             <a class="nav-link  text-secondary" aria-current="page" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" aria-current="page"
+                            <a class="nav-link text-white" aria-current="page"
                                 href="{% url 'ClubScout' %}">Scouts</a>
                         </li>
-                        
+
                         <li class="nav-item">
                             <a class="nav-link text-secondary" aria-current="page"
                                 href="{% url 'following_feeds' %}">Feeds</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" aria-current="page"
+                            <a class="nav-link text-secondary" aria-current="page"
                                 href="{% url 'tournaments' %}">Tournaments</a>
                         </li>
                         <li class="nav-item">
@@ -237,173 +237,58 @@
     {% endif %}
     <div class="d-flex flex-wrap justify-content-center mt-4">
 
-        <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
+        <div class="col-lg-7 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
             <div>
-                <p class="h4 text-secondary fw-bold">Tournaments in your district</p>
+                <p class="h4 text-secondary fw-bold">Your Scouting Instructions</p>
 
             </div>
 
-            {% if feeds %}
-            {% for i in feeds %}
+            {% if result %}
+            {% for i in result %}
 
             <div class="mt-4 border-top pt-4">
-                <div class="d-flex">
-                    <div class="feed-img">
-                        <img class="w-100 rounded-circle" src={{i.user.img.url}} alt="">
-                    </div>
-                    <div class="ms-2 d-flex">
-                        <p class="fw-bold">
-                            {{i.user.club_name}}
-                        </p>
-                        <p class="ms-2 text-secondary">{{i.time}}</p>
-                    </div>
+
+
+                <div class="d-flex gap-1">
+                    <p class="fw-bold">Ability: </p>
+                    <p>{{i.ability}}</p>
                 </div>
-                <div class="w-100 mt-3">
 
-                    {% if i.img.url != '' %}
-                    <div class="w-100 mt-3">
-                        <img class="w-100" src="{{i.img}}" alt="">
-                    </div>
-                    {% endif %}
+                <div class="d-flex gap-1">
+                    <p class="fw-bold">Potential: </p>
+                    <p>{{i.potential}}</p>
                 </div>
-                <p class="fw-bold mt-5">{{i.title}}</p>
-                <p>{{i.desc}}</p>
-                <div class="mt-3">
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Tournament Conductors: </p>
-                        <p>{{i.user.club_name}}</p>
-                    </div>
-
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Date: </p>
-                        <p>{{i.tour_date}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Venue: </p>
-                        <p>{{i.place}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">District: </p>
-                        <p>{{i.district}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Contact Number: </p>
-                        <p>+91 {{i.contact}}</p>
-                    </div>
-                    {% if i.slots <= 0 %}
-                    <p class="text-danger">No slots left in this tournament</p>
-                    {% else %}
-                    <div class="d-flex gap-1 text-success">
-                        <p class="fw-bold">Slots Left: </p>
-                        <p>{{i.slots}}</p>
-                    </div>
-
-    <button onclick="showConfirmation('{{ i.id }}')" class="btn btn-primary">Enroll</button>
-    {% endif %}
-    <a class="btn btn-info" href="{% url 'tour_map' i.id %}">View in map</a>
-
-                    
-
+                <div class="d-flex gap-1">
+                    <p class="fw-bold">Position: </p>
+                    <p>{{i.position}}</p>
                 </div>
+                <div class="d-flex gap-1">
+                    <p class="fw-bold">Scout: </p>
+                    <p>{{i.scout.first_name}} {{i.scout.last_name}}</p>
+                </div>
+
             </div>
+            <a href="{% url 'scout_result_players' i.id %}" class="btn btn-warning">Check Players</a>
             {% endfor %}
             {% else %}
-            <p class="text-danger">No upcoming tounaments in your district</p>
+            <p class="text-danger">No Scouting Instructions Registered</p>
             {% endif %}
-
-
-        </div>
-        <div class="col-lg-5 col-12 player-feeds m-3 p-5 rounded bg-white shadow-lg">
-            <div>
-                <p class="h4 text-secondary fw-bold">Other Tournaments</p>
-
-            </div>
-
-
-            {% if feeds1 %}
-            {% for i in feeds1 %}
-
-            <div class="mt-4 border-top pt-4">
-                <div class="d-flex">
-                    <div class="feed-img">
-                        <img class="w-100 rounded-circle" src={{i.user.img.url}} alt="">
-                    </div>
-                    <div class="ms-2 d-flex">
-                        <p class="fw-bold">
-                            {{i.user.club_name}}
-                        </p>
-                        <p class="ms-2 text-secondary">{{i.time}}</p>
-                        {% if i.edited %}
-                            <p class="ms-2 text-secondary">Edited</p>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="w-100 mt-3">
-
-                    {% if i.img.url != '' %}
-                    <div class="w-100 mt-3">
-                        <img class="w-100" src="{{i.img}}" alt="">
-                    </div>
-                    {% endif %}
-                </div>
-                <p class="fw-bold mt-5">{{i.title}}</p>
-                <p>{{i.desc}}</p>
-                <div class="mt-3">
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Tournament Conductors: </p>
-                        <p>{{i.user.club_name}}</p>
-                    </div>
-
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Date: </p>
-                        <p>{{i.tour_date}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">Venue: </p>
-                        <p>{{i.place}}</p>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <p class="fw-bold">District: </p>
-                        <p>{{i.district}}</p>
-                    </div>
-                    {% if i.slots <= 0 %}
-                    <p class="text-danger">No slots left in this tournament</p>
-                    {% else %}
-                    <div class="d-flex gap-1 text-success">
-                        <p class="fw-bold">Slots Left: </p>
-                        <p>{{i.slots}}</p>
-                    </div>
-
-    <button onclick="showConfirmation('{{ i.id }}')" class="btn btn-primary">Enroll</button>
-    {% endif %}
-    {% if i.latitude is not None %}
-    <a class="btn btn-info" href="{% url 'tour_map' i.id %}">View in map</a>
-    {% endif %}
-
-
-
-
-                </div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <p class="text-danger">No upcoming tounaments</p>
-            {% endif %}
-
         </div>
 
     </div>
-    <div class="alan-btn"></div></body>
-    <script src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
-    <script type="text/javascript"
-     src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
-    <script>
-      var alanBtnInstance = alanBtn({
+
+
+    <div class="alan-btn"></div>
+</body>
+<script src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
+<script type="text/javascript" src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
+<script>
+    var alanBtnInstance = alanBtn({
         key: "c5c3927b6204baee8ef04ad65d7ab54e2e956eca572e1d8b807a3e2338fdd0dc/stage",
         onCommand: function (commandData) {
-          if (commandData.command === "feed") {
-            window.location.href = "http://127.0.0.1:8000/following_feeds";
-          }else if (commandData.command === "scout") {
+            if (commandData.command === "feed") {
+                window.location.href = "http://127.0.0.1:8000/following_feeds";
+            } else if (commandData.command === "scout") {
                 window.location.href = "http://127.0.0.1:8000/PlayerScout";
             } else if (commandData.command === "club") {
                 window.location.href = "http://127.0.0.1:8000/player-club";
@@ -411,14 +296,14 @@
                 window.location.href = "http://127.0.0.1:8000/trial_list";
             } else if (commandData.command === "tour") {
                 window.location.href = "http://127.0.0.1:8000/tournaments";
-            }else if (commandData.command === "home") {
+            } else if (commandData.command === "home") {
                 window.location.href = "http://127.0.0.1:8000/";
             }
-          
+
         },
         rootEl: document.getElementById("alan-btn"),
-      });
-    </script>
+    });
+</script>
 </body>
 
 </html>

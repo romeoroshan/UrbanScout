@@ -219,8 +219,11 @@
                 </div>
                 
                 <div class="d-flex justify-content-lg-end justify-content-center w-100">
-                    <div class="d-flex align-items-center justify-content-center col-5">
+                    <div class="d-flex align-items-center flex-column justify-content-center col-5">
                         <p class="text-primary"><i class="bi bi-file-earmark-bar-graph-fill"></i> You have released the scout report for this club</p>
+                        {% if i.id in check %}
+                        <a class="btn btn-primary" href="{% url 'select_player_scout' i.id %}">Select Players</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

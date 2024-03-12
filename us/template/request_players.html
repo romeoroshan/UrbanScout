@@ -75,10 +75,7 @@
 <body class="bg-light">
     <nav class="navbar player-navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#">
-                <p class="text-white">Urban</p>
-                <p class="text-warning">Scout</p>
-            </a>
+            <a class="ms-5 navbar-brand d-flex fs-2 fw-bold" href="#"><p class="text-white">Urban</p><p class="text-warning">Scout</p></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -97,128 +94,73 @@
                             <a class="nav-link  text-secondary" aria-current="page" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" aria-current="page" href="{% url 'ClubScout' %}">Scouts</a>
+                            <a class="nav-link text-secondary" aria-current="page" href="{% url 'ScoutClub' %}">Club</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" aria-current="page"
-                                href="{% url 'ClubPlayer' %}">Players</a>
+                            <a class="nav-link text-white" aria-current="page" href="{% url 'ScoutPlayer' %}">Players</a>
                         </li>
                     </ul>
                 </div>
                 <div class="d-flex w-100 justify-content-start justify-content-sm-end">
                     <div class="border rounded p-2 pb-0 mt-2 ms-3">
-                        <p class="text-light "><i class="bi bi-shield-fill"></i> {{user.club_name}}</p>
+                        <p class="text-light "><i class="bi bi-binoculars-fill"></i> {{user.club_name}}</p>
                     </div>
-                    <a class="d-flex flex-column justify-content-center text-decoration-none"
-                        href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
+                    <a class="d-flex flex-column justify-content-center text-decoration-none" href="{% url 'logout' %}"><button class="btn text-white ms-4">Log-out</button></a>
                 </div>
             </div>
         </div>
     </nav>
-    <div class="d-flex flex-column align-items-center justify-content-center">
-        {% if shortlisted_scout|length > 0 %}
-        <h2 class="mt-5">Shortlisted Scouts</h2>
-        {% endif %}
-        {% for i in shortlisted_scout %}
-        <script>console.log("{{ i.img }}")</script>
-        <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
-            <div class="border mt-4 d-flex flex-lg-row flex-column justify-content-center justify-content-lg-start align-items-center w-100 p-3 rounded">
-                <div class="d-flex align-items-center">
-                    <div class="player-scout-img">
-                        <img class="w-100 rounded-circle" src={{i.img}} alt="">
-                    </div>
-                </div>
+    <div class="d-flex justify-content-center">
+        <div class="bg-white shadow-lg mt-4 pb-3 rounded col-12 col-lg-8">
+            <p class="m-4 text-secondary fs-4 fw-bold">Scout Players</p>
+            <form action="" method="post"  enctype="multipart/form-data">
+                {% csrf_token %}
                 
-                <div class="ms-3 col-lg-5 col-12">
-                    <a class="text-decoration-none text-dark" href="{% url 'scout-home' i.id %}"><p class="fs-2 fw-bold">{{i.first_name}}{{i.last_name}}</p></a>
-                    <p class=""><b>District: </b>{{i.district}} </p>
-                    <p class=""><b>Locality </b>{{i.locality}}</p>
-                    <p class="fw-bold">Recommendation: <i class="bi bi-star-fill text-warning"></i><i
-                        class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i
-                        class="bi bi-star-fill text-warning"></i><i class="bi bi-star-half text-warning"></i></p>
-                </div>
-                
-                <div class="d-flex justify-content-lg-end justify-content-center w-100">
-                    <div class="d-flex align-items-center justify-content-center col-5">
-                        {% if user.scouted_by == '' %}
-                        <p class="text-success"><i class="bi bi-check-circle-fill"></i> You're request has been recorded, waiting for scout response</p>
-                        {% else %}
-                        <div class="d-flex flex-column gap-2">
-                            <p class="text-primary"><i class="bi bi-check-circle-fill"></i> You're scout reports are released by {{user.scouted_by}}</p>
-                        {% if check is False %}
-                        <a class="btn btn-primary" href="{% url 'request_players' i.id %}">Request Players</a>
-                        {% endif %}
-                        <a class="btn btn-primary" href="{% url 'view_scout_result' i.id %}">View Scout Results</a>
+                <div class="d-flex justify-content-center">
+                    <div class="col-lg-8 col-12">
+                        
+                        <div class="d-flex"><p class="fw-bold fs-3">Request Players</p></div>
+                        
+                        <div class="d-flex justify-content-center gap-2 m-5">
+                            <div class="d-flex flex-column w-100">
+                                <label for="ability">Min Ability</label>
+                                <select class="form-control" name="ability" id="">
+                                    {% for choice_value,choice in abilityChoices %}
+                                    <option value="{{ choice }}">{{ choice }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="potential">Min Potential</label>
+                                <select class="form-control" name="potential" id="">
+                                    {% for choice_value,choice in abilityChoices %}
+                                    <option value="{{ choice }}">{{ choice }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="position">Postition</label>
+                                <select class="form-control" name="position" id="">
+                                    {% for choice_value,choice in positionChoices %}
+                                    <option value="{{ choice }}">{{ choice }}</option>
+                                    {% endfor %}
+                                </select>
+
+
+                            </div>
+                            
+                            
+                            
                         </div>
                         
-                        {% endif %}                    </div>
-                </div>
-            </div>
-            
-        </div>
-        {% endfor %}
-        {% if not_shortlisted_scout|length > 0 %}
-        <h2 class="mt-5">Other Scouts</h2>
-        {% endif %}
-        {% for i in not_shortlisted_scout %}
-        <script>console.log("{{ i.img }}")</script>
-        <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
-            <div class="border mt-4 d-flex flex-lg-row flex-column justify-content-center justify-content-lg-start align-items-center w-100 p-3 rounded">
-                <div class="d-flex align-items-center">
-                    <div class="player-scout-img">
-                        <img class="w-100 rounded-circle" src={{i.img}} alt="">
+                        <div class="d-flex justify-content-center mt-2">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                        
                     </div>
                 </div>
-                
-                <div class="ms-3 col-lg-5 col-12">
-                    <a class="text-decoration-none text-dark" href="{% url 'scout-home' i.id %}"><p class="fs-2 fw-bold">{{i.first_name}}{{i.last_name}}</p></a>
-                    <p class=""><b>District: </b>{{i.district}} </p>
-                    <p class=""><b>Locality </b>{{i.locality}}</p>
-                    <p class="fw-bold">Recommendation: <i class="bi bi-star-fill text-warning"></i><i
-                        class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i
-                        class="bi bi-star-fill text-warning"></i><i class="bi bi-star-half text-warning"></i></p>
-                </div>
-                
-                <div class="d-flex justify-content-lg-end justify-content-center w-100">
-                    <div class="d-flex align-items-center justify-content-center col-5">
-                        <a href="{% url 'ShortlistClubScout' i.id %}"><button class="btn btn-outline-primary">Enquire Scout</button></a>
-                    </div>
-                </div>
-            </div>
-            
+            </form>
         </div>
-        {% endfor %}
     </div>
-    <div class="alan-btn"></div></body>
-
 </body>
 
 </html>
-<script src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
-<script type="text/javascript"
- src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
-<script>
-  var alanBtnInstance = alanBtn({
-    key: "c5c3927b6204baee8ef04ad65d7ab54e2e956eca572e1d8b807a3e2338fdd0dc/stage",
-    onCommand: function (commandData) {
-      if (commandData.command === "feed") {
-        window.location.href = "http://127.0.0.1:8000/following_feeds";
-      }else if (commandData.command === "scout") {
-            window.location.href = "http://127.0.0.1:8000/PlayerScout";
-        } else if (commandData.command === "club") {
-            window.location.href = "http://127.0.0.1:8000/player-club";
-        } else if (commandData.command === "trail") {
-            window.location.href = "http://127.0.0.1:8000/trial_list";
-        } else if (commandData.command === "tour") {
-            window.location.href = "http://127.0.0.1:8000/tournaments";
-        }else if (commandData.command === "home") {
-            window.location.href = "http://127.0.0.1:8000/";
-        }
-      
-    },
-    rootEl: document.getElementById("alan-btn"),
-  });
-</script>
 <script>
     $(document).ready(function () {
         $("#search_bar").keyup(function(){

@@ -220,3 +220,14 @@ class GoalkeepingStats(models.Model):
     reflexes = models.IntegerField(default=0)
     speed = models.IntegerField(default=0)
     user=models.ForeignKey(User,on_delete=models.CASCADE)
+class ScoutPlayers(models.Model):
+    club=models.ForeignKey(User,on_delete=models.CASCADE,related_name='club')
+    scout=models.ForeignKey(User,on_delete=models.CASCADE,related_name='scout')
+    ability=models.IntegerField()
+    potential=models.IntegerField()
+    position=models.CharField(max_length=50)
+    time=models.DateTimeField()
+    active=models.BooleanField(default=True)
+class ScoutPlayerResult(models.Model):
+    scout=models.ForeignKey(ScoutPlayers,on_delete=models.CASCADE)
+    player=models.ForeignKey(User,on_delete=models.CASCADE)
