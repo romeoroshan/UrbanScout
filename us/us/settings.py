@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'usapp',
     'social_django',
     'rest_framework',
-    
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -54,8 +54,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:6628",  # Add the origin of your Flutter app here
+]
 ROOT_URLCONF = 'us.urls'
 
 TEMPLATES = [

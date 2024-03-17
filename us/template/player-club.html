@@ -50,6 +50,89 @@
     .user-name {
         font-weight: bold;
     }
+    .card1 {
+            width: 420px;
+            border-radius: 1rem;
+            background: linear-gradient(rgb(60, 21, 60), rgb(41, 0, 41));
+            padding: 1rem;
+        }
+
+        .infos {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            grid-gap: 1rem;
+            gap: 1rem;
+        }
+
+        .image {
+            height: 7rem;
+            width: 7rem;
+            border-radius: 0.5rem;
+            background-color: rgb(118, 36, 194);
+            background: linear-gradient(rgb(60, 21, 60), rgb(41, 0, 41));
+        }
+
+        .info {
+            height: 10rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .name {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .function {
+            font-size: 0.75rem;
+            line-height: 0rem;
+            color: rgba(156, 163, 175, 1);
+        }
+
+        .stats {
+            width: 100%;
+            border-radius: 0.5rem;
+            background-color: rgba(255, 255, 255, 1);
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: rgba(0, 0, 0, 1);
+        }
+
+        .flex {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 4px;
+        }
+
+        .state-value {
+            font-weight: 700;
+            color: rgb(118, 36, 194);
+        }
+
+        .request {
+            margin-top: 1.5rem;
+            width: 100%;
+            border: 1px solid transparent;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            transition: all .3s ease;
+        }
+
+        .request:hover {
+            background-color: rgb(118, 36, 194);
+            color: #fff;
+        }
     @media (max-width: 991.98px) {
         #search-results{
             position: fixed;
@@ -246,34 +329,53 @@
         </div>
         {% endfor %}
         {% if not_interested_clubs|length > 0 %}
-        <h2 class="mt-5">Other Clubs</h2>
+        <h2 class="mt-5 fw-bold text-info">Other Clubs</h2>
         {% endif %}
-        {% for i in not_interested_clubs %}
-        <script>console.log("{{ i.img }}")</script>
-        <div class="col-10 bg-white rounded p-4 shadow-lg mt-5">
-            <div class="border mt-4 d-flex flex-lg-row flex-column justify-content-center justify-content-lg-start align-items-center w-100 p-3 rounded">
-                <div class="d-flex align-items-center">
-                    <div class="player-scout-img">
-                        <img class="w-100 rounded-circle" src={{i.img}} alt="">
+        <div class="d-flex justify-content-center flex-wrap gap-2">
+            {% for i in not_interested_clubs %}
+        
+
+
+
+
+        <div class="card1">
+            <div class="infos">
+                <div class="image"><img class="w-100 rounded" src="{{i.img}}" alt=""></div>
+                <div class="info">
+                    <div>
+                        <a class="text-decoration-none" href="{% url 'clubHome' i.id %}">
+                            <p class="name">
+                                {{i.club_name}}
+                            </p>
+                        </a>
+                        <p class="function">
+                            {{i.district}}
+                        </p>
+                        <p class="function">
+                            {{i.locality}}
+                        </p>
+                        <script>console.log("{{i.club_reputation}}")</script>
+                        <p class="text-warning">Club Reputation :{% with ability=i.club_reputation %} {% for j in abilityRange %}
+                            {% if j < ability %}
+                            <i class="bi bi-star-fill text-warning"></i>
+                            {% else %}
+                            <i class="bi bi-star text-warning"></i>
+                            {% endif %}
+                            {% endfor %}
+                            {% endwith %}
+                        </p>
                     </div>
-                </div>
-                
-                <div class="ms-3 col-lg-7 col-12">
-                    <p class="fs-2 fw-bold">{{i.club_name}}</p>
-                    <p class=""><b>District: </b>{{i.district}} </p>
-                    <p class=""><b>Locality </b>{{i.locality}}</p>
-                    <p class=""><b>Club Reputation: </b><i class="bi bi-star-fill text-warning text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-half text-warning"></i></p>
-                </div>
-                
-                <div class="d-flex justify-content-lg-end justify-content-center w-100">
-                    <div class="d-flex align-items-center justify-content-center col-3">
-                        <a href="{% url 'ShowInterest' i.id %}"><button class="btn btn-outline-primary">Show Interest</button></a>
-                    </div>
+
                 </div>
             </div>
             
+            <a class="btn btn-outline-info w-100" href="{% url 'ShowInterest' i.id %}">Show Interest</a>
+                
         </div>
+
+        
         {% endfor %}
+        </div>
     </div>
     <div class="alan-btn"></div></body>
     <script src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>

@@ -185,6 +185,7 @@
     .user-name {
         font-weight: bold;
     }
+    
 @media (max-width: 991.98px) {
     .player-feeds{
         height: 100%;

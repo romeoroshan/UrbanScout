@@ -29,8 +29,11 @@ def index(request):
     print(followingg)
     users=User.objects.all()
     usercout=users.count()
-    players = User.objects.filter(is_player=True,player_ability=request.user.club_reputation)
-    player_count = players.count()
+    players=None
+    player_count=0
+    if request.user.is_authenticated:
+        players = User.objects.filter(is_player=True, player_ability=request.user.club_reputation)
+        player_count = players.count()
     club = User.objects.filter(is_club=True)
     club_count = club.count()
     scout=User.objects.filter(is_scout=True)
@@ -237,7 +240,8 @@ def playerClub(request):
             'club_name': club['club_name'],
             'img':club['img'],
             'district':club['district'],
-            'locality':club['locality']
+            'locality':club['locality'],
+            'club_reputation':club['club_reputation']
             # Add other fields you want to include here
         }
         
@@ -255,9 +259,11 @@ def playerClub(request):
             non_contract_clubs.append(club_data)
         if club_id in cont_is_accepted:
             cont_accepted.append(club_data)
+    ability_range = range(0, 5)
     print(contract_clubs)
     print(non_contract_clubs)
     return render(request, 'player-club.html', {
+        'abilityRange':ability_range,
         'shortlisted_players':shortlisted_Players_list,
         'interested_clubs': interested_clubs_list,
         'not_interested_clubs': not_interested_clubs_list,
