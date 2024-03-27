@@ -6,8 +6,9 @@
     }],
     "routes": [
         {
-            "src": "/(.*)",
-            "dest": "us/wsgi.py"
+            "rewrites": [
+                { "source": "/(.*)", "destination": "/" }
+            ]
         }
     ]
 }
