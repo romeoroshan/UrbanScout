@@ -1593,9 +1593,17 @@ def contact(request,user_id):
 
 from rest_framework import generics
 from .serializers import UserSerializer
-
+from rest_framework.response import Response
 class UserListCreateView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+class UserReturn(generics.ListCreateAPIView):
+    def get(self, request, *args, **kwargs):
+        print("Called")
+        user_id = kwargs.get('user_id')
+        print(user_id)
+        queryset = User.objects.get(id=user_id)
+        serializer_class = UserSerializer(queryset)
+        return Response(serializer_class.data)
 
 

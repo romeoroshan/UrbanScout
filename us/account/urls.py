@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import UserListCreateView
+from .views import UserListCreateView,UserReturn
 urlpatterns = [
     
     path('',views.index,name='index'),
@@ -81,6 +81,7 @@ urlpatterns = [
     path('trial',views.trial,name="trial"),
     path('trial_list',views.trial_list,name="trial_list"),
     path('api/your-model/', UserListCreateView.as_view(), name='your-model-list-create'),
+    path('api/return-user/<int:user_id>', UserReturn.as_view(), name='return-user'),
     path('enroltrial/<int:tour_id>',views.enroltrial,name="enroltrial"),
     path('enrolled_trials',views.enrolled_trials,name="enrolled_trials"),
     path('search_players',views.search_players,name="search_players"),
