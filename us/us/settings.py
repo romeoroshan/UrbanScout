@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
+import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -85,11 +87,14 @@ WSGI_APPLICATION = 'us.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.parse("postgres://urbanscout_user:RZKObojv9SHUFx0K6AUxp3MgzQLhh6Dl@dpg-co5tfkm3e1ms73bbmarg-a.singapore-postgres.render.com/urbanscout")
 }
 
 
@@ -144,9 +149,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.google.GoogleOAuth2',
 ]
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '306080151564-t11nk5holv7ku4f592l8ot3c6nuilg7b.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
-SOCIAL_AUTH_REDIRECT_URI = 'http://127.0.0.1:8000/auth/complete/google-oauth2/'
+
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
